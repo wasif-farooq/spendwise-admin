@@ -1,12 +1,17 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { LayoutDashboard, Save, Building2, Info, Upload, X, Camera, User, ShieldCheck, Sparkles, AlertTriangle } from 'lucide-react';
+import { LayoutDashboard, Save, Building2, Info, Upload, Camera, User, ShieldCheck, Sparkles, AlertTriangle } from 'lucide-react';
 import { useState, useRef } from 'react';
 import { Input } from '../../components/Input';
 import { Button } from '../../components/Button';
 import { Modal } from '../../components/Modal';
 
+import { useDispatch, useSelector } from 'react-redux';
+import { setAccountType } from '../../store/uiSlice';
+import type { RootState } from '../../store/store';
+
 const ManageGeneral = () => {
-    const [accountType, setAccountType] = useState<'personal' | 'organization'>('personal');
+    const dispatch = useDispatch();
+    const accountType = useSelector((state: RootState) => state.ui.accountType);
     const [orgName, setOrgName] = useState('My Account');
     const [orgIcon, setOrgIcon] = useState<string | null>(null);
     const [isSaving, setIsSaving] = useState(false);
@@ -42,7 +47,7 @@ const ManageGeneral = () => {
 
     const confirmConversion = () => {
         if (pendingType) {
-            setAccountType(pendingType);
+            dispatch(setAccountType(pendingType));
             setIsConvertModalOpen(false);
             setIsDowngradeModalOpen(false);
             setPendingType(null);

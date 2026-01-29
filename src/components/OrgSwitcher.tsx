@@ -9,6 +9,9 @@ import {
     User,
     Sparkles
 } from 'lucide-react';
+import { useDispatch, useSelector } from 'react-redux';
+import { setAccountType } from '../store/uiSlice';
+import type { RootState } from '../store/store';
 
 interface Organization {
     id: string;
@@ -28,8 +31,15 @@ interface OrgSwitcherProps {
 }
 
 export const OrgSwitcher: React.FC<OrgSwitcherProps> = ({ isCollapsed = false }) => {
+    const dispatch = useDispatch();
+    const currentAccountType = useSelector((state: RootState) => state.ui.accountType);
     const [isOpen, setIsOpen] = useState(false);
-    const [activeOrg, setActiveOrg] = useState<Organization>(MOCK_ORGS[0]);
+
+    // Initialize activeOrg based on currentAccountType if needed, 
+    // but for now we'll keep the local state for the name/icon and sync the type.
+    const [activeOrg, setActiveOrg] = useState<Organization>(
+        MOCK_ORGS.find(org => org.type === currentAccountType) || MOCK_ORGS[0]
+    );
     const dropdownRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -46,6 +56,7 @@ export const OrgSwitcher: React.FC<OrgSwitcherProps> = ({ isCollapsed = false })
 
     const handleSwitch = (org: Organization) => {
         setActiveOrg(org);
+        dispatch(setAccountType(org.type));
         setIsOpen(false);
     };
 
@@ -55,13 +66,13 @@ export const OrgSwitcher: React.FC<OrgSwitcherProps> = ({ isCollapsed = false })
             <button
                 onClick={toggleDropdown}
                 className={`w-full flex items-center gap-3 p-3 rounded-2xl transition-all duration-300 group ${isOpen
-                        ? 'bg-primary/10 ring-2 ring-primary/20'
-                        : 'hover:bg-gray-50'
+                    ? 'bg-primary/10 ring-2 ring-primary/20'
+                    : 'hover:bg-gray-50'
                     }`}
             >
                 <div className={`flex-shrink-0 h-10 w-10 rounded-xl flex items-center justify-center transition-all duration-300 ${activeOrg.type === 'personal'
-                        ? 'bg-blue-100 text-blue-600'
-                        : 'bg-purple-100 text-purple-600'
+                    ? 'bg-blue-100 text-blue-600'
+                    : 'bg-purple-100 text-purple-600'
                     } ${isOpen ? 'scale-110 shadow-lg' : 'group-hover:scale-105'}`}>
                     {activeOrg.type === 'personal' ? <User size={20} /> : <Building2 size={20} />}
                 </div>
@@ -103,13 +114,13 @@ export const OrgSwitcher: React.FC<OrgSwitcherProps> = ({ isCollapsed = false })
                                     key={org.id}
                                     onClick={() => handleSwitch(org)}
                                     className={`w-full flex items-center gap-3 p-3 rounded-xl transition-all group ${activeOrg.id === org.id
-                                            ? 'bg-primary text-white shadow-lg shadow-primary/20'
-                                            : 'hover:bg-primary/5 text-gray-700'
+                                        ? 'bg-primary text-white shadow-lg shadow-primary/20'
+                                        : 'hover:bg-primary/5 text-gray-700'
                                         }`}
                                 >
                                     <div className={`h-8 w-8 rounded-lg flex items-center justify-center ${activeOrg.id === org.id
-                                            ? 'bg-white/20'
-                                            : org.type === 'personal' ? 'bg-blue-50 text-blue-600' : 'bg-purple-50 text-purple-600'
+                                        ? 'bg-white/20'
+                                        : org.type === 'personal' ? 'bg-blue-50 text-blue-600' : 'bg-purple-50 text-purple-600'
                                         }`}>
                                         {org.type === 'personal' ? <User size={16} /> : <Building2 size={16} />}
                                     </div>

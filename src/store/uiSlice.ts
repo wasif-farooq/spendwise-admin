@@ -4,11 +4,13 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 interface UIState {
     isYearlyBilling: boolean;
     isMobileMenuOpen: boolean;
+    accountType: 'personal' | 'organization';
 }
 
 const initialState: UIState = {
     isYearlyBilling: false,
     isMobileMenuOpen: false,
+    accountType: 'personal',
 };
 
 const uiSlice = createSlice({
@@ -27,8 +29,17 @@ const uiSlice = createSlice({
         setMobileMenu: (state, action: PayloadAction<boolean>) => {
             state.isMobileMenuOpen = action.payload;
         },
+        setAccountType: (state, action: PayloadAction<'personal' | 'organization'>) => {
+            state.accountType = action.payload;
+        },
     },
 });
 
-export const { toggleBillingCycle, setBillingCycle, toggleMobileMenu, setMobileMenu } = uiSlice.actions;
+export const {
+    toggleBillingCycle,
+    setBillingCycle,
+    toggleMobileMenu,
+    setMobileMenu,
+    setAccountType
+} = uiSlice.actions;
 export default uiSlice.reducer;

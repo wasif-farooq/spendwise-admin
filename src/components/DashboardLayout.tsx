@@ -6,20 +6,29 @@ import {
     CreditCard,
     Menu,
     X,
-    User
+    User,
+    Globe
 } from 'lucide-react';
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useLayout } from '../context/LayoutContext';
 import { OrgSwitcher } from './OrgSwitcher';
+import type { RootState } from '../store/store';
 
 export const DashboardLayout = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
     const { layout } = useLayout();
     const navigate = useNavigate();
+    const accountType = useSelector((state: RootState) => state.ui.accountType);
 
     const navItems = [
         { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
+        { name: 'Exchange Rates', path: '/exchange-rates', icon: Globe },
         { name: 'Manage', path: '/manage/general', icon: LayoutDashboard },
+        ...(accountType === 'organization' ? [
+            { name: 'Members', path: '/manage/members', icon: User },
+            { name: 'Roles', path: '/manage/roles', icon: Settings },
+        ] : []),
         { name: 'Settings', path: '/settings/preferences', icon: Settings },
     ];
 
