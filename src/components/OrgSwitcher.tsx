@@ -2,8 +2,6 @@ import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     ChevronDown,
-    Plus,
-    Settings,
     Check,
     Building2,
     User,
@@ -128,22 +126,6 @@ export const OrgSwitcher: React.FC<OrgSwitcherProps> = ({ isCollapsed = false })
                                     {activeOrg.id === org.id && <Check size={16} className="text-white" />}
                                 </button>
                             ))}
-
-                            <div className="h-px bg-gray-100 my-2 mx-2" />
-
-                            <button className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 text-gray-600 transition-all group">
-                                <div className="h-8 w-8 rounded-lg bg-gray-100 flex items-center justify-center group-hover:bg-primary/10 group-hover:text-primary transition-colors">
-                                    <Plus size={16} />
-                                </div>
-                                <span className="text-sm font-bold">Create Organization</span>
-                            </button>
-
-                            <button className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 text-gray-600 transition-all group">
-                                <div className="h-8 w-8 rounded-lg bg-gray-100 flex items-center justify-center group-hover:bg-primary/10 group-hover:text-primary transition-colors">
-                                    <Settings size={16} />
-                                </div>
-                                <span className="text-sm font-bold">Manage All</span>
-                            </button>
                         </div>
 
                         <div className="bg-primary/5 p-4 flex items-center gap-3">
