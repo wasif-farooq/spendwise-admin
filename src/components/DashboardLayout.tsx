@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import { useState } from 'react';
 import { useLayout } from '../context/LayoutContext';
+import { OrgSwitcher } from './OrgSwitcher';
 
 export const DashboardLayout = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -45,7 +46,11 @@ export const DashboardLayout = () => {
                 </NavLink>
             </div>
 
-            <nav className="flex-grow px-4 space-y-2 mt-4">
+            <div className="px-4 mb-4">
+                <OrgSwitcher isCollapsed={!isSidebarOpen} />
+            </div>
+
+            <nav className="flex-grow px-4 space-y-2">
                 {navItems.map((item) => (
                     <NavLink
                         key={item.name}
@@ -88,14 +93,19 @@ export const DashboardLayout = () => {
                 )}
 
                 {(layout === 'top-nav' || layout === 'minimal') && (
-                    <NavLink to="/dashboard" className="flex items-center group mr-8">
-                        <div className="bg-primary/10 p-2 rounded-xl group-hover:scale-110 transition-transform">
-                            <CreditCard className="h-6 w-6 text-primary" />
+                    <div className="flex items-center mr-8">
+                        <NavLink to="/dashboard" className="flex items-center group mr-6">
+                            <div className="bg-primary/10 p-2 rounded-xl group-hover:scale-110 transition-transform">
+                                <CreditCard className="h-6 w-6 text-primary" />
+                            </div>
+                            <span className="ml-3 text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-blue-600 truncate">
+                                ExpenseFlow
+                            </span>
+                        </NavLink>
+                        <div className="w-48">
+                            <OrgSwitcher />
                         </div>
-                        <span className="ml-3 text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-blue-600 truncate">
-                            ExpenseFlow
-                        </span>
-                    </NavLink>
+                    </div>
                 )}
 
                 {layout === 'top-nav' && (
