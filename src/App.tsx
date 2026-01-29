@@ -18,6 +18,9 @@ import Security from './pages/SettingsPage/Security';
 import Setup2FAPage from './pages/SettingsPage/Setup2FAPage';
 import ManagePage from './pages/ManagePage';
 import ManageGeneral from './pages/ManagePage/General';
+import ManageMembers from './pages/ManagePage/Members';
+import ManageBilling from './pages/ManagePage/Billing';
+import ManageRoles from './pages/ManagePage/Roles';
 
 import { LayoutProvider } from './context/LayoutContext';
 
@@ -39,6 +42,9 @@ function App() {
             <Route path="/manage" element={<ManagePage />}>
               <Route index element={<Navigate to="general" replace />} />
               <Route path="general" element={<ManageGeneral />} />
+              <Route path="members" element={<ManageMembers />} />
+              <Route path="roles" element={<ManageRoles />} />
+              <Route path="billing" element={<ManageBilling />} />
             </Route>
 
             {/* Settings Nested Routes */}

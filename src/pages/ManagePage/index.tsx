@@ -1,5 +1,5 @@
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
-import { Users, CreditCard, LayoutDashboard } from 'lucide-react';
+import { Users, CreditCard, LayoutDashboard, Shield } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const ManagePage = () => {
@@ -8,6 +8,7 @@ const ManagePage = () => {
     const menuItems = [
         { name: 'General', path: 'general', icon: LayoutDashboard, description: 'Organization & Account settings' },
         { name: 'Members', path: 'members', icon: Users, description: 'Manage team & permissions' },
+        { name: 'Roles', path: 'roles', icon: Shield, description: 'Define custom permissions' },
         { name: 'Billing', path: 'billing', icon: CreditCard, description: 'Plans & Invoices' },
     ];
 
