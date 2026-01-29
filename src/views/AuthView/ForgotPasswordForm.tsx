@@ -1,10 +1,27 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { forgotPasswordSchema, type ForgotPasswordInput } from './schemas/authSchemas';
 import { Input } from '../../components/Input';
 import { Button } from '../../components/Button';
 import { CreditCard, ArrowLeft } from 'lucide-react';
 
 export const ForgotPasswordForm = () => {
+    const navigate = useNavigate();
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm<ForgotPasswordInput>({
+        resolver: zodResolver(forgotPasswordSchema),
+    });
+
+    const onSubmit = (data: ForgotPasswordInput) => {
+        console.log('Forgot password data:', data);
+        // Trigger password reset API here
+        navigate('/check-email');
+    };
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
             <motion.div
@@ -23,12 +40,13 @@ export const ForgotPasswordForm = () => {
                     </p>
                 </div>
 
-                <form className="mt-8 space-y-6">
+                <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
                     <Input
                         label="Email address"
                         type="email"
                         placeholder="name@company.com"
-                        required
+                        {...register('email')}
+                        error={errors.email?.message}
                     />
 
                     <Button type="submit" className="w-full py-6 text-lg">

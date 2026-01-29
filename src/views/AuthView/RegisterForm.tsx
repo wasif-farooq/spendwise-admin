@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -9,6 +9,7 @@ import { SocialLogin } from './components/SocialLogin';
 import { CreditCard } from 'lucide-react';
 
 export const RegisterForm = () => {
+    const navigate = useNavigate();
     const {
         register,
         handleSubmit,
@@ -20,6 +21,7 @@ export const RegisterForm = () => {
     const onSubmit = (data: RegisterInput) => {
         console.log('Register data:', data);
         // Handle registration logic here
+        navigate('/confirm-email');
     };
 
     return (
