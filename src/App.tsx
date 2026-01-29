@@ -21,6 +21,7 @@ import ManageGeneral from './pages/ManagePage/General';
 import ManageMembers from './pages/ManagePage/Members';
 import ManageBilling from './pages/ManagePage/Billing';
 import ManageRoles from './pages/ManagePage/Roles';
+import RoleEditor from './pages/ManagePage/RoleEditor';
 
 import { LayoutProvider } from './context/LayoutContext';
 
@@ -39,11 +40,13 @@ function App() {
             <Route path="/dashboard" element={<DashboardPage />} />
 
             {/* Manage Nested Routes */}
-            <Route path="/manage" element={<ManagePage />}>
+            <Route path="manage" element={<ManagePage />}>
               <Route index element={<Navigate to="general" replace />} />
               <Route path="general" element={<ManageGeneral />} />
               <Route path="members" element={<ManageMembers />} />
               <Route path="roles" element={<ManageRoles />} />
+              <Route path="roles/new" element={<RoleEditor />} />
+              <Route path="roles/:id/edit" element={<RoleEditor />} />
               <Route path="billing" element={<ManageBilling />} />
             </Route>
 
