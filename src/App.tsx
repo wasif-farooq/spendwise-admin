@@ -23,6 +23,8 @@ import ManageBilling from './pages/ManagePage/Billing';
 import ManageRoles from './pages/ManagePage/Roles';
 import RoleEditor from './pages/ManagePage/RoleEditor';
 import ExchangeRatesPage from './pages/ExchangeRatesPage';
+import AccountsPage from './pages/AccountsPage';
+import TransactionsPage from './pages/TransactionsPage';
 
 import { LayoutProvider } from './context/LayoutContext';
 
@@ -40,6 +42,8 @@ function App() {
           <Route element={<DashboardLayout />}>
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/exchange-rates" element={<ExchangeRatesPage />} />
+            <Route path="/accounts" element={<AccountsPage />} />
+            <Route path="/accounts/:id/transactions" element={<TransactionsPage />} />
 
             {/* Manage Nested Routes */}
             <Route path="manage" element={<ManagePage />}>

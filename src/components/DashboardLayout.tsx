@@ -7,7 +7,8 @@ import {
     Menu,
     X,
     User,
-    Globe
+    Globe,
+    Wallet
 } from 'lucide-react';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -23,6 +24,7 @@ export const DashboardLayout = () => {
 
     const navItems = [
         { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
+        { name: 'Accounts', path: '/accounts', icon: Wallet },
         { name: 'Exchange Rates', path: '/exchange-rates', icon: Globe },
         { name: 'Manage', path: '/manage/general', icon: LayoutDashboard },
         ...(accountType === 'organization' ? [
