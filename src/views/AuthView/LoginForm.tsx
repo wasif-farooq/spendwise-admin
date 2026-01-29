@@ -21,7 +21,6 @@ export const LoginForm = () => {
     const onSubmit = (data: LoginInput) => {
         console.log('Login data:', data);
         // Simulate successful login and redirect to 2FA
-        // In a real app, this would verify credentials with backend first
         setTimeout(() => {
             navigate('/verify-2fa');
         }, 500);

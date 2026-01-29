@@ -26,7 +26,7 @@ export const TwoFactorForm = () => {
     const onSubmit = (data: TwoFactorInput) => {
         console.log('2FA code:', data, 'Method:', method);
         setTimeout(() => {
-            navigate('/');
+            navigate('/dashboard');
         }, 500);
     };
 
@@ -80,8 +80,8 @@ export const TwoFactorForm = () => {
                                 type="button"
                                 onClick={() => setMethod(m.id)}
                                 className={`flex flex-col items-center p-4 rounded-2xl border-2 transition-all duration-200 ${isActive
-                                        ? 'border-primary bg-primary/5 ring-4 ring-primary/10'
-                                        : 'border-gray-100 bg-white hover:border-gray-200 hover:bg-gray-50'
+                                    ? 'border-primary bg-primary/5 ring-4 ring-primary/10'
+                                    : 'border-gray-100 bg-white hover:border-gray-200 hover:bg-gray-50'
                                     }`}
                             >
                                 <Icon className={`h-6 w-6 mb-2 ${isActive ? 'text-primary' : 'text-gray-400'}`} />
