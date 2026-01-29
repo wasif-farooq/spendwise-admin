@@ -18,6 +18,7 @@ export const DashboardLayout = () => {
 
     const navItems = [
         { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
+        { name: 'Manage', path: '/manage/general', icon: LayoutDashboard },
         { name: 'Settings', path: '/settings/preferences', icon: Settings },
     ];
 

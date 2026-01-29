@@ -16,6 +16,8 @@ import Profile from './pages/SettingsPage/Profile';
 import Preferences from './pages/SettingsPage/Preferences';
 import Security from './pages/SettingsPage/Security';
 import Setup2FAPage from './pages/SettingsPage/Setup2FAPage';
+import ManagePage from './pages/ManagePage';
+import ManageGeneral from './pages/ManagePage/General';
 
 import { LayoutProvider } from './context/LayoutContext';
 
@@ -32,6 +34,12 @@ function App() {
           {/* Dashboard Layout Routes (Authenticated) */}
           <Route element={<DashboardLayout />}>
             <Route path="/dashboard" element={<DashboardPage />} />
+
+            {/* Manage Nested Routes */}
+            <Route path="/manage" element={<ManagePage />}>
+              <Route index element={<Navigate to="general" replace />} />
+              <Route path="general" element={<ManageGeneral />} />
+            </Route>
 
             {/* Settings Nested Routes */}
             <Route path="/settings" element={<SettingsPage />}>
