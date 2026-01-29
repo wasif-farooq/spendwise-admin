@@ -15,9 +15,14 @@ import {
     Smartphone,
     MoreVertical,
     Calendar,
-    Plus
+    Plus,
+    History,
+    Clock,
+    ArrowRight,
+    Edit2
 } from 'lucide-react';
 import { Button } from '../../components/Button';
+import { Modal } from '../../components/Modal';
 
 interface Transaction {
     id: string;
@@ -116,6 +121,35 @@ const TransactionsPage = () => {
     const navigate = useNavigate();
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('All');
+    const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
+    const [selectedTransaction, setSelectedTransaction] = useState<Transaction | null>(null);
+
+    const MOCK_HISTORY = [
+        {
+            id: 'h1',
+            date: '2024-01-29 15:00',
+            user: 'Wasif Farooq',
+            action: 'Updated Amount',
+            details: 'Changed amount from $2,400.00 to $2,499.00',
+            type: 'update'
+        },
+        {
+            id: 'h2',
+            date: '2024-01-29 14:35',
+            user: 'Wasif Farooq',
+            action: 'Categorized',
+            details: 'Set category to "Electronics"',
+            type: 'category'
+        },
+        {
+            id: 'h3',
+            date: '2024-01-29 14:30',
+            user: 'System',
+            action: 'Created',
+            details: 'Transaction imported via Bank Sync',
+            type: 'create'
+        }
+    ];
 
     const filteredTransactions = useMemo(() => {
         return MOCK_TRANSACTIONS.filter(t => {
@@ -272,9 +306,21 @@ const TransactionsPage = () => {
                                             </span>
                                         </td>
                                         <td className="px-8 py-6 text-right">
-                                            <button className="p-2 text-gray-400 hover:text-primary transition-colors">
-                                                <MoreVertical size={20} />
-                                            </button>
+                                            <div className="flex items-center justify-end gap-2">
+                                                <button
+                                                    onClick={() => {
+                                                        setSelectedTransaction(t);
+                                                        setIsHistoryModalOpen(true);
+                                                    }}
+                                                    className="p-2 text-gray-400 hover:text-primary hover:bg-primary/5 rounded-xl transition-all"
+                                                    title="Modification History"
+                                                >
+                                                    <History size={20} />
+                                                </button>
+                                                <button className="p-2 text-gray-400 hover:text-primary hover:bg-primary/5 rounded-xl transition-all">
+                                                    <MoreVertical size={20} />
+                                                </button>
+                                            </div>
                                         </td>
                                     </motion.tr>
                                 ))}
@@ -293,6 +339,78 @@ const TransactionsPage = () => {
                     </div>
                 )}
             </div>
+
+            {/* Modification History Modal */}
+            <Modal
+                isOpen={isHistoryModalOpen}
+                onClose={() => setIsHistoryModalOpen(false)}
+                title="Modification History"
+                maxWidth="max-w-3xl"
+            >
+                <div className="space-y-8">
+                    {selectedTransaction && (
+                        <div className="bg-gray-50 p-6 rounded-3xl flex items-center justify-between">
+                            <div className="flex items-center gap-4">
+                                <div className={`h-12 w-12 rounded-xl flex items-center justify-center text-white shadow-lg ${selectedTransaction.color}`}>
+                                    <selectedTransaction.icon size={20} />
+                                </div>
+                                <div>
+                                    <h4 className="font-black text-gray-900">{selectedTransaction.description}</h4>
+                                    <p className="text-xs font-bold text-gray-500 uppercase tracking-widest">{selectedTransaction.category}</p>
+                                </div>
+                            </div>
+                            <div className="text-right">
+                                <p className="text-xl font-black text-gray-900">
+                                    {selectedTransaction.type === 'income' ? '+' : '-'}${selectedTransaction.amount.toLocaleString()}
+                                </p>
+                                <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Current Amount</p>
+                            </div>
+                        </div>
+                    )}
+
+                    <div className="relative space-y-8 before:absolute before:inset-0 before:ml-5 before:-translate-x-px before:h-full before:w-0.5 before:bg-gradient-to-b before:from-primary/20 before:via-gray-100 before:to-transparent">
+                        {MOCK_HISTORY.map((item) => (
+                            <div key={item.id} className="relative flex items-start gap-6 pl-12 group">
+                                <div className={`absolute left-0 h-10 w-10 rounded-full border-4 border-white shadow-md flex items-center justify-center transition-transform group-hover:scale-110 ${item.type === 'create' ? 'bg-emerald-500 text-white' :
+                                    item.type === 'category' ? 'bg-blue-500 text-white' : 'bg-primary text-white'
+                                    }`}>
+                                    {item.type === 'create' ? <Plus size={16} /> :
+                                        item.type === 'category' ? <TrendingUp size={16} /> : <Edit2 size={16} />}
+                                </div>
+                                <div className="flex-1 bg-white border border-gray-100 p-6 rounded-[2rem] shadow-sm hover:shadow-md transition-all">
+                                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+                                        <div className="flex items-center gap-2">
+                                            <span className="px-3 py-1 bg-primary/10 text-primary text-[10px] font-black uppercase tracking-widest rounded-lg">
+                                                {item.action}
+                                            </span>
+                                            <span className="text-sm font-black text-gray-900">{item.user}</span>
+                                        </div>
+                                        <div className="flex items-center gap-1.5 text-gray-400">
+                                            <Clock size={14} />
+                                            <span className="text-xs font-bold">{item.date}</span>
+                                        </div>
+                                    </div>
+                                    <p className="text-gray-600 font-medium leading-relaxed">{item.details}</p>
+
+                                    {item.type === 'update' && (
+                                        <div className="mt-4 flex items-center gap-3 text-xs font-bold">
+                                            <span className="text-gray-400 line-through">$2,400.00</span>
+                                            <ArrowRight size={14} className="text-primary" />
+                                            <span className="text-emerald-600">$2,499.00</span>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    <div className="pt-6 border-t border-gray-100 flex justify-end">
+                        <Button onClick={() => setIsHistoryModalOpen(false)} className="rounded-2xl px-8">
+                            Close History
+                        </Button>
+                    </div>
+                </div>
+            </Modal>
         </motion.div>
     );
 };
