@@ -29,7 +29,14 @@ export const resetPasswordSchema = z.object({
     path: ["confirmPassword"],
 });
 
+export const twoFactorSchema = z.object({
+    code: z.string()
+        .length(6, 'Code must be exactly 6 digits')
+        .regex(/^\d+$/, 'Code must contain only numbers'),
+});
+
 export type LoginInput = z.infer<typeof loginSchema>;
 export type RegisterInput = z.infer<typeof registerSchema>;
 export type ForgotPasswordInput = z.infer<typeof forgotPasswordSchema>;
 export type ResetPasswordInput = z.infer<typeof resetPasswordSchema>;
+export type TwoFactorInput = z.infer<typeof twoFactorSchema>;

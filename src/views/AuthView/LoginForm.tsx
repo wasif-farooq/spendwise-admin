@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -9,6 +9,7 @@ import { SocialLogin } from './components/SocialLogin';
 import { CreditCard } from 'lucide-react';
 
 export const LoginForm = () => {
+    const navigate = useNavigate();
     const {
         register,
         handleSubmit,
@@ -19,7 +20,11 @@ export const LoginForm = () => {
 
     const onSubmit = (data: LoginInput) => {
         console.log('Login data:', data);
-        // Handle login logic here
+        // Simulate successful login and redirect to 2FA
+        // In a real app, this would verify credentials with backend first
+        setTimeout(() => {
+            navigate('/verify-2fa');
+        }, 500);
     };
 
     return (
