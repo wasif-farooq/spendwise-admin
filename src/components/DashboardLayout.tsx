@@ -8,16 +8,20 @@ import {
     X,
     User,
     Globe,
-    Wallet
+    Wallet,
+    Plus
 } from 'lucide-react';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useLayout } from '../context/LayoutContext';
 import { OrgSwitcher } from './OrgSwitcher';
+import { Button } from './Button';
+import { TransactionModal } from './TransactionModal';
 import type { RootState } from '../store/store';
 
 export const DashboardLayout = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+    const [isTransactionModalOpen, setIsTransactionModalOpen] = useState(false);
     const { layout } = useLayout();
     const navigate = useNavigate();
     const accountType = useSelector((state: RootState) => state.ui.accountType);
@@ -140,19 +144,30 @@ export const DashboardLayout = () => {
                 )}
             </div>
 
-            <div className="flex items-center space-x-4">
-                <div className="text-right hidden sm:block">
-                    <p className="text-sm font-bold text-gray-900">John Doe</p>
-                    <p className="text-xs text-gray-500">Premium Member</p>
+            <div className="flex items-center space-x-6">
+                <Button
+                    size="sm"
+                    onClick={() => setIsTransactionModalOpen(true)}
+                    className="hidden md:flex items-center gap-2 rounded-xl px-4 py-2 shadow-lg shadow-primary/10"
+                >
+                    <Plus size={18} />
+                    <span>New Transaction</span>
+                </Button>
+
+                <div className="flex items-center space-x-4">
+                    <div className="text-right hidden sm:block">
+                        <p className="text-sm font-bold text-gray-900">John Doe</p>
+                        <p className="text-xs text-gray-500">Premium Member</p>
+                    </div>
+                    <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center border border-primary/20">
+                        <User className="h-5 w-5 text-primary" />
+                    </div>
+                    {layout === 'minimal' && (
+                        <button onClick={handleLogout} className="p-2 text-gray-400 hover:text-red-600 transition-colors">
+                            <LogOut className="h-5 w-5" />
+                        </button>
+                    )}
                 </div>
-                <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center border border-primary/20">
-                    <User className="h-5 w-5 text-primary" />
-                </div>
-                {layout === 'minimal' && (
-                    <button onClick={handleLogout} className="p-2 text-gray-400 hover:text-red-600 transition-colors">
-                        <LogOut className="h-5 w-5" />
-                    </button>
-                )}
             </div>
         </header>
     );
@@ -167,6 +182,11 @@ export const DashboardLayout = () => {
                     <Outlet />
                 </main>
             </div>
+
+            <TransactionModal
+                isOpen={isTransactionModalOpen}
+                onClose={() => setIsTransactionModalOpen(false)}
+            />
         </div>
     );
 };

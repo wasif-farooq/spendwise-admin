@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import Select, { type StylesConfig } from 'react-select';
 import {
     Wallet,
     Plus,
@@ -12,7 +13,9 @@ import {
     Edit2,
     Eye,
     TrendingUp,
-    TrendingDown
+    TrendingDown,
+    Check,
+    Info
 } from 'lucide-react';
 import { Modal } from '../../components/Modal';
 import { Button } from '../../components/Button';
@@ -77,11 +80,105 @@ const MOCK_ACCOUNTS: Account[] = [
     },
 ];
 
+const ACCOUNT_TYPES = [
+    { id: 'bank', name: 'Bank Account', description: 'Checking or current account', icon: Building2, color: 'text-blue-600', bg: 'bg-blue-50' },
+    { id: 'savings', name: 'Savings', description: 'Long-term savings account', icon: Wallet, color: 'text-emerald-600', bg: 'bg-emerald-50' },
+    { id: 'credit_card', name: 'Credit Card', description: 'Credit or revolving line', icon: CreditCard, color: 'text-rose-600', bg: 'bg-rose-50' },
+    { id: 'cash', name: 'Cash', description: 'Physical cash or wallet', icon: Banknote, color: 'text-amber-600', bg: 'bg-amber-50' },
+] as const;
+
+const CURRENCY_OPTIONS = [
+    { value: 'USD', label: 'USD - US Dollar' },
+    { value: 'EUR', label: 'EUR - Euro' },
+    { value: 'GBP', label: 'GBP - British Pound' },
+    { value: 'PKR', label: 'PKR - Pakistani Rupee' },
+    { value: 'AED', label: 'AED - UAE Dirham' },
+    { value: 'SAR', label: 'SAR - Saudi Riyal' },
+    { value: 'CAD', label: 'CAD - Canadian Dollar' },
+    { value: 'AUD', label: 'AUD - Australian Dollar' },
+];
+
+interface SelectOption {
+    value: string;
+    label: string;
+    description?: string;
+    icon?: any;
+    color?: string;
+    bg?: string;
+}
+
+const customSelectStyles: StylesConfig<SelectOption, false> = {
+    control: (base, state) => ({
+        ...base,
+        backgroundColor: '#f9fafb', // gray-50
+        border: 'none',
+        borderRadius: '1rem',
+        padding: '0.4rem 0.5rem',
+        boxShadow: state.isFocused ? '0 0 0 2px rgba(var(--color-primary-rgb), 0.1)' : 'none',
+        '&:hover': {
+            backgroundColor: '#f3f4f6', // gray-100
+        },
+        cursor: 'pointer',
+    }),
+    valueContainer: (base) => ({
+        ...base,
+        padding: '0 0.75rem',
+    }),
+    singleValue: (base) => ({
+        ...base,
+        fontWeight: '700',
+        color: '#111827', // gray-900
+    }),
+    placeholder: (base) => ({
+        ...base,
+        fontWeight: '700',
+        color: '#9ca3af', // gray-400
+    }),
+    menu: (base) => ({
+        ...base,
+        backgroundColor: 'white',
+        borderRadius: '1.5rem',
+        padding: '0.5rem',
+        boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+        border: '1px solid #f3f4f6',
+        overflow: 'hidden',
+        zIndex: 100,
+    }),
+    menuList: (base) => ({
+        ...base,
+        padding: '0',
+    }),
+    option: (base, state) => ({
+        ...base,
+        backgroundColor: state.isSelected ? 'rgba(var(--color-primary-rgb), 1)' : state.isFocused ? 'rgba(var(--color-primary-rgb), 0.05)' : 'transparent',
+        color: state.isSelected ? 'white' : '#374151', // gray-700
+        padding: '0.75rem 1rem',
+        borderRadius: '0.75rem',
+        fontWeight: '700',
+        cursor: 'pointer',
+        '&:active': {
+            backgroundColor: 'rgba(var(--color-primary-rgb), 0.1)',
+        },
+    }),
+    indicatorSeparator: () => ({
+        display: 'none',
+    }),
+    dropdownIndicator: (base) => ({
+        ...base,
+        color: '#9ca3af', // gray-400
+        '&:hover': {
+            color: '#6b7280', // gray-500
+        },
+    }),
+};
+
 const AccountsPage = () => {
     const navigate = useNavigate();
     const [accounts] = useState<Account[]>(MOCK_ACCOUNTS);
     const [searchQuery, setSearchQuery] = useState('');
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+    const [selectedType, setSelectedType] = useState<Account['type']>('bank');
+    const [selectedCurrency, setSelectedCurrency] = useState(CURRENCY_OPTIONS[0]);
 
     const totalBalance = useMemo(() => {
         return accounts.reduce((acc, curr) => acc + curr.balance, 0);
@@ -249,35 +346,80 @@ const AccountsPage = () => {
                 isOpen={isAddModalOpen}
                 onClose={() => setIsAddModalOpen(false)}
                 title="Add New Account"
+                maxWidth="max-w-2xl"
             >
-                <form className="space-y-6" onSubmit={(e) => { e.preventDefault(); setIsAddModalOpen(false); }}>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <Input label="Account Name" placeholder="e.g. Personal Savings" required />
-                        <div className="space-y-2">
-                            <label className="text-sm font-bold text-gray-700 ml-1">Account Type</label>
-                            <select className="w-full px-5 py-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-primary font-bold text-gray-900 transition-all appearance-none">
-                                <option value="bank">Bank Account</option>
-                                <option value="cash">Cash</option>
-                                <option value="credit_card">Credit Card</option>
-                                <option value="savings">Savings</option>
-                            </select>
+                <form className="space-y-8" onSubmit={(e) => { e.preventDefault(); setIsAddModalOpen(false); }}>
+                    <div className="space-y-4">
+                        <div className="flex items-center justify-between px-1">
+                            <label className="text-xs font-black text-gray-400 uppercase tracking-widest">Select Account Type</label>
+                            <div className="flex items-center gap-1 text-primary">
+                                <Info size={14} />
+                                <span className="text-[10px] font-bold">Choose how you'll use this account</span>
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            {ACCOUNT_TYPES.map((type) => (
+                                <button
+                                    key={type.id}
+                                    type="button"
+                                    onClick={() => setSelectedType(type.id)}
+                                    className={`relative flex items-center gap-4 p-4 rounded-3xl border-2 transition-all text-left group ${selectedType === type.id
+                                        ? 'border-primary bg-primary/5 ring-4 ring-primary/10'
+                                        : 'border-gray-100 hover:border-gray-200 hover:bg-gray-50'
+                                        }`}
+                                >
+                                    <div className={`h-12 w-12 rounded-2xl flex items-center justify-center flex-shrink-0 transition-transform group-hover:scale-110 ${type.bg} ${type.color}`}>
+                                        <type.icon size={24} />
+                                    </div>
+                                    <div className="flex-1 min-w-0">
+                                        <p className={`text-sm font-black truncate ${selectedType === type.id ? 'text-primary' : 'text-gray-900'}`}>{type.name}</p>
+                                        <p className="text-[10px] font-bold text-gray-500 truncate">{type.description}</p>
+                                    </div>
+                                    {selectedType === type.id && (
+                                        <div className="absolute top-3 right-3 h-5 w-5 bg-primary text-white rounded-full flex items-center justify-center shadow-lg shadow-primary/20">
+                                            <Check size={12} strokeWidth={4} />
+                                        </div>
+                                    )}
+                                </button>
+                            ))}
                         </div>
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <Input label="Initial Balance" type="number" placeholder="0.00" required />
+
+                    <div className="space-y-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="space-y-2">
+                                <Input label="Account Name" placeholder="e.g. Personal Savings" required />
+                                <p className="text-[10px] font-bold text-gray-400 ml-1">Give your account a recognizable name</p>
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-xs font-black text-gray-400 uppercase tracking-widest ml-1">Currency</label>
+                                <Select
+                                    options={CURRENCY_OPTIONS}
+                                    styles={customSelectStyles}
+                                    value={selectedCurrency}
+                                    onChange={(option) => option && setSelectedCurrency(option)}
+                                    placeholder="Select Currency"
+                                    isSearchable
+                                />
+                            </div>
+                        </div>
+
                         <div className="space-y-2">
-                            <label className="text-sm font-bold text-gray-700 ml-1">Currency</label>
-                            <select className="w-full px-5 py-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-primary font-bold text-gray-900 transition-all appearance-none">
-                                <option value="USD">USD - US Dollar</option>
-                                <option value="EUR">EUR - Euro</option>
-                                <option value="GBP">GBP - British Pound</option>
-                                <option value="PKR">PKR - Pakistani Rupee</option>
-                            </select>
+                            <Input label="Initial Balance" type="number" placeholder="0.00" required />
+                            <div className="flex items-center gap-2 ml-1">
+                                <div className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                                <p className="text-[10px] font-bold text-gray-400">This will be your starting balance for tracking</p>
+                            </div>
                         </div>
                     </div>
-                    <div className="pt-4 flex gap-4">
-                        <Button variant="outline" className="flex-1" onClick={() => setIsAddModalOpen(false)}>Cancel</Button>
-                        <Button type="submit" className="flex-1">Create Account</Button>
+
+                    <div className="pt-4 flex flex-col sm:flex-row gap-4">
+                        <Button variant="outline" className="flex-1 rounded-2xl py-4" onClick={() => setIsAddModalOpen(false)}>
+                            Cancel
+                        </Button>
+                        <Button type="submit" className="flex-1 rounded-2xl py-4 shadow-xl shadow-primary/20">
+                            Create Account
+                        </Button>
                     </div>
                 </form>
             </Modal>
