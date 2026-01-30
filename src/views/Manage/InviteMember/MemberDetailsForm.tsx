@@ -9,13 +9,15 @@ interface MemberDetailsFormProps {
     setEmail: (email: string) => void;
     selectedRoles: string[];
     toggleRole: (roleName: string) => void;
+    isEditing?: boolean;
 }
 
 export const MemberDetailsForm = ({
     email,
     setEmail,
     selectedRoles,
-    toggleRole
+    toggleRole,
+    isEditing = false
 }: MemberDetailsFormProps) => {
     // Local state for role search/pagination
     const [roleSearchQuery, setRoleSearchQuery] = useState('');
@@ -50,15 +52,24 @@ export const MemberDetailsForm = ({
                     <Heading as="h3" weight="black" className="text-xl text-gray-900">Member Details</Heading>
                 </Flex>
 
-                <Input
-                    label="Email Address"
-                    type="email"
-                    placeholder="colleague@example.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="bg-gray-50 border-none h-14 rounded-2xl focus:ring-2 focus:ring-primary font-bold"
-                    required
-                />
+                {isEditing ? (
+                    <Block>
+                        <Text size="xs" weight="black" color="text-gray-400" className="uppercase tracking-widest mb-2">Email Address</Text>
+                        <Text weight="bold" size="lg" className="text-gray-900 bg-gray-50 px-4 py-3 rounded-2xl border border-transparent">
+                            {email}
+                        </Text>
+                    </Block>
+                ) : (
+                    <Input
+                        label="Email Address"
+                        type="email"
+                        placeholder="colleague@example.com"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="bg-gray-50 border-none h-14 rounded-2xl focus:ring-2 focus:ring-primary font-bold"
+                        required
+                    />
+                )}
 
                 <Block className="space-y-4">
                     <Heading as="h4" size="sm" weight="black" className="uppercase tracking-widest px-1 text-gray-400">

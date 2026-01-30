@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { Shield, CheckCircle2, Clock, Edit2, UserMinus, Users, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Block, Flex, Heading, Text } from '@shared';
 import type { Member } from './types';
@@ -23,6 +24,8 @@ export const MembersTable = ({
     onOpenRemove,
     clearFilters
 }: MembersTableProps) => {
+    const navigate = useNavigate();
+
     return (
         <Block className="bg-gray-50/50 rounded-[3rem] border border-gray-100 overflow-hidden">
             <Block className="overflow-x-auto">
@@ -97,6 +100,7 @@ export const MembersTable = ({
                                     <td className="px-8 py-6 text-right">
                                         <Flex align="center" justify="end" gap={2}>
                                             <button
+                                                onClick={() => navigate(`/manage/members/${member.id}/edit`)}
                                                 disabled={member.isCurrentUser}
                                                 className={`p-2 rounded-xl transition-all ${member.isCurrentUser
                                                     ? 'text-gray-300 cursor-not-allowed'
