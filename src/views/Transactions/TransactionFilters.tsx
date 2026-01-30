@@ -1,5 +1,6 @@
 import { Search } from 'lucide-react';
 import { Block, Flex } from '@shared';
+import { Button } from '@ui';
 
 interface TransactionFiltersProps {
     searchQuery: string;
@@ -30,7 +31,8 @@ export const TransactionFilters = ({
             </Block>
             <Flex gap={2} className="w-full lg:w-auto overflow-x-auto pb-2 lg:pb-0 no-scrollbar">
                 {categories.map(cat => (
-                    <button
+                    <Button
+                        variant="ghost"
                         key={cat}
                         onClick={() => onCategoryChange(cat)}
                         className={`px-6 py-5 rounded-[2rem] font-black text-xs uppercase tracking-widest transition-all whitespace-nowrap shadow-sm ${selectedCategory === cat
@@ -39,7 +41,7 @@ export const TransactionFilters = ({
                             }`}
                     >
                         {cat}
-                    </button>
+                    </Button>
                 ))}
             </Flex>
         </Flex>

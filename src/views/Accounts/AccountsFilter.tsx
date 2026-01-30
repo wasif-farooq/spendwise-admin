@@ -1,5 +1,6 @@
 import { Search } from 'lucide-react';
 import { Block, Flex } from '@shared';
+import { Button } from '@ui';
 
 interface AccountsFilterProps {
     searchQuery: string;
@@ -20,12 +21,12 @@ export const AccountsFilter = ({ searchQuery, onSearchChange }: AccountsFilterPr
                 />
             </Block>
             <Flex gap={2} className="w-full sm:w-auto">
-                <button className="flex-1 sm:flex-none px-6 py-5 bg-white border border-gray-100 rounded-[2rem] font-black text-xs uppercase tracking-widest text-gray-500 hover:bg-gray-50 transition-all shadow-sm">
+                <Button variant="outline" className="flex-1 sm:flex-none px-6 py-5 bg-white border border-gray-100 rounded-[2rem] font-black text-xs uppercase tracking-widest text-gray-500 hover:bg-gray-50 transition-all shadow-sm">
                     All Types
-                </button>
-                <button className="flex-1 sm:flex-none px-6 py-5 bg-white border border-gray-100 rounded-[2rem] font-black text-xs uppercase tracking-widest text-gray-500 hover:bg-gray-50 transition-all shadow-sm">
+                </Button>
+                <Button variant="outline" className="flex-1 sm:flex-none px-6 py-5 bg-white border border-gray-100 rounded-[2rem] font-black text-xs uppercase tracking-widest text-gray-500 hover:bg-gray-50 transition-all shadow-sm">
                     Currency
-                </button>
+                </Button>
             </Flex>
         </Flex>
     );

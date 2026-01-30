@@ -34,9 +34,9 @@ export const Navbar = () => {
                     </Flex>
 
                     <Block className="md:hidden">
-                        <button onClick={() => dispatch(toggleMobileMenu())} className="text-gray-600">
+                        <Button variant="ghost" onClick={() => dispatch(toggleMobileMenu())} className="text-gray-600">
                             {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-                        </button>
+                        </Button>
                     </Block>
                 </Flex>
             </Block>

@@ -39,9 +39,9 @@ const CheckEmailPage = () => {
 
                     <Text size="sm" color="text-gray-500">
                         Didn't receive the email?{' '}
-                        <button className="font-medium text-primary hover:underline">
+                        <Button variant="ghost" className="font-medium text-primary hover:underline">
                             Click to resend
-                        </button>
+                        </Button>
                     </Text>
                 </Block>
 

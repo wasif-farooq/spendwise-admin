@@ -1,5 +1,6 @@
 import { CreditCard, Plus, ArrowUpRight } from 'lucide-react';
 import { Block, Flex, Heading, Text } from '@shared';
+import { Button } from '@ui';
 
 interface PaymentMethod {
     id: number;
@@ -23,10 +24,10 @@ export const PaymentMethods = ({ paymentMethods }: PaymentMethodsProps) => {
                     </Block>
                     <Heading as="h3" weight="black" className="text-xl tracking-tight text-gray-900">Payment Methods</Heading>
                 </Flex>
-                <button className="text-primary font-black text-sm flex items-center hover:underline">
+                <Button variant="ghost" className="text-primary font-black text-sm flex items-center hover:underline">
                     <Plus className="h-4 w-4 mr-1" />
                     Add New
-                </button>
+                </Button>
             </Flex>
 
             <Block className="space-y-4">
@@ -55,9 +56,9 @@ export const PaymentMethods = ({ paymentMethods }: PaymentMethodsProps) => {
                                     Default
                                 </Text>
                             )}
-                            <button className="p-2 text-gray-400 hover:text-primary transition-colors">
+                            <Button variant="ghost" className="p-2 text-gray-400 hover:text-primary transition-colors">
                                 <ArrowUpRight className="h-5 w-5" />
-                            </button>
+                            </Button>
                         </Flex>
                     </Flex>
                 ))}

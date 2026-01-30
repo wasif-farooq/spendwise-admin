@@ -205,12 +205,13 @@ const Setup2FAPage = () => {
                                     >
                                         {isVerifying ? 'Verifying...' : 'Verify & Continue'}
                                     </Button>
-                                    <button
+                                    <Button
+                                        variant="ghost"
                                         onClick={() => setStep(1)}
                                         className="text-sm font-bold text-gray-500 hover:text-primary transition-colors"
                                     >
                                         Change {method === 'authenticator' ? 'Method' : details.inputLabel}
-                                    </button>
+                                    </Button>
                                 </Block>
                             </Block>
                         )}
@@ -244,20 +245,22 @@ const Setup2FAPage = () => {
                                     </Grid>
 
                                     <Flex gap={4} className="mt-8">
-                                        <button
+                                        <Button
+                                            variant="outline"
                                             onClick={copyToClipboard}
                                             className="flex-grow flex items-center justify-center px-6 py-4 bg-white rounded-2xl font-bold text-gray-700 hover:bg-gray-100 transition-all border border-gray-200"
                                         >
                                             {hasCopied ? <Check className="h-5 w-5 mr-2 text-green-600" /> : <Copy className="h-5 w-5 mr-2" />}
                                             {hasCopied ? 'Copied!' : 'Copy Codes'}
-                                        </button>
-                                        <button
+                                        </Button>
+                                        <Button
+                                            variant="outline"
                                             onClick={downloadCodes}
                                             className="flex-grow flex items-center justify-center px-6 py-4 bg-white rounded-2xl font-bold text-gray-700 hover:bg-gray-100 transition-all border border-gray-200"
                                         >
                                             <Download className="h-5 w-5 mr-2" />
                                             Download
-                                        </button>
+                                        </Button>
                                     </Flex>
                                 </Block>
 

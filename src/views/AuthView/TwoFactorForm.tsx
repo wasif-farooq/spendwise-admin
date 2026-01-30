@@ -83,7 +83,8 @@ export const TwoFactorForm = () => {
                         const Icon = m.icon;
                         const isActive = method === m.id;
                         return (
-                            <button
+                            <Button
+                                variant="ghost"
                                 key={m.id}
                                 type="button"
                                 onClick={() => setMethod(m.id)}
@@ -96,7 +97,7 @@ export const TwoFactorForm = () => {
                                 <Text size="xs" weight="bold" className={isActive ? 'text-primary' : 'text-gray-500'}>
                                     {m.label}
                                 </Text>
-                            </button>
+                            </Button>
                         );
                     })}
                 </Grid>
@@ -137,14 +138,15 @@ export const TwoFactorForm = () => {
                     </Button>
 
                     <Flex direction="col" gap={4} className="text-center">
-                        <button
+                        <Button
+                            variant="ghost"
                             type="button"
                             onClick={handleResendCode}
                             disabled={resendDisabled}
                             className="text-sm font-semibold text-primary hover:text-primary/80 disabled:text-gray-400 transition-colors"
                         >
                             {resendDisabled ? 'Code sent! Wait 30s' : 'Didn\'t receive a code? Resend'}
-                        </button>
+                        </Button>
                         <Link
                             to="/login"
                             className="inline-flex items-center justify-center text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors"

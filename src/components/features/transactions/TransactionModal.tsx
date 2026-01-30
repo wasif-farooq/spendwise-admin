@@ -422,14 +422,15 @@ export const TransactionModal = ({ isOpen, onClose }: TransactionModalProps) => 
                                     className="hidden"
                                 />
                                 {!receipt ? (
-                                    <button
+                                    <Button
                                         type="button"
+                                        variant="ghost"
                                         onClick={() => fileInputRef.current?.click()}
                                         className="w-full h-full border-2 border-dashed border-gray-200 rounded-2xl flex items-center justify-center gap-2 text-gray-400 hover:border-primary hover:text-primary transition-all group"
                                     >
                                         <Upload size={18} className="group-hover:scale-110 transition-transform" />
                                         <Text as="span" className="text-xs font-bold">Upload Receipt</Text>
-                                    </button>
+                                    </Button>
                                 ) : (
                                     <Block className="w-full h-full relative group">
                                         <img
@@ -438,13 +439,14 @@ export const TransactionModal = ({ isOpen, onClose }: TransactionModalProps) => 
                                             className="w-full h-full object-cover rounded-2xl border border-gray-100"
                                         />
                                         <Flex align="center" justify="center" className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl">
-                                            <button
+                                            <Button
                                                 type="button"
+                                                variant="ghost"
                                                 onClick={removeReceipt}
                                                 className="p-2 bg-white/20 hover:bg-white/40 rounded-full text-white transition-colors"
                                             >
                                                 <CloseIcon size={16} />
-                                            </button>
+                                            </Button>
                                         </Flex>
                                     </Block>
                                 )}

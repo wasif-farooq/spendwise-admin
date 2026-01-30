@@ -133,12 +133,13 @@ const InviteMemberPage = () => {
             {/* Header */}
             <Flex as="header" direction="col" justify="between" gap={6} className="sm:flex-row sm:items-center">
                 <Flex align="center" gap={4}>
-                    <button
+                    <Button
+                        variant="ghost"
                         onClick={() => navigate('/manage/members')}
                         className="p-3 rounded-2xl bg-gray-100 text-gray-500 hover:bg-gray-200 transition-all"
                     >
                         <ArrowLeft className="h-6 w-6" />
-                    </button>
+                    </Button>
                     <Block>
                         <Heading as="h2" weight="black" className="text-3xl tracking-tight text-gray-900">
                             Invite New Member

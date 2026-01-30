@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { History, MoreVertical, type LucideIcon } from 'lucide-react';
 import { Flex, Text, Inline, Block } from '@shared';
+import { Button } from '../Button';
 
 interface TransactionRowProps {
     transaction: {
@@ -57,16 +58,17 @@ export const TransactionRow = ({ transaction: t, onViewHistory }: TransactionRow
             </td>
             <td className="px-8 py-6 text-right">
                 <Flex align="center" justify="end" gap={2}>
-                    <button
+                    <Button
+                        variant="ghost"
                         onClick={() => onViewHistory(t)}
                         className="p-2 text-gray-400 hover:text-primary hover:bg-primary/5 rounded-xl transition-all"
                         title="Modification History"
                     >
                         <History size={20} />
-                    </button>
-                    <button className="p-2 text-gray-400 hover:text-primary hover:bg-primary/5 rounded-xl transition-all">
+                    </Button>
+                    <Button variant="ghost" className="p-2 text-gray-400 hover:text-primary hover:bg-primary/5 rounded-xl transition-all">
                         <MoreVertical size={20} />
-                    </button>
+                    </Button>
                 </Flex>
             </td>
         </motion.tr>

@@ -30,9 +30,9 @@ const Profile = () => {
                         <Flex align="center" justify="center" className="h-32 w-32 rounded-3xl bg-primary/10 border-4 border-white shadow-xl overflow-hidden">
                             <User className="h-16 w-16 text-primary" />
                         </Flex>
-                        <button className="absolute -bottom-2 -right-2 p-3 bg-primary text-white rounded-2xl shadow-lg hover:scale-110 transition-transform active:scale-95">
+                        <Button variant="ghost" className="absolute -bottom-2 -right-2 p-3 bg-primary text-white rounded-2xl shadow-lg hover:scale-110 transition-transform active:scale-95">
                             <Camera className="h-5 w-5" />
-                        </button>
+                        </Button>
                     </Block>
 
                     <Grid cols={1} gap={6} className="flex-grow sm:grid-cols-2 w-full">
@@ -49,9 +49,9 @@ const Profile = () => {
             </section>
 
             <Flex align="center" justify="end" gap={4} className="pt-8 border-t border-gray-100">
-                <button className="px-8 py-4 text-gray-500 font-bold hover:text-gray-900 transition-colors">
+                <Button variant="ghost" className="px-8 py-4 text-gray-500 font-bold hover:text-gray-900 transition-colors">
                     Cancel
-                </button>
+                </Button>
                 <Button className="px-10 py-4 shadow-lg shadow-primary/20">
                     Save Changes
                 </Button>

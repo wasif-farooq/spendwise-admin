@@ -90,13 +90,14 @@ export const DashboardLayout = () => {
             </Block>
 
             <Block className="p-4 border-t border-gray-100">
-                <button
+                <Button
+                    variant="ghost"
                     onClick={handleLogout}
                     className="w-full flex items-center px-4 py-3 text-gray-500 hover:bg-red-50 hover:text-red-600 rounded-2xl transition-all duration-200 group"
                 >
                     <LogOut className={`h-5 w-5 flex-shrink-0 ${isSidebarOpen ? 'mr-3' : 'mx-auto'}`} />
                     {isSidebarOpen && <span className="font-medium">Logout</span>}
-                </button>
+                </Button>
             </Block>
         </Block>
     );
@@ -170,9 +171,9 @@ export const DashboardLayout = () => {
                         <User className="h-5 w-5 text-primary" />
                     </Block>
                     {layout === 'minimal' && (
-                        <button onClick={handleLogout} className="p-2 text-gray-400 hover:text-red-600 transition-colors">
+                        <Button variant="ghost" onClick={handleLogout} className="p-2 text-gray-400 hover:text-red-600 transition-colors">
                             <LogOut className="h-5 w-5" />
-                        </button>
+                        </Button>
                     )}
                 </Flex>
             </Flex>

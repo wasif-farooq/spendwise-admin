@@ -1,5 +1,6 @@
 import { PieChart } from 'lucide-react';
 import { Heading, Text, Block, Flex, AnimatedBlock } from '@shared';
+import { Button } from '@ui';
 
 export const SpendingAnalysisPreview = () => {
     return (
@@ -14,7 +15,7 @@ export const SpendingAnalysisPreview = () => {
                     <PieChart className="h-5 w-5 mr-2 text-primary" />
                     Spending Analysis
                 </Heading>
-                <button className="text-sm text-primary font-semibold hover:underline">View Details</button>
+                <Button variant="ghost" className="text-sm text-primary font-semibold hover:underline">View Details</Button>
             </Flex>
             <Block className="flex-grow bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200 flex items-center justify-center">
                 <Text weight="medium" color="text-gray-400">Chart Visualization Placeholder</Text>

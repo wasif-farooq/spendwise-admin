@@ -1,6 +1,6 @@
 import { Calendar } from 'lucide-react';
 import { Heading, Block, Flex, AnimatedBlock } from '@shared';
-import { RecentTransactionItem } from '@ui';
+import { RecentTransactionItem, Button } from '@ui';
 
 export const RecentTransactionsPreview = () => {
     return (
@@ -15,7 +15,7 @@ export const RecentTransactionsPreview = () => {
                     <Calendar className="h-5 w-5 mr-2 text-primary" />
                     Recent Transactions
                 </Heading>
-                <button className="text-sm text-primary font-semibold hover:underline">See All</button>
+                <Button variant="ghost" className="text-sm text-primary font-semibold hover:underline">See All</Button>
             </Flex>
             <Block className="space-y-4 overflow-y-auto pr-2">
                 {[1, 2, 3].map((i) => (

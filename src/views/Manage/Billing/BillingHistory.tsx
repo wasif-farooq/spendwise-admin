@@ -1,5 +1,6 @@
 import { ShieldCheck, Download } from 'lucide-react';
 import { Block, Flex, Heading, Text } from '@shared';
+import { Button } from '@ui';
 
 interface Invoice {
     id: string;
@@ -32,17 +33,17 @@ export const BillingHistory = ({ billingHistory }: BillingHistoryProps) => {
                             </Block>
                             <Block className="text-right">
                                 <Text weight="black" className="text-gray-900">{invoice.amount}</Text>
-                                <button className="text-primary hover:text-primary/80 transition-colors mt-1">
+                                <Button variant="ghost" className="text-primary hover:text-primary/80 transition-colors mt-1">
                                     <Download className="h-4 w-4" />
-                                </button>
+                                </Button>
                             </Block>
                         </Flex>
                     ))}
                 </Block>
 
-                <button className="w-full mt-10 py-4 bg-gray-50 text-gray-500 font-black text-sm rounded-2xl hover:bg-gray-100 transition-all border border-gray-100">
+                <Button variant="outline" className="w-full mt-10 py-4 bg-gray-50 text-gray-500 font-black text-sm rounded-2xl hover:bg-gray-100 transition-all border border-gray-100">
                     View All Invoices
-                </button>
+                </Button>
             </Block>
         </Block>
     );

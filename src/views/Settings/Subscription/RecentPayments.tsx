@@ -1,5 +1,6 @@
 import { Receipt, Download, ArrowUpRight } from 'lucide-react';
 import { Block, Flex, Heading, Text } from '@shared';
+import { Button } from '@ui';
 
 interface Payment {
     id: string;
@@ -24,10 +25,10 @@ export const RecentPayments = ({ payments }: RecentPaymentsProps) => {
                         </Block>
                         <Heading as="h3" weight="black" className="text-xl tracking-tight text-gray-900">Recent Payments</Heading>
                     </Flex>
-                    <button className="text-indigo-600 font-black text-sm flex items-center hover:underline">
+                    <Button variant="ghost" className="text-indigo-600 font-black text-sm flex items-center hover:underline">
                         View All
                         <ArrowUpRight className="h-4 w-4 ml-1" />
-                    </button>
+                    </Button>
                 </Flex>
 
                 <Block className="space-y-4">
@@ -54,15 +55,15 @@ export const RecentPayments = ({ payments }: RecentPaymentsProps) => {
                                 <Text weight="black" className="text-gray-900">{payment.amount}</Text>
                                 <Block
                                     className={`px-3 py-1 text-[10px] uppercase tracking-widest rounded-full font-black ${payment.status === 'Paid' ? 'bg-emerald-100 text-emerald-700' :
-                                            payment.status === 'Pending' ? 'bg-amber-100 text-amber-700' :
-                                                'bg-rose-100 text-rose-700'
+                                        payment.status === 'Pending' ? 'bg-amber-100 text-amber-700' :
+                                            'bg-rose-100 text-rose-700'
                                         }`}
                                 >
                                     {payment.status}
                                 </Block>
-                                <button className="p-2 text-gray-400 hover:text-indigo-600 transition-colors">
+                                <Button variant="ghost" className="p-2 text-gray-400 hover:text-indigo-600 transition-colors">
                                     <Download className="h-5 w-5" />
-                                </button>
+                                </Button>
                             </Flex>
                         </Flex>
                     ))}
