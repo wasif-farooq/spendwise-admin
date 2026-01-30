@@ -1,0 +1,112 @@
+{
+    "insights": [
+        {
+            "id": "insight-1",
+            "type": "spending",
+            "title": "High Electronics Spending",
+            "description": "You spent $2,499 on electronics this month, which is 55% of your total expenses. This is significantly higher than your average.",
+            "priority": "high",
+            "category": "Electronics",
+            "amount": 2499.00,
+            "actionable": true,
+            "action": "Consider setting a budget limit for electronics purchases",
+            "createdAt": "2024-01-29T14:30:00Z"
+        },
+        {
+            "id": "insight-2",
+            "type": "saving",
+            "title": "Great Savings Rate!",
+            "description": "Your savings rate of 47.4% is excellent! You're saving almost half of your income.",
+            "priority": "low",
+            "actionable": false,
+            "createdAt": "2024-01-28T10:00:00Z"
+        },
+        {
+            "id": "insight-3",
+            "type": "budget",
+            "title": "Food & Drink Spending Decreased",
+            "description": "Your food spending is down 96% this month. Make sure you're eating well!",
+            "priority": "medium",
+            "category": "Food & Drink",
+            "actionable": true,
+            "action": "Review your meal planning",
+            "createdAt": "2024-01-27T15:00:00Z"
+        },
+        {
+            "id": "insight-4",
+            "type": "warning",
+            "title": "Unusual Transaction Detected",
+            "description": "A large purchase of $2,499 was detected. If this wasn't you, please review immediately.",
+            "priority": "high",
+            "amount": 2499.00,
+            "actionable": true,
+            "action": "Review transaction",
+            "createdAt": "2024-01-29T14:35:00Z"
+        }
+    ],
+    "recommendations": [
+        {
+            "id": "rec-1",
+            "category": "Transport",
+            "suggestion": "Consider using public transportation or carpooling to reduce transport costs",
+            "potentialSavings": 150.00,
+            "confidence": 85,
+            "reasoning": "Based on your transport spending patterns, you could save approximately $150/month by using alternative transportation methods 3 days a week."
+        },
+        {
+            "id": "rec-2",
+            "category": "Food & Drink",
+            "suggestion": "Meal prep on weekends to reduce dining out expenses",
+            "potentialSavings": 200.00,
+            "confidence": 78,
+            "reasoning": "Your historical data shows you spend an average of $300/month on dining out. Meal prepping could reduce this by 60%."
+        },
+        {
+            "id": "rec-3",
+            "category": "Subscriptions",
+            "suggestion": "Review and cancel unused subscriptions",
+            "potentialSavings": 50.00,
+            "confidence": 92,
+            "reasoning": "We detected 3 subscriptions that haven't been used in the last 2 months."
+        }
+    ],
+    "budgetSuggestions": [
+        {
+            "category": "Electronics",
+            "currentSpending": 2499.00,
+            "suggestedBudget": 500.00,
+            "reasoning": "Based on your income and historical spending, a monthly electronics budget of $500 would be more sustainable."
+        },
+        {
+            "category": "Food & Drink",
+            "currentSpending": 5.50,
+            "suggestedBudget": 400.00,
+            "reasoning": "Your current food spending is unusually low. A budget of $400/month would ensure proper nutrition while staying within your means."
+        },
+        {
+            "category": "Entertainment",
+            "currentSpending": 0,
+            "suggestedBudget": 200.00,
+            "reasoning": "Consider allocating $200/month for entertainment to maintain work-life balance."
+        }
+    ],
+    "spendingPatterns": [
+        {
+            "pattern": "Monthly rent payment",
+            "frequency": "Monthly on the 27th",
+            "averageAmount": 1800.00,
+            "nextOccurrence": "2024-02-27"
+        },
+        {
+            "pattern": "Weekly grocery shopping",
+            "frequency": "Every Saturday",
+            "averageAmount": 75.00,
+            "nextOccurrence": "2024-02-03"
+        },
+        {
+            "pattern": "Coffee purchases",
+            "frequency": "3-4 times per week",
+            "averageAmount": 5.50
+        }
+    ]
+}
