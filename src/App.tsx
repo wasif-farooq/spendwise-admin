@@ -25,6 +25,8 @@ import RoleEditor from './pages/ManagePage/RoleEditor';
 import ExchangeRatesPage from './pages/ExchangeRatesPage';
 import AccountsPage from './pages/AccountsPage';
 import TransactionsPage from './pages/TransactionsPage';
+import AnalyticsPage from './pages/AnalyticsPage';
+import AIAdvisorPage from './pages/AIAdvisorPage';
 
 import { LayoutProvider } from './context/LayoutContext';
 
@@ -41,6 +43,8 @@ function App() {
           {/* Dashboard Layout Routes (Authenticated) */}
           <Route element={<DashboardLayout />}>
             <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="/analytics" element={<AnalyticsPage />} />
+            <Route path="/ai-advisor" element={<AIAdvisorPage />} />
             <Route path="/exchange-rates" element={<ExchangeRatesPage />} />
             <Route path="/accounts" element={<AccountsPage />} />
             <Route path="/accounts/:id/transactions" element={<TransactionsPage />} />

@@ -9,7 +9,9 @@ import {
     User,
     Globe,
     Wallet,
-    Plus
+    Plus,
+    PieChart,
+    Sparkles
 } from 'lucide-react';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -28,6 +30,8 @@ export const DashboardLayout = () => {
 
     const navItems = [
         { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
+        { name: 'Analytics', path: '/analytics', icon: PieChart },
+        { name: 'AI Advisor', path: '/ai-advisor', icon: Sparkles },
         { name: 'Accounts', path: '/accounts', icon: Wallet },
         { name: 'Exchange Rates', path: '/exchange-rates', icon: Globe },
         { name: 'Manage', path: '/manage/general', icon: LayoutDashboard },
