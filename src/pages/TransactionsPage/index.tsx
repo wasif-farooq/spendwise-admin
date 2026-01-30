@@ -166,7 +166,7 @@ const TransactionsPage = () => {
         <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="p-8 space-y-8 max-w-7xl mx-auto"
+            className="p-8 space-y-8 max-w-[1600px] mx-auto"
         >
             {/* Header */}
             <header className="flex flex-col md:flex-row md:items-center justify-between gap-6">

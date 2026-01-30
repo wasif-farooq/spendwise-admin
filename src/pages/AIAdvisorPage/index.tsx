@@ -182,8 +182,8 @@ const AIAdvisorPage = () => {
                                         {msg.sender === 'user' ? <User className="h-4 w-4 text-gray-600" /> : <Bot className="h-4 w-4 text-primary" />}
                                     </div>
                                     <div className={`p-4 rounded-2xl shadow-sm ${msg.sender === 'user'
-                                            ? 'bg-primary text-white rounded-tr-none'
-                                            : 'bg-white border border-gray-100 text-gray-800 rounded-tl-none'
+                                        ? 'bg-primary text-white rounded-tr-none'
+                                        : 'bg-white border border-gray-100 text-gray-800 rounded-tl-none'
                                         }`}>
                                         <p className="text-sm leading-relaxed">{msg.text}</p>
                                         <span className={`text-[9px] mt-2 block opacity-60 ${msg.sender === 'user' ? 'text-right' : 'text-left'}`}>
@@ -217,7 +217,7 @@ const AIAdvisorPage = () => {
 
                 {/* Input Area */}
                 <div className="p-6 bg-white border-t border-gray-100 shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.05)]">
-                    <div className="max-w-4xl mx-auto space-y-4">
+                    <div className="max-w-6xl mx-auto space-y-4">
                         {/* Suggested Prompts */}
                         <div className="flex flex-wrap gap-2 overflow-x-auto pb-2 scrollbar-none">
                             {suggestedPrompts.map((prompt, idx) => (
