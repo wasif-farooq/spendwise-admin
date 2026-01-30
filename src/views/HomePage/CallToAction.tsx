@@ -1,20 +1,22 @@
-import { motion } from 'framer-motion';
 import { Button } from '@ui';
+import { AnimatedBlock } from '@shared';
 
 export const CallToAction = () => {
     return (
         <section className="py-20 bg-primary relative overflow-hidden">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 <div className="text-center max-w-3xl mx-auto">
-                    <motion.h2
+                    <AnimatedBlock
+                        as="h2"
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         className="text-3xl md:text-4xl font-bold text-white mb-6"
                     >
                         Ready to simplify your expense tracking?
-                    </motion.h2>
-                    <motion.p
+                    </AnimatedBlock>
+                    <AnimatedBlock
+                        as="p"
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
@@ -22,9 +24,9 @@ export const CallToAction = () => {
                         className="text-xl text-white/80 mb-10"
                     >
                         Join thousands of individuals and teams who use SpendWise to take control of their financial future.
-                    </motion.p>
+                    </AnimatedBlock>
 
-                    <motion.div
+                    <AnimatedBlock
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
@@ -41,7 +43,7 @@ export const CallToAction = () => {
                         <Button variant="secondary" size="lg" className="w-full sm:w-auto">
                             Get Started
                         </Button>
-                    </motion.div>
+                    </AnimatedBlock>
 
                     <p className="mt-6 text-sm text-white/60">
                         No credit card required. 14-day free trial.

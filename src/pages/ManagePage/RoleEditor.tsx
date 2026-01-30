@@ -1,4 +1,4 @@
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import { Shield, ShieldCheck, Check, X, Lock, Eye, PlusSquare, ChevronLeft, Info, AlertCircle, Save } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -9,7 +9,8 @@ import {
     Heading,
     Text,
     Grid,
-    Inline
+    Inline,
+    AnimatedBlock
 } from '@shared';
 
 const RoleEditor = () => {
@@ -126,8 +127,7 @@ const RoleEditor = () => {
     };
 
     return (
-        <Block
-            as={motion.div}
+        <AnimatedBlock
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="max-w-6xl mx-auto space-y-12 pb-20"
@@ -281,7 +281,8 @@ const RoleEditor = () => {
 
                                                     <Block className={`w-14 h-8 rounded-full transition-all relative flex items-center px-1 ${isSelected ? 'bg-primary shadow-lg shadow-primary/20' : 'bg-gray-200'
                                                         }`}>
-                                                        <motion.div
+                                                        <AnimatedBlock
+                                                            initial={false}
                                                             animate={{ x: isSelected ? 24 : 0 }}
                                                             className="w-6 h-6 bg-white rounded-full shadow-sm"
                                                         />
@@ -299,8 +300,7 @@ const RoleEditor = () => {
 
             <AnimatePresence>
                 {feedback && (
-                    <Block
-                        as={motion.div}
+                    <AnimatedBlock
                         initial={{ opacity: 0, scale: 0.9, y: 20 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.9, y: 20 }}
@@ -311,10 +311,10 @@ const RoleEditor = () => {
                             {feedback.type === 'success' ? <Check className="h-5 w-5" /> : <X className="h-5 w-5" />}
                             <Text as="span">{feedback.message}</Text>
                         </Flex>
-                    </Block>
+                    </AnimatedBlock>
                 )}
             </AnimatePresence>
-        </Block>
+        </AnimatedBlock>
     );
 };
 

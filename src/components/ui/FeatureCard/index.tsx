@@ -1,5 +1,5 @@
 import type { LucideIcon } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { AnimatedBlock } from '@shared';
 
 interface FeatureCardProps {
     title: string;
@@ -10,7 +10,7 @@ interface FeatureCardProps {
 
 export const FeatureCard: React.FC<FeatureCardProps> = ({ title, description, icon: Icon, delay = 0 }) => {
     return (
-        <motion.div
+        <AnimatedBlock
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -22,6 +22,6 @@ export const FeatureCard: React.FC<FeatureCardProps> = ({ title, description, ic
             </div>
             <h3 className="text-xl font-semibold text-gray-900 mb-2">{title}</h3>
             <p className="text-gray-600">{description}</p>
-        </motion.div>
+        </AnimatedBlock>
     );
 };

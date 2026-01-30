@@ -1,7 +1,6 @@
 import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { MoreVertical, TrendingUp, TrendingDown, Eye, Edit2 } from 'lucide-react';
-import { Block, Flex, Heading, Text } from '@shared';
+import { Block, Flex, Heading, Text, AnimatedBlock } from '@shared';
 
 interface AccountCardProps {
     account: {
@@ -22,7 +21,7 @@ export const AccountCard = ({ account, getIcon }: AccountCardProps) => {
     const navigate = useNavigate();
 
     return (
-        <motion.div
+        <AnimatedBlock
             layout
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -79,6 +78,6 @@ export const AccountCard = ({ account, getIcon }: AccountCardProps) => {
                     </button>
                 </Flex>
             </Block>
-        </motion.div>
+        </AnimatedBlock>
     );
 };

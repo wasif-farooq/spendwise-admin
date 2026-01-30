@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { ChevronDown, Check } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
+import { AnimatedBlock } from '@shared';
 
 interface Option {
     value: string;
@@ -48,7 +49,7 @@ export const CustomSelect = ({ label, options, value, onChange }: CustomSelectPr
 
             <AnimatePresence>
                 {isOpen && (
-                    <motion.div
+                    <AnimatedBlock
                         initial={{ opacity: 0, y: 10, scale: 0.95 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 10, scale: 0.95 }}
@@ -72,7 +73,7 @@ export const CustomSelect = ({ label, options, value, onChange }: CustomSelectPr
                                 {value === option.value && <Check className="h-4 w-4" />}
                             </button>
                         ))}
-                    </motion.div>
+                    </AnimatedBlock>
                 )}
             </AnimatePresence>
         </div>

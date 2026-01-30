@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import {
     Sparkles,
     Send,
@@ -10,7 +10,7 @@ import {
     Search,
     RefreshCw
 } from 'lucide-react';
-import { Block, Heading, Text, Flex } from '@shared';
+import { Block, Heading, Text, Flex, AnimatedBlock } from '@shared';
 
 import { ChatMessage, InsightCard, SuggestedPrompt } from '@ui';
 
@@ -120,7 +120,7 @@ const AIAdvisorPage = () => {
                 <Block className="mt-8 p-4 rounded-2xl bg-primary text-white space-y-3">
                     <Text size="sm" weight="bold">Goal Progress</Text>
                     <Block className="h-2 bg-white/20 rounded-full overflow-hidden">
-                        <motion.div
+                        <AnimatedBlock
                             initial={{ width: 0 }}
                             animate={{ width: '75%' }}
                             className="h-full bg-white rounded-full"
@@ -164,7 +164,7 @@ const AIAdvisorPage = () => {
                         ))}
                     </AnimatePresence>
                     {isTyping && (
-                        <motion.div
+                        <AnimatedBlock
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             className="flex items-start gap-3"
@@ -179,7 +179,7 @@ const AIAdvisorPage = () => {
                                     <span className="w-1.5 h-1.5 bg-gray-300 rounded-full animate-bounce [animation-delay:0.4s]" />
                                 </Flex>
                             </Block>
-                        </motion.div>
+                        </AnimatedBlock>
                     )}
                     <div ref={messagesEndRef} />
                 </Block>

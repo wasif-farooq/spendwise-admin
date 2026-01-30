@@ -1,6 +1,6 @@
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
-import { Block, Text } from '@shared';
+import { Block, Text, AnimatedBlock } from '@shared';
 
 interface FAQItemProps {
     question: string;
@@ -21,7 +21,7 @@ export const FAQItem = ({ question, answer, isOpen, onClick }: FAQItemProps) => 
             </button>
             <AnimatePresence>
                 {isOpen && (
-                    <motion.div
+                    <AnimatedBlock
                         initial={{ height: 0, opacity: 0 }}
                         animate={{ height: 'auto', opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
@@ -32,7 +32,7 @@ export const FAQItem = ({ question, answer, isOpen, onClick }: FAQItemProps) => 
                                 {answer}
                             </Text>
                         </Block>
-                    </motion.div>
+                    </AnimatedBlock>
                 )}
             </AnimatePresence>
         </Block>

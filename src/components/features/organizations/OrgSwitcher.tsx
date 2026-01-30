@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import {
     ChevronDown,
     Check,
@@ -10,6 +10,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { setAccountType } from '@/store/uiSlice';
 import type { RootState } from '@/store/store';
+import { AnimatedBlock } from '@shared';
 
 interface Organization {
     id: string;
@@ -94,7 +95,7 @@ export const OrgSwitcher: React.FC<OrgSwitcherProps> = ({ isCollapsed = false })
             {/* Dropdown */}
             <AnimatePresence>
                 {isOpen && (
-                    <motion.div
+                    <AnimatedBlock
                         initial={{ opacity: 0, y: 10, scale: 0.95 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 10, scale: 0.95 }}
@@ -136,7 +137,7 @@ export const OrgSwitcher: React.FC<OrgSwitcherProps> = ({ isCollapsed = false })
                                 Upgrade to Pro for unlimited organizations.
                             </p>
                         </div>
-                    </motion.div>
+                    </AnimatedBlock>
                 )}
             </AnimatePresence>
         </div>

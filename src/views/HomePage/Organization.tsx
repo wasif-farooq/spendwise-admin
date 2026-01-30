@@ -1,23 +1,23 @@
-import { motion } from 'framer-motion';
 import { Shield, UserPlus, Settings, CheckCircle2 } from 'lucide-react';
+import { Block, Flex, Grid, AnimatedBlock, Heading, Text } from '@shared';
 
 export const Organization = () => {
     return (
         <section id="organization" className="py-20 bg-gray-50 overflow-hidden">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-                    <motion.div
+                <Grid cols={1} className="lg:grid-cols-2" gap={16} align="center">
+                    <AnimatedBlock
                         initial={{ opacity: 0, x: -20 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.6 }}
                     >
-                        <h2 className="text-3xl font-bold text-gray-900 mb-6">Built for Teams and Organizations</h2>
-                        <p className="text-lg text-gray-600 mb-8">
+                        <Heading as="h2" size="3xl" weight="bold" color="text-gray-900" className="mb-6">Built for Teams and Organizations</Heading>
+                        <Text size="lg" color="text-gray-600" className="mb-8">
                             Manage your company's expenses with granular control. Invite team members, set permissions, and maintain a clear audit trail of every transaction.
-                        </p>
+                        </Text>
 
-                        <div className="space-y-6">
+                        <Block className="space-y-6">
                             {[
                                 {
                                     title: 'Granular Permissions',
@@ -35,49 +35,49 @@ export const Organization = () => {
                                     icon: Settings,
                                 },
                             ].map((item, index) => (
-                                <div key={index} className="flex gap-4">
-                                    <div className="flex-shrink-0 h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                                <Flex key={index} gap={4}>
+                                    <Block className="flex-shrink-0 h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center">
                                         <item.icon className="h-5 w-5 text-primary" />
-                                    </div>
-                                    <div>
-                                        <h3 className="font-semibold text-gray-900">{item.title}</h3>
-                                        <p className="text-gray-600 text-sm">{item.description}</p>
-                                    </div>
-                                </div>
+                                    </Block>
+                                    <Block>
+                                        <Heading as="h3" size="sm" weight="semibold" color="text-gray-900">{item.title}</Heading>
+                                        <Text size="sm" color="text-gray-600">{item.description}</Text>
+                                    </Block>
+                                </Flex>
                             ))}
-                        </div>
-                    </motion.div>
+                        </Block>
+                    </AnimatedBlock>
 
-                    <motion.div
+                    <AnimatedBlock
                         initial={{ opacity: 0, x: 20 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.6 }}
                         className="relative"
                     >
-                        <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-8">
-                            <div className="flex justify-between items-center mb-8">
-                                <h3 className="font-bold text-gray-900">Team Members</h3>
+                        <Block className="bg-white rounded-2xl shadow-xl border border-gray-100 p-8">
+                            <Flex justify="between" align="center" className="mb-8">
+                                <Heading as="h3" weight="bold" color="text-gray-900">Team Members</Heading>
                                 <button className="text-primary text-sm font-medium hover:underline">+ Invite Member</button>
-                            </div>
+                            </Flex>
 
-                            <div className="space-y-4">
+                            <Block className="space-y-4">
                                 {[
                                     { name: 'Alex Johnson', role: 'Admin', email: 'alex@company.com', status: 'Active' },
                                     { name: 'Sarah Chen', role: 'Editor', email: 'sarah@company.com', status: 'Active' },
                                     { name: 'Mike Ross', role: 'Viewer', email: 'mike@company.com', status: 'Pending' },
                                 ].map((member, index) => (
-                                    <div key={index} className="flex items-center justify-between p-4 rounded-xl bg-gray-50 border border-gray-100">
-                                        <div className="flex items-center gap-3">
-                                            <div className="h-10 w-10 rounded-full bg-primary/20 flex items-center justify-center font-bold text-primary">
+                                    <Flex key={index} align="center" justify="between" className="p-4 rounded-xl bg-gray-50 border border-gray-100">
+                                        <Flex align="center" gap={3}>
+                                            <Block className="h-10 w-10 rounded-full bg-primary/20 flex items-center justify-center font-bold text-primary">
                                                 {member.name[0]}
-                                            </div>
-                                            <div>
-                                                <p className="font-medium text-gray-900 text-sm">{member.name}</p>
-                                                <p className="text-gray-500 text-xs">{member.email}</p>
-                                            </div>
-                                        </div>
-                                        <div className="flex items-center gap-4">
+                                            </Block>
+                                            <Block>
+                                                <Text size="sm" weight="medium" color="text-gray-900">{member.name}</Text>
+                                                <Text size="xs" color="text-gray-500">{member.email}</Text>
+                                            </Block>
+                                        </Flex>
+                                        <Flex align="center" gap={4}>
                                             <span className={`text-xs px-2 py-1 rounded-full font-medium ${member.role === 'Admin' ? 'bg-blue-100 text-blue-700' :
                                                 member.role === 'Editor' ? 'bg-emerald-100 text-emerald-700' :
                                                     'bg-gray-100 text-gray-700'
@@ -85,10 +85,10 @@ export const Organization = () => {
                                                 {member.role}
                                             </span>
                                             <CheckCircle2 className={`h-4 w-4 ${member.status === 'Active' ? 'text-secondary' : 'text-gray-300'}`} />
-                                        </div>
-                                    </div>
+                                        </Flex>
+                                    </Flex>
                                 ))}
-                            </div>
+                            </Block>
 
                             <div className="mt-8 pt-8 border-t border-gray-100">
                                 <p className="text-xs text-gray-400 text-center uppercase tracking-widest font-bold mb-4">Permission Matrix</p>
@@ -111,13 +111,13 @@ export const Organization = () => {
                                     </div>
                                 ))}
                             </div>
-                        </div>
+                        </Block>
 
                         {/* Decorative elements */}
                         <div className="absolute -top-4 -right-4 h-24 w-24 bg-primary/5 rounded-full -z-10 blur-2xl"></div>
                         <div className="absolute -bottom-8 -left-8 h-32 w-32 bg-secondary/5 rounded-full -z-10 blur-2xl"></div>
-                    </motion.div>
-                </div>
+                    </AnimatedBlock>
+                </Grid>
             </div>
         </section>
     );

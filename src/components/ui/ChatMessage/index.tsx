@@ -1,6 +1,5 @@
-import { motion } from 'framer-motion';
 import { Bot, User } from 'lucide-react';
-import { Block, Flex, Text } from '@shared';
+import { Block, Flex, Text, AnimatedBlock } from '@shared';
 
 interface ChatMessageProps {
     message: {
@@ -13,7 +12,7 @@ interface ChatMessageProps {
 
 export const ChatMessage = ({ message: msg }: ChatMessageProps) => {
     return (
-        <motion.div
+        <AnimatedBlock
             initial={{ opacity: 0, y: 10, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
@@ -32,6 +31,6 @@ export const ChatMessage = ({ message: msg }: ChatMessageProps) => {
                     </span>
                 </Block>
             </Flex>
-        </motion.div>
+        </AnimatedBlock>
     );
 };
