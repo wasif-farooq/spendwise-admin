@@ -1,26 +1,18 @@
 import { useState, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import Select, { type StylesConfig } from 'react-select';
 import {
     Wallet,
     Plus,
     Search,
-    MoreVertical,
     CreditCard,
     Banknote,
     Building2,
-    Edit2,
-    Eye,
-    TrendingUp,
-    TrendingDown,
     Check,
     Info
 } from 'lucide-react';
-import Modal from '@/components/ui/Modal';
-import Button from '@/components/ui/Button';
-import Input from '@/components/ui/Input';
 import { Container, Heading, Text, Block, Flex } from '@shared';
+import { Button, Modal, Input, AccountCard } from '@ui';
 
 interface Account {
     id: string;
@@ -174,7 +166,6 @@ const customSelectStyles: StylesConfig<SelectOption, false> = {
 };
 
 const AccountsPage = () => {
-    const navigate = useNavigate();
     const [accounts] = useState<Account[]>(MOCK_ACCOUNTS);
     const [searchQuery, setSearchQuery] = useState('');
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -192,7 +183,7 @@ const AccountsPage = () => {
         );
     }, [accounts, searchQuery]);
 
-    const getIcon = (type: Account['type']) => {
+    const getIcon = (type: Account['type'] | string) => {
         switch (type) {
             case 'bank': return <Building2 size={24} />;
             case 'cash': return <Banknote size={24} />;
@@ -260,65 +251,7 @@ const AccountsPage = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <AnimatePresence mode="popLayout">
                     {filteredAccounts.map((account) => (
-                        <motion.div
-                            layout
-                            key={account.id}
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0, scale: 0.9 }}
-                            className="bg-white rounded-[3rem] border border-gray-100 shadow-sm hover:shadow-2xl hover:shadow-primary/5 transition-all group overflow-hidden flex flex-col"
-                        >
-                            <Block className="p-8 flex-grow space-y-8">
-                                <Flex align="start" justify="between">
-                                    <Block className={`h-16 w-16 rounded-[1.5rem] flex items-center justify-center text-white shadow-lg ${account.color} group-hover:scale-110 transition-transform duration-500`}>
-                                        {getIcon(account.type)}
-                                    </Block>
-                                    <Flex direction="col" align="end" gap={2}>
-                                        <button className="p-2 hover:bg-gray-100 rounded-xl transition-colors text-gray-400">
-                                            <MoreVertical size={20} />
-                                        </button>
-                                        <Flex align="center" gap={1} className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider ${account.trend === 'up' ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'}`}>
-                                            {account.trend === 'up' ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
-                                            {account.change}
-                                        </Flex>
-                                    </Flex>
-                                </Flex>
-
-                                <Block className="space-y-1">
-                                    <Heading size="2xl" weight="black" color="text-gray-900" className="tracking-tight">{account.name}</Heading>
-                                    <Text size="xs" weight="black" color="text-gray-400" className="uppercase tracking-widest">{account.type.replace('_', ' ')}</Text>
-                                </Block>
-
-                                <Block className="space-y-1">
-                                    <Text size="xs" weight="black" color="text-gray-400" className="uppercase tracking-widest">Current Balance</Text>
-                                    <Flex align="baseline" gap={2}>
-                                        <Text size="4xl" weight="black" className={`tracking-tighter ${account.balance < 0 ? 'text-rose-600' : 'text-gray-900'}`}>
-                                            {account.balance < 0 ? '-' : ''}${Math.abs(account.balance).toLocaleString()}
-                                        </Text>
-                                        <Text size="sm" weight="black" color="text-gray-400">{account.currency}</Text>
-                                    </Flex>
-                                </Block>
-                            </Block>
-
-                            <Block className="px-8 py-6 bg-gray-50/50 border-t border-gray-100 flex items-center justify-between">
-                                <Flex align="center" gap={2}>
-                                    <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-                                    <Text size="xs" weight="black" color="text-gray-400" className="uppercase tracking-widest">Active: {account.lastActivity}</Text>
-                                </Flex>
-                                <Flex align="center" gap={1}>
-                                    <button
-                                        onClick={() => navigate(`/accounts/${account.id}/transactions`)}
-                                        className="p-2 hover:bg-primary/10 hover:text-primary rounded-xl transition-all text-gray-400"
-                                        title="View Transactions"
-                                    >
-                                        <Eye size={18} />
-                                    </button>
-                                    <button className="p-2 hover:bg-primary/10 hover:text-primary rounded-xl transition-all text-gray-400" title="Edit Account">
-                                        <Edit2 size={18} />
-                                    </button>
-                                </Flex>
-                            </Block>
-                        </motion.div>
+                        <AccountCard key={account.id} account={account} getIcon={getIcon} />
                     ))}
                 </AnimatePresence>
 

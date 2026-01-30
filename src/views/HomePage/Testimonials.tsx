@@ -1,5 +1,5 @@
-import { Quote } from 'lucide-react';
-import { Block, Flex, Grid, AnimatedBlock } from '@shared';
+import { Grid } from '@shared';
+import { TestimonialCard } from '@ui';
 
 const testimonials = [
     {
@@ -35,26 +35,11 @@ export const Testimonials = () => {
 
                 <Grid cols={1} className="md:grid-cols-3" gap={8}>
                     {testimonials.map((testimonial, index) => (
-                        <AnimatedBlock
+                        <TestimonialCard
                             key={index}
-                            initial={{ opacity: 0, scale: 0.95 }}
-                            whileInView={{ opacity: 1, scale: 1 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.5, delay: index * 0.1 }}
-                            className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 relative"
-                        >
-                            <Quote className="h-8 w-8 text-primary/10 absolute top-6 right-8" />
-                            <p className="text-gray-600 italic mb-8 relative z-10">"{testimonial.quote}"</p>
-                            <Flex align="center" gap={4}>
-                                <Block className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center font-bold text-primary">
-                                    {testimonial.avatar}
-                                </Block>
-                                <Block>
-                                    <p className="font-bold text-gray-900">{testimonial.author}</p>
-                                    <p className="text-gray-500 text-sm">{testimonial.role}</p>
-                                </Block>
-                            </Flex>
-                        </AnimatedBlock>
+                            index={index}
+                            {...testimonial}
+                        />
                     ))}
                 </Grid>
 

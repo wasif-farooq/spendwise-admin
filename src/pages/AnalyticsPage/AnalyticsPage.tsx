@@ -19,11 +19,10 @@ import {
     DollarSign,
     Target,
     Filter,
-    Calendar,
-    ArrowUpRight,
-    ArrowDownRight
+    Calendar
 } from 'lucide-react';
 import { Container, Heading, Text, Block, Flex, Grid, AnimatedBlock } from '@shared';
+import { StatCard } from '@ui';
 
 const COLORS = ['#4F46E5', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899'];
 
@@ -54,23 +53,6 @@ const spendingTrendData = [
     { date: '2026-01-29', amount: 150 },
     { date: '2026-01-30', amount: 400 },
 ];
-
-
-const StatCard = ({ title, value, change, trend, icon: Icon, color }: any) => (
-    <AnimatedBlock className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
-        <Flex align="center" justify="between" className="mb-4">
-            <Block className={`p-3 rounded-2xl ${color.bg}`}>
-                <Icon className={`h-6 w-6 ${color.text}`} />
-            </Block>
-            <Flex align="center" className={`text-xs font-bold px-2 py-1 rounded-full ${trend === 'up' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
-                {trend === 'up' ? <ArrowUpRight className="h-3 w-3 mr-1" /> : <ArrowDownRight className="h-3 w-3 mr-1" />}
-                {change}
-            </Flex>
-        </Flex>
-        <Text size="sm" weight="medium" color="text-gray-500">{title}</Text>
-        <Text size="2xl" weight="bold" color="text-gray-900" className="mt-1">{value}</Text>
-    </AnimatedBlock>
-);
 
 const AnalyticsPage = () => {
     return (

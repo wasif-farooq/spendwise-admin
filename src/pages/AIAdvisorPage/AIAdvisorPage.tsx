@@ -4,15 +4,15 @@ import {
     Sparkles,
     Send,
     Bot,
-    User,
     TrendingDown,
     Zap,
     Lightbulb,
-    ChevronRight,
     Search,
     RefreshCw
 } from 'lucide-react';
 import { Block, Heading, Text, Flex } from '@shared';
+
+import { ChatMessage, InsightCard, SuggestedPrompt } from '@ui';
 
 interface Message {
     id: number;
@@ -113,18 +113,7 @@ const AIAdvisorPage = () => {
 
                 <div className="space-y-4">
                     {insights.map((insight, idx) => (
-                        <Block key={idx} className="p-4 rounded-2xl border border-gray-100 bg-gray-50/50 hover:bg-gray-50 transition-colors cursor-pointer group">
-                            <Flex align="center" gap={3} className="mb-2">
-                                <Block className={`p-2 rounded-lg ${insight.bg}`}>
-                                    <insight.icon className={`h-4 w-4 ${insight.color}`} />
-                                </Block>
-                                <Text size="sm" weight="bold" color="text-gray-900">{insight.title}</Text>
-                            </Flex>
-                            <Text size="xs" color="text-gray-500" className="leading-relaxed mb-3">{insight.desc}</Text>
-                            <button className="text-[10px] font-bold text-primary flex items-center group-hover:gap-1 transition-all">
-                                VIEW DETAILS <ChevronRight className="h-3 w-3" />
-                            </button>
-                        </Block>
+                        <InsightCard key={idx} insight={insight} />
                     ))}
                 </div>
 
@@ -171,27 +160,7 @@ const AIAdvisorPage = () => {
                 <Block className="flex-grow overflow-y-auto p-6 space-y-6">
                     <AnimatePresence initial={false}>
                         {messages.map((msg) => (
-                            <motion.div
-                                key={msg.id}
-                                initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                                animate={{ opacity: 1, y: 0, scale: 1 }}
-                                className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
-                            >
-                                <Flex gap={3} className={`max-w-[80%] ${msg.sender === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
-                                    <Block className={`h-8 w-8 rounded-full flex-shrink-0 flex items-center justify-center ${msg.sender === 'user' ? 'bg-gray-200' : 'bg-primary/10'}`}>
-                                        {msg.sender === 'user' ? <User className="h-4 w-4 text-gray-600" /> : <Bot className="h-4 w-4 text-primary" />}
-                                    </Block>
-                                    <Block className={`p-4 rounded-2xl shadow-sm ${msg.sender === 'user'
-                                        ? 'bg-primary text-white rounded-tr-none'
-                                        : 'bg-white border border-gray-100 text-gray-800 rounded-tl-none'
-                                        }`}>
-                                        <Text size="sm" className="leading-relaxed">{msg.text}</Text>
-                                        <span className={`text-[9px] mt-2 block opacity-60 ${msg.sender === 'user' ? 'text-right' : 'text-left'}`}>
-                                            {msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                        </span>
-                                    </Block>
-                                </Flex>
-                            </motion.div>
+                            <ChatMessage key={msg.id} message={msg} />
                         ))}
                     </AnimatePresence>
                     {isTyping && (
@@ -221,13 +190,11 @@ const AIAdvisorPage = () => {
                         {/* Suggested Prompts */}
                         <Flex gap={2} className="overflow-x-auto pb-2 scrollbar-none">
                             {suggestedPrompts.map((prompt, idx) => (
-                                <button
+                                <SuggestedPrompt
                                     key={idx}
-                                    onClick={() => handleSendMessage(prompt)}
-                                    className="px-4 py-2 bg-gray-50 border border-gray-200 rounded-full text-xs font-medium text-gray-600 hover:bg-primary/5 hover:border-primary/20 hover:text-primary transition-all whitespace-nowrap"
-                                >
-                                    {prompt}
-                                </button>
+                                    prompt={prompt}
+                                    onClick={handleSendMessage}
+                                />
                             ))}
                         </Flex>
 

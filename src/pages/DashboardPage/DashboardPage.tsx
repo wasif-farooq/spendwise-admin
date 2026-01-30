@@ -6,12 +6,34 @@ import {
     Calendar
 } from 'lucide-react';
 import { Container, Heading, Text, Block, Flex, Grid, AnimatedBlock } from '@shared';
+import { StatCard, RecentTransactionItem } from '@ui';
 
 const DashboardPage = () => {
     const stats = [
-        { name: 'Total Balance', value: '$12,450.00', change: '+12.5%', icon: Wallet, color: 'text-blue-600', bg: 'bg-blue-50' },
-        { name: 'Monthly Income', value: '$4,200.00', change: '+8.2%', icon: TrendingUp, color: 'text-green-600', bg: 'bg-green-50' },
-        { name: 'Monthly Expenses', value: '$2,150.00', change: '-4.1%', icon: TrendingDown, color: 'text-red-600', bg: 'bg-red-50' },
+        {
+            name: 'Total Balance',
+            value: '$12,450.00',
+            change: '12.5% vs last month',
+            trend: 'up' as const,
+            icon: Wallet,
+            color: { text: 'text-blue-600', bg: 'bg-blue-50' }
+        },
+        {
+            name: 'Monthly Income',
+            value: '$4,200.00',
+            change: '8.2% increased',
+            trend: 'up' as const,
+            icon: TrendingUp,
+            color: { text: 'text-green-600', bg: 'bg-green-50' }
+        },
+        {
+            name: 'Monthly Expenses',
+            value: '$2,150.00',
+            change: '4.1% decreased',
+            trend: 'down' as const,
+            icon: TrendingDown,
+            color: { text: 'text-red-600', bg: 'bg-red-50' }
+        },
     ];
 
     return (
@@ -27,21 +49,15 @@ const DashboardPage = () => {
                     <AnimatedBlock
                         key={stat.name}
                         transition={{ delay: index * 0.1 }}
-                        className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow"
                     >
-                        <Flex align="center" justify="between">
-                            <Block className={`${stat.bg} p-3 rounded-2xl`}>
-                                <stat.icon className={`h-6 w-6 ${stat.color}`} />
-                            </Block>
-                            <span className={`text-xs font-bold px-2 py-1 rounded-full ${stat.change.startsWith('+') ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
-                                }`}>
-                                {stat.change}
-                            </span>
-                        </Flex>
-                        <Block className="mt-4">
-                            <Text size="sm" weight="medium" color="text-gray-500">{stat.name}</Text>
-                            <Text size="2xl" weight="bold" color="text-gray-900" className="mt-1">{stat.value}</Text>
-                        </Block>
+                        <StatCard
+                            title={stat.name}
+                            value={stat.value}
+                            change={stat.change}
+                            trend={stat.trend}
+                            icon={stat.icon}
+                            color={stat.color}
+                        />
                     </AnimatedBlock>
                 ))}
             </Grid>
@@ -79,20 +95,16 @@ const DashboardPage = () => {
                         </Heading>
                         <button className="text-sm text-primary font-semibold hover:underline">See All</button>
                     </Flex>
-                    <Block className="space-y-4">
+                    <Block className="space-y-4 overflow-y-auto pr-2">
                         {[1, 2, 3].map((i) => (
-                            <Flex key={i} align="center" justify="between" className="p-3 hover:bg-gray-50 rounded-2xl transition-colors cursor-pointer">
-                                <Flex align="center">
-                                    <Block className="h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 font-bold">
-                                        {i}
-                                    </Block>
-                                    <Block className="ml-3">
-                                        <Text size="sm" weight="bold" color="text-gray-900">Transaction {i}</Text>
-                                        <Text size="xs" color="text-gray-500">Jan 29, 2026</Text>
-                                    </Block>
-                                </Flex>
-                                <Text size="sm" weight="bold" color="text-red-600">-$45.00</Text>
-                            </Flex>
+                            <RecentTransactionItem
+                                key={i}
+                                index={i}
+                                description={`Transaction ${i}`}
+                                date="Jan 29, 2026"
+                                amount="$45.00"
+                                isExpense={true}
+                            />
                         ))}
                     </Block>
                 </AnimatedBlock>

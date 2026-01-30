@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown } from 'lucide-react';
+import { FAQItem } from '@ui';
 
 const faqs = [
     {
@@ -36,29 +35,13 @@ export const FAQ = () => {
 
                 <div className="space-y-4">
                     {faqs.map((faq, index) => (
-                        <div key={index} className="border border-gray-100 rounded-xl overflow-hidden">
-                            <button
-                                onClick={() => setActiveIndex(activeIndex === index ? null : index)}
-                                className="w-full flex items-center justify-between p-6 text-left hover:bg-gray-50 transition-colors"
-                            >
-                                <span className="font-semibold text-gray-900">{faq.question}</span>
-                                <ChevronDown className={`h-5 w-5 text-gray-500 transition-transform ${activeIndex === index ? 'rotate-180' : ''}`} />
-                            </button>
-                            <AnimatePresence>
-                                {activeIndex === index && (
-                                    <motion.div
-                                        initial={{ height: 0, opacity: 0 }}
-                                        animate={{ height: 'auto', opacity: 1 }}
-                                        exit={{ height: 0, opacity: 0 }}
-                                        transition={{ duration: 0.3 }}
-                                    >
-                                        <div className="p-6 pt-0 text-gray-600 leading-relaxed">
-                                            {faq.answer}
-                                        </div>
-                                    </motion.div>
-                                )}
-                            </AnimatePresence>
-                        </div>
+                        <FAQItem
+                            key={index}
+                            question={faq.question}
+                            answer={faq.answer}
+                            isOpen={activeIndex === index}
+                            onClick={() => setActiveIndex(activeIndex === index ? null : index)}
+                        />
                     ))}
                 </div>
             </div>
