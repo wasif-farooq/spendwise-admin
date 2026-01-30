@@ -1,6 +1,7 @@
 import { useAppDispatch, useAppSelector } from '@hooks/redux';
 import { toggleBillingCycle } from '@store/uiSlice';
 import { PricingCard } from '@ui';
+import { Grid, Flex } from '@shared';
 
 export const Pricing = () => {
     const dispatch = useAppDispatch();
@@ -47,7 +48,7 @@ export const Pricing = () => {
                         Choose the plan that's right for you or your organization.
                     </p>
 
-                    <div className="flex items-center justify-center gap-4">
+                    <Flex align="center" justify="center" gap={4}>
                         <span className={!isYearly ? 'text-gray-900 font-medium' : 'text-gray-500'}>Monthly</span>
                         <button
                             onClick={() => dispatch(toggleBillingCycle())}
@@ -61,14 +62,14 @@ export const Pricing = () => {
                         <span className={isYearly ? 'text-gray-900 font-medium' : 'text-gray-500'}>
                             Yearly <span className="text-secondary text-sm font-bold">(Save 20%)</span>
                         </span>
-                    </div>
+                    </Flex>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <Grid cols={1} gap={8} className="md:grid-cols-2 max-w-4xl mx-auto">
                     {plans.map((plan, index) => (
                         <PricingCard key={index} {...plan} />
                     ))}
-                </div>
+                </Grid>
             </div>
         </section>
     );

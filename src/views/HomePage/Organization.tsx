@@ -79,8 +79,8 @@ export const Organization = () => {
                                         </div>
                                         <div className="flex items-center gap-4">
                                             <span className={`text-xs px-2 py-1 rounded-full font-medium ${member.role === 'Admin' ? 'bg-blue-100 text-blue-700' :
-                                                    member.role === 'Editor' ? 'bg-emerald-100 text-emerald-700' :
-                                                        'bg-gray-100 text-gray-700'
+                                                member.role === 'Editor' ? 'bg-emerald-100 text-emerald-700' :
+                                                    'bg-gray-100 text-gray-700'
                                                 }`}>
                                                 {member.role}
                                             </span>

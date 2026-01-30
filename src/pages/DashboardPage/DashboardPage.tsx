@@ -1,4 +1,3 @@
-import { motion } from 'framer-motion';
 import {
     TrendingUp,
     TrendingDown,
@@ -6,7 +5,7 @@ import {
     PieChart,
     Calendar
 } from 'lucide-react';
-import { Container, Heading, Text, Block, Flex } from '@shared';
+import { Container, Heading, Text, Block, Flex, Grid, AnimatedBlock } from '@shared';
 
 const DashboardPage = () => {
     const stats = [
@@ -17,21 +16,16 @@ const DashboardPage = () => {
 
     return (
         <Container size="wide" className="p-8 space-y-8">
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-            >
+            <AnimatedBlock>
                 <Heading size="3xl" weight="black" color="text-gray-900">Overview</Heading>
                 <Text color="text-gray-500" className="mt-1">Welcome back, John! Here's what's happening today.</Text>
-            </motion.div>
+            </AnimatedBlock>
 
             {/* Stats Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <Grid cols={1} className="md:grid-cols-3" gap={6}>
                 {stats.map((stat, index) => (
-                    <motion.div
+                    <AnimatedBlock
                         key={stat.name}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: index * 0.1 }}
                         className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow"
                     >
@@ -48,13 +42,13 @@ const DashboardPage = () => {
                             <Text size="sm" weight="medium" color="text-gray-500">{stat.name}</Text>
                             <Text size="2xl" weight="bold" color="text-gray-900" className="mt-1">{stat.value}</Text>
                         </Block>
-                    </motion.div>
+                    </AnimatedBlock>
                 ))}
-            </div>
+            </Grid>
 
             {/* Charts & Recent Activity Placeholders */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <motion.div
+            <Grid cols={1} className="lg:grid-cols-2" gap={8}>
+                <AnimatedBlock
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: 0.3 }}
@@ -70,9 +64,9 @@ const DashboardPage = () => {
                     <Block className="flex-grow bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200 flex items-center justify-center">
                         <Text weight="medium" color="text-gray-400">Chart Visualization Placeholder</Text>
                     </Block>
-                </motion.div>
+                </AnimatedBlock>
 
-                <motion.div
+                <AnimatedBlock
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: 0.4 }}
@@ -85,7 +79,7 @@ const DashboardPage = () => {
                         </Heading>
                         <button className="text-sm text-primary font-semibold hover:underline">See All</button>
                     </Flex>
-                    <div className="space-y-4">
+                    <Block className="space-y-4">
                         {[1, 2, 3].map((i) => (
                             <Flex key={i} align="center" justify="between" className="p-3 hover:bg-gray-50 rounded-2xl transition-colors cursor-pointer">
                                 <Flex align="center">
@@ -100,9 +94,9 @@ const DashboardPage = () => {
                                 <Text size="sm" weight="bold" color="text-red-600">-$45.00</Text>
                             </Flex>
                         ))}
-                    </div>
-                </motion.div>
-            </div>
+                    </Block>
+                </AnimatedBlock>
+            </Grid>
         </Container>
     );
 };

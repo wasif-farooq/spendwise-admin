@@ -1,5 +1,5 @@
-import { motion } from 'framer-motion';
 import { CreditCard, Users, Calendar, History } from 'lucide-react';
+import { Block, Grid, AnimatedBlock } from '@shared';
 
 const steps = [
     {
@@ -39,9 +39,9 @@ export const HowItWorks = () => {
                     {/* Connector Line (Desktop) */}
                     <div className="hidden lg:block absolute top-1/2 left-0 w-full h-0.5 bg-gray-100 -translate-y-1/2 z-0"></div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 relative z-10">
+                    <Grid cols={1} gap={8} className="md:grid-cols-2 lg:grid-cols-4 relative z-10">
                         {steps.map((step, index) => (
-                            <motion.div
+                            <AnimatedBlock
                                 key={index}
                                 initial={{ opacity: 0, y: 20 }}
                                 whileInView={{ opacity: 1, y: 0 }}
@@ -49,19 +49,19 @@ export const HowItWorks = () => {
                                 transition={{ duration: 0.5, delay: index * 0.1 }}
                                 className="bg-white p-6 text-center"
                             >
-                                <div className="relative inline-block mb-6">
-                                    <div className="h-16 w-16 rounded-full bg-primary flex items-center justify-center text-white shadow-lg shadow-primary/20">
+                                <Block className="relative inline-block mb-6">
+                                    <Block className="h-16 w-16 rounded-full bg-primary flex items-center justify-center text-white shadow-lg shadow-primary/20">
                                         <step.icon className="h-8 w-8" />
-                                    </div>
-                                    <div className="absolute -top-2 -right-2 h-8 w-8 rounded-full bg-secondary flex items-center justify-center text-white font-bold border-4 border-white">
+                                    </Block>
+                                    <Block className="absolute -top-2 -right-2 h-8 w-8 rounded-full bg-secondary flex items-center justify-center text-white font-bold border-4 border-white">
                                         {index + 1}
-                                    </div>
-                                </div>
+                                    </Block>
+                                </Block>
                                 <h3 className="text-xl font-semibold text-gray-900 mb-2">{step.title}</h3>
                                 <p className="text-gray-600 text-sm leading-relaxed">{step.description}</p>
-                            </motion.div>
+                            </AnimatedBlock>
                         ))}
-                    </div>
+                    </Grid>
                 </div>
             </div>
         </section>

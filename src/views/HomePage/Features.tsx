@@ -1,5 +1,6 @@
 import { LayoutDashboard, Users, Calendar, History, PieChart, Cloud } from 'lucide-react';
 import { FeatureCard } from '@ui';
+import { Grid } from '@shared';
 
 const features = [
     {
@@ -45,7 +46,7 @@ export const Features = () => {
                     </p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <Grid cols={1} className="md:grid-cols-2 lg:grid-cols-3" gap={8}>
                     {features.map((feature, index) => (
                         <FeatureCard
                             key={index}
@@ -55,7 +56,7 @@ export const Features = () => {
                             delay={index * 0.1}
                         />
                     ))}
-                </div>
+                </Grid>
             </div>
         </section>
     );

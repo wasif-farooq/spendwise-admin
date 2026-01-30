@@ -1,4 +1,3 @@
-import { motion } from 'framer-motion';
 import {
     BarChart,
     Bar,
@@ -24,7 +23,7 @@ import {
     ArrowUpRight,
     ArrowDownRight
 } from 'lucide-react';
-import { Container, Heading, Text, Block, Flex } from '@shared';
+import { Container, Heading, Text, Block, Flex, Grid, AnimatedBlock } from '@shared';
 
 const COLORS = ['#4F46E5', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899'];
 
@@ -56,12 +55,9 @@ const spendingTrendData = [
     { date: '2026-01-30', amount: 400 },
 ];
 
+
 const StatCard = ({ title, value, change, trend, icon: Icon, color }: any) => (
-    <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow"
-    >
+    <AnimatedBlock className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
         <Flex align="center" justify="between" className="mb-4">
             <Block className={`p-3 rounded-2xl ${color.bg}`}>
                 <Icon className={`h-6 w-6 ${color.text}`} />
@@ -73,20 +69,20 @@ const StatCard = ({ title, value, change, trend, icon: Icon, color }: any) => (
         </Flex>
         <Text size="sm" weight="medium" color="text-gray-500">{title}</Text>
         <Text size="2xl" weight="bold" color="text-gray-900" className="mt-1">{value}</Text>
-    </motion.div>
+    </AnimatedBlock>
 );
 
 const AnalyticsPage = () => {
     return (
         <Container size="wide" className="p-8 space-y-8">
             <Flex direction="col" className="md:flex-row" align="stretch" justify="between" gap={4}>
-                <motion.div
+                <AnimatedBlock
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                 >
                     <Heading size="3xl" weight="bold" color="text-gray-900">Analytics</Heading>
                     <Text color="text-gray-500" className="mt-1">Deep dive into your financial health and spending patterns.</Text>
-                </motion.div>
+                </AnimatedBlock>
 
                 <Flex align="center" gap={3}>
                     <button className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-xl text-sm font-medium hover:bg-gray-50 transition-colors text-gray-700">
@@ -101,7 +97,7 @@ const AnalyticsPage = () => {
             </Flex>
 
             {/* Stats Overview */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <Grid cols={1} className="md:grid-cols-2 lg:grid-cols-4" gap={6}>
                 <StatCard
                     title="Net Savings"
                     value="$5,840.00"
@@ -134,11 +130,11 @@ const AnalyticsPage = () => {
                     icon={Target}
                     color={{ bg: 'bg-emerald-50', text: 'text-emerald-600' }}
                 />
-            </div>
+            </Grid>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <Grid cols={1} className="lg:grid-cols-3" gap={8}>
                 {/* Income vs Expenses Bar Chart */}
-                <motion.div
+                <AnimatedBlock
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
                     className="lg:col-span-2 bg-white p-8 rounded-3xl border border-gray-100 shadow-sm"
@@ -159,10 +155,10 @@ const AnalyticsPage = () => {
                             </BarChart>
                         </ResponsiveContainer>
                     </Block>
-                </motion.div>
+                </AnimatedBlock>
 
                 {/* Categories Pie Chart */}
-                <motion.div
+                <AnimatedBlock
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
                     className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm"
@@ -191,13 +187,11 @@ const AnalyticsPage = () => {
                             </PieChart>
                         </ResponsiveContainer>
                     </Block>
-                </motion.div>
-            </div>
+                </AnimatedBlock>
+            </Grid>
 
             {/* Spending Trend Area Chart */}
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
+            <AnimatedBlock
                 className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm"
             >
                 <Heading as="h3" size="lg" weight="bold" color="text-gray-900" className="mb-6">Daily Spending Trend</Heading>
@@ -237,7 +231,7 @@ const AnalyticsPage = () => {
                         </AreaChart>
                     </ResponsiveContainer>
                 </Block>
-            </motion.div>
+            </AnimatedBlock>
         </Container>
     );
 };

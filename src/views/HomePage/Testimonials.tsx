@@ -1,5 +1,5 @@
-import { motion } from 'framer-motion';
 import { Quote } from 'lucide-react';
+import { Block, Flex, Grid, AnimatedBlock } from '@shared';
 
 const testimonials = [
     {
@@ -33,9 +33,9 @@ export const Testimonials = () => {
                     </p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <Grid cols={1} className="md:grid-cols-3" gap={8}>
                     {testimonials.map((testimonial, index) => (
-                        <motion.div
+                        <AnimatedBlock
                             key={index}
                             initial={{ opacity: 0, scale: 0.95 }}
                             whileInView={{ opacity: 1, scale: 1 }}
@@ -45,18 +45,18 @@ export const Testimonials = () => {
                         >
                             <Quote className="h-8 w-8 text-primary/10 absolute top-6 right-8" />
                             <p className="text-gray-600 italic mb-8 relative z-10">"{testimonial.quote}"</p>
-                            <div className="flex items-center gap-4">
-                                <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center font-bold text-primary">
+                            <Flex align="center" gap={4}>
+                                <Block className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center font-bold text-primary">
                                     {testimonial.avatar}
-                                </div>
-                                <div>
+                                </Block>
+                                <Block>
                                     <p className="font-bold text-gray-900">{testimonial.author}</p>
                                     <p className="text-gray-500 text-sm">{testimonial.role}</p>
-                                </div>
-                            </div>
-                        </motion.div>
+                                </Block>
+                            </Flex>
+                        </AnimatedBlock>
                     ))}
-                </div>
+                </Grid>
 
                 {/* Trust Badges */}
                 <div className="mt-20 flex flex-wrap justify-center items-center gap-12 opacity-40 grayscale">
