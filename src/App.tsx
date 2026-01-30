@@ -16,6 +16,7 @@ import Profile from './pages/SettingsPage/Profile';
 import Preferences from './pages/SettingsPage/Preferences';
 import Security from './pages/SettingsPage/Security';
 import Setup2FAPage from './pages/SettingsPage/Setup2FAPage';
+import SettingsSubscription from './pages/SettingsPage/Subscription';
 import ManagePage from './pages/ManagePage';
 import ManageGeneral from './pages/ManagePage/General';
 import ManageMembers from './pages/ManagePage/Members';
@@ -67,6 +68,7 @@ function App() {
               <Route path="preferences" element={<Preferences />} />
               <Route path="security" element={<Security />} />
               <Route path="security/setup-2fa" element={<Setup2FAPage />} />
+              <Route path="subscription" element={<SettingsSubscription />} />
             </Route>
           </Route>
 

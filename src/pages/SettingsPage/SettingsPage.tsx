@@ -1,5 +1,5 @@
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
-import { Shield, Palette, User } from 'lucide-react';
+import { Shield, Palette, User, Receipt } from 'lucide-react';
 import { motion } from 'framer-motion';
 import {
     Block,
@@ -17,6 +17,7 @@ const SettingsPage = () => {
         { name: 'Profile', path: 'profile', icon: User },
         { name: 'Preferences', path: 'preferences', icon: Palette },
         { name: 'Security', path: 'security', icon: Shield },
+        { name: 'Subscription', path: 'subscription', icon: Receipt },
     ];
 
     return (
