@@ -40,7 +40,7 @@ export interface UpdatePasswordData {
 
 export interface AuthState {
     user: User | null;
-    token: string | null;
+    accessToken: string | null;
     loading: boolean;
     error: string | null;
     isAuthenticated: boolean;
