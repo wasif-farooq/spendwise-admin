@@ -3,6 +3,7 @@ import { Shield, ShieldCheck, Check, X, Lock, Eye, PlusSquare, ChevronLeft, Info
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Button, Input } from '@ui';
+import mockData from '@/data/mockData.json';
 import {
     Block,
     Flex,
@@ -83,16 +84,17 @@ const RoleEditor = () => {
     const [selectedPermissions, setSelectedPermissions] = useState<any>({});
 
     useEffect(() => {
-        if (isEditing) {
-            // Mock loading existing role
-            setRoleName('Custom Role');
-            setRoleDescription('A role with specific descriptive permissions.');
-            setSelectedPermissions({
-                dashboard: ['view'],
-                transactions: ['view', 'create'],
-            });
+        if (isEditing && id) {
+            // Find role in mockData
+            const role = (mockData as any).roles.find((r: any) => r.id === Number(id));
+
+            if (role) {
+                setRoleName(role.name);
+                setRoleDescription(role.description);
+                setSelectedPermissions(role.permissions || {});
+            }
         }
-    }, [isEditing]);
+    }, [isEditing, id]);
 
     const togglePermission = (resourceId: string, actionId: string) => {
         const currentResPerms = selectedPermissions[resourceId] || [];

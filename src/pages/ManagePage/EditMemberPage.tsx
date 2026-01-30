@@ -33,15 +33,21 @@ const EditMemberPage = () => {
             setIsLoading(true);
             await new Promise(resolve => setTimeout(resolve, 600)); // Simulating network
 
-            // In a real app, fetch based on 'id'
-            // Here we just mock some existing data
-            setEmail('jane@example.com');
-            setSelectedRoles(['editor', 'viewer']);
-            setAccountConfigs({
-                '1': { accountId: '1', permissions: ['view', 'create'], denied: [] },
-                '3': { accountId: '3', permissions: ['view'], denied: [] }
-            });
-            setOverriddenAccounts(['1']);
+            const member = mockData.members.find(m => m.id === Number(id));
+
+            if (member) {
+                setEmail(member.email);
+                // logic to handle legacy 'role' vs new 'roles' array
+                const roles = (member as any).roles || [member.role.toLowerCase()];
+                setSelectedRoles(roles);
+
+                const permissions = (member as any).accountPermissions || {};
+                setAccountConfigs(permissions);
+
+                // Infer overridden accounts from permissions existence
+                setOverriddenAccounts(Object.keys(permissions));
+            }
+
             setIsLoading(false);
         };
 

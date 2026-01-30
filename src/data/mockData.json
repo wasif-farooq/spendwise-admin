@@ -16,7 +16,28 @@
             "role": "Member",
             "status": "Active",
             "joinedDate": "2023-11-15",
-            "isCurrentUser": false
+            "isCurrentUser": false,
+            "roles": [
+                "member",
+                "viewer"
+            ],
+            "accountPermissions": {
+                "1": {
+                    "accountId": "1",
+                    "permissions": [
+                        "view",
+                        "create"
+                    ],
+                    "denied": []
+                },
+                "3": {
+                    "accountId": "3",
+                    "permissions": [
+                        "view"
+                    ],
+                    "denied": []
+                }
+            }
         },
         {
             "id": 3,
