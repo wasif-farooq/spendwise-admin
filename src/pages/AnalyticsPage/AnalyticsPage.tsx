@@ -1,58 +1,10 @@
-import {
-    BarChart,
-    Bar,
-    XAxis,
-    YAxis,
-    CartesianGrid,
-    Tooltip,
-    ResponsiveContainer,
-    AreaChart,
-    Area,
-    PieChart,
-    Pie,
-    Cell,
-    Legend
-} from 'recharts';
-import {
-    TrendingUp,
-    TrendingDown,
-    DollarSign,
-    Target,
-    Filter,
-    Calendar
-} from 'lucide-react';
-import { Container, Heading, Text, Block, Flex, Grid, AnimatedBlock } from '@shared';
-import { StatCard } from '@ui';
+import { IncomeVsExpensesChart } from '@/views/Analytics/IncomeVsExpensesChart';
+import { SpendingCategoryChart } from '@/views/Analytics/SpendingCategoryChart';
+import { SpendingTrendChart } from '@/views/Analytics/SpendingTrendChart';
+import { Filter, Calendar } from 'lucide-react';
+import { Container, Heading, Text, Flex, Grid, AnimatedBlock } from '@shared';
+import { StatsOverview } from '@/views/Analytics/StatsOverview';
 
-const COLORS = ['#4F46E5', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899'];
-
-const incomeVsExpenseData = [
-    { name: 'Jan', income: 4000, expenses: 2400 },
-    { name: 'Feb', income: 3000, expenses: 1398 },
-    { name: 'Mar', income: 2000, expenses: 9800 },
-    { name: 'Apr', income: 2780, expenses: 3908 },
-    { name: 'May', income: 1890, expenses: 4800 },
-    { name: 'Jun', income: 2390, expenses: 3800 },
-];
-
-const categoryData = [
-    { name: 'Food & Dining', value: 400 },
-    { name: 'Shopping', value: 300 },
-    { name: 'Transport', value: 300 },
-    { name: 'Utilities', value: 200 },
-    { name: 'Entertainment', value: 278 },
-    { name: 'Healthcare', value: 189 },
-];
-
-const spendingTrendData = [
-    { date: '2026-01-24', amount: 120 },
-    { date: '2026-01-25', amount: 450 },
-    { date: '2026-01-26', amount: 300 },
-    { date: '2026-01-27', amount: 900 },
-    { date: '2026-01-28', amount: 200 },
-    { date: '2026-01-29', amount: 150 },
-    { date: '2026-01-30', amount: 400 },
-];
 
 const AnalyticsPage = () => {
     return (
@@ -79,141 +31,20 @@ const AnalyticsPage = () => {
             </Flex>
 
             {/* Stats Overview */}
-            <Grid cols={1} className="md:grid-cols-2 lg:grid-cols-4" gap={6}>
-                <StatCard
-                    title="Net Savings"
-                    value="$5,840.00"
-                    change="12% vs last month"
-                    trend="up"
-                    icon={DollarSign}
-                    color={{ bg: 'bg-indigo-50', text: 'text-indigo-600' }}
-                />
-                <StatCard
-                    title="Monthly Expenses"
-                    value="$2,150.00"
-                    change="4.1% decreased"
-                    trend="down"
-                    icon={TrendingDown}
-                    color={{ bg: 'bg-red-50', text: 'text-red-600' }}
-                />
-                <StatCard
-                    title="Avg Daily Spend"
-                    value="$72.50"
-                    change="2% increased"
-                    trend="up"
-                    icon={TrendingUp}
-                    color={{ bg: 'bg-blue-50', text: 'text-blue-600' }}
-                />
-                <StatCard
-                    title="Savings Goal"
-                    value="84%"
-                    change="5% to target"
-                    trend="up"
-                    icon={Target}
-                    color={{ bg: 'bg-emerald-50', text: 'text-emerald-600' }}
-                />
-            </Grid>
+            {/* Stats Overview */}
+            <StatsOverview />
 
             <Grid cols={1} className="lg:grid-cols-3" gap={8}>
                 {/* Income vs Expenses Bar Chart */}
-                <AnimatedBlock
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    className="lg:col-span-2 bg-white p-8 rounded-3xl border border-gray-100 shadow-sm"
-                >
-                    <Heading as="h3" size="lg" weight="bold" color="text-gray-900" className="mb-6">Income vs Expenses</Heading>
-                    <Block className="h-80 w-full">
-                        <ResponsiveContainer width="100%" height="100%">
-                            <BarChart data={incomeVsExpenseData}>
-                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
-                                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#9CA3AF', fontSize: 12 }} />
-                                <YAxis axisLine={false} tickLine={false} tick={{ fill: '#9CA3AF', fontSize: 12 }} />
-                                <Tooltip
-                                    cursor={{ fill: '#f9fafb' }}
-                                    contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)' }}
-                                />
-                                <Bar dataKey="income" fill="#4F46E5" radius={[4, 4, 0, 0]} name="Income" />
-                                <Bar dataKey="expenses" fill="#F87171" radius={[4, 4, 0, 0]} name="Expenses" />
-                            </BarChart>
-                        </ResponsiveContainer>
-                    </Block>
-                </AnimatedBlock>
+                {/* Income vs Expenses Bar Chart */}
+                <IncomeVsExpensesChart />
 
                 {/* Categories Pie Chart */}
-                <AnimatedBlock
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm"
-                >
-                    <Heading as="h3" size="lg" weight="bold" color="text-gray-900" className="mb-6">Spending by Category</Heading>
-                    <Block className="h-80 w-full">
-                        <ResponsiveContainer width="100%" height="100%">
-                            <PieChart>
-                                <Pie
-                                    data={categoryData}
-                                    cx="50%"
-                                    cy="50%"
-                                    innerRadius={60}
-                                    outerRadius={80}
-                                    paddingAngle={5}
-                                    dataKey="value"
-                                >
-                                    {categoryData.map((_, index) => (
-                                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                                    ))}
-                                </Pie>
-                                <Tooltip
-                                    contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)' }}
-                                />
-                                <Legend verticalAlign="bottom" height={36} />
-                            </PieChart>
-                        </ResponsiveContainer>
-                    </Block>
-                </AnimatedBlock>
+                <SpendingCategoryChart />
             </Grid>
 
             {/* Spending Trend Area Chart */}
-            <AnimatedBlock
-                className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm"
-            >
-                <Heading as="h3" size="lg" weight="bold" color="text-gray-900" className="mb-6">Daily Spending Trend</Heading>
-                <Block className="h-80 w-full">
-                    <ResponsiveContainer width="100%" height="100%">
-                        <AreaChart data={spendingTrendData}>
-                            <defs>
-                                <linearGradient id="colorAmount" x1="0" y1="0" x2="0" y2="1">
-                                    <stop offset="5%" stopColor="#4F46E5" stopOpacity={0.1} />
-                                    <stop offset="95%" stopColor="#4F46E5" stopOpacity={0} />
-                                </linearGradient>
-                            </defs>
-                            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
-                            <XAxis
-                                dataKey="date"
-                                axisLine={false}
-                                tickLine={false}
-                                tick={{ fill: '#9CA3AF', fontSize: 12 }}
-                                tickFormatter={(str) => {
-                                    const date = new Date(str);
-                                    return date.toLocaleDateString('en-US', { day: 'numeric', month: 'short' });
-                                }}
-                            />
-                            <YAxis axisLine={false} tickLine={false} tick={{ fill: '#9CA3AF', fontSize: 12 }} />
-                            <Tooltip
-                                contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)' }}
-                            />
-                            <Area
-                                type="monotone"
-                                dataKey="amount"
-                                stroke="#4F46E5"
-                                strokeWidth={3}
-                                fillOpacity={1}
-                                fill="url(#colorAmount)"
-                                name="Spending"
-                            />
-                        </AreaChart>
-                    </ResponsiveContainer>
-                </Block>
-            </AnimatedBlock>
+            <SpendingTrendChart />
         </Container>
     );
 };
