@@ -1,0 +1,68 @@
+[
+    {
+        "id": "1",
+        "date": "2024-01-29 14:30",
+        "description": "Apple Store - MacBook Pro",
+        "category": "Electronics",
+        "amount": 2499.00,
+        "type": "expense",
+        "status": "completed",
+        "iconName": "Smartphone",
+        "color": "bg-gray-900"
+    },
+    {
+        "id": "2",
+        "date": "2024-01-29 12:15",
+        "description": "Starbucks Coffee",
+        "category": "Food & Drink",
+        "amount": 5.50,
+        "type": "expense",
+        "status": "completed",
+        "iconName": "Coffee",
+        "color": "bg-orange-500"
+    },
+    {
+        "id": "3",
+        "date": "2024-01-28 18:45",
+        "description": "Monthly Salary",
+        "category": "Income",
+        "amount": 8500.00,
+        "type": "income",
+        "status": "completed",
+        "iconName": "TrendingUp",
+        "color": "bg-emerald-500"
+    },
+    {
+        "id": "4",
+        "date": "2024-01-28 10:20",
+        "description": "Uber Ride",
+        "category": "Transport",
+        "amount": 24.80,
+        "type": "expense",
+        "status": "completed",
+        "iconName": "Car",
+        "color": "bg-blue-500"
+    },
+    {
+        "id": "5",
+        "date": "2024-01-27 15:30",
+        "description": "Rent Payment",
+        "category": "Housing",
+        "amount": 1800.00,
+        "type": "expense",
+        "status": "pending",
+        "iconName": "Home",
+        "color": "bg-purple-500"
+    },
+    {
+        "id": "6",
+        "date": "2024-01-27 09:15",
+        "description": "Amazon.com",
+        "category": "Shopping",
+        "amount": 145.20,
+        "type": "expense",
+        "status": "completed",
+        "iconName": "ShoppingBag",
+        "color": "bg-yellow-500"
+    }
+]

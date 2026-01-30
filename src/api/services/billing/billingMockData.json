@@ -1,0 +1,98 @@
+{
+    "currentPlan": {
+        "name": "Premium Plan",
+        "price": "$29",
+        "period": "month",
+        "nextBilling": "Feb 29, 2026",
+        "status": "Active",
+        "features": [
+            "Up to 20 team members",
+            "Unlimited transactions",
+            "Advanced reporting",
+            "Priority support",
+            "Custom categories"
+        ]
+    },
+    "paymentMethods": [
+        {
+            "id": 1,
+            "type": "Visa",
+            "last4": "4242",
+            "expiry": "12/26",
+            "isDefault": true
+        },
+        {
+            "id": 2,
+            "type": "Mastercard",
+            "last4": "8888",
+            "expiry": "08/25",
+            "isDefault": false
+        }
+    ],
+    "history": [
+        {
+            "id": "INV-001",
+            "date": "Jan 29, 2026",
+            "amount": "$29.00",
+            "status": "Paid"
+        },
+        {
+            "id": "INV-002",
+            "date": "Dec 29, 2025",
+            "amount": "$29.00",
+            "status": "Paid"
+        },
+        {
+            "id": "INV-003",
+            "date": "Nov 29, 2025",
+            "amount": "$29.00",
+            "status": "Paid"
+        }
+    ],
+    "subscription": {
+        "currentPlan": {
+            "name": "Pro Member",
+            "price": "$12",
+            "period": "month",
+            "nextBilling": "Feb 14, 2026",
+            "status": "Active",
+            "features": [
+                "Unlimited personal accounts",
+                "AI Advisor access",
+                "Advanced analytics",
+                "Priority support",
+                "Export to CSV/PDF"
+            ]
+        },
+        "recentPayments": [
+            {
+                "id": "SUB-8821",
+                "date": "Jan 14, 2026",
+                "amount": "$12.00",
+                "status": "Paid",
+                "method": "Visa ending 4242"
+            },
+            {
+                "id": "SUB-7734",
+                "date": "Dec 14, 2025",
+                "amount": "$12.00",
+                "status": "Paid",
+                "method": "Visa ending 4242"
+            },
+            {
+                "id": "SUB-6612",
+                "date": "Nov 14, 2025",
+                "amount": "$12.00",
+                "status": "Paid",
+                "method": "Visa ending 4242"
+            },
+            {
+                "id": "SUB-5590",
+                "date": "Oct 14, 2025",
+                "amount": "$12.00",
+                "status": "Pending",
+                "method": "Visa ending 4242"
+            }
+        ]
+    }
+}

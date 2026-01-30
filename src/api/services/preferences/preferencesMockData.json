@@ -1,0 +1,109 @@
+{
+    "colorSchemes": [
+        {
+            "id": "blue",
+            "name": "Blue",
+            "class": "bg-blue-600"
+        },
+        {
+            "id": "purple",
+            "name": "Purple",
+            "class": "bg-purple-600"
+        },
+        {
+            "id": "green",
+            "name": "Green",
+            "class": "bg-green-600"
+        },
+        {
+            "id": "orange",
+            "name": "Orange",
+            "class": "bg-orange-600"
+        },
+        {
+            "id": "rose",
+            "name": "Rose",
+            "class": "bg-rose-600"
+        }
+    ],
+    "layoutOptions": [
+        {
+            "id": "sidebar-left",
+            "label": "Sidebar Left",
+            "iconName": "PanelLeft",
+            "description": "Classic navigation on the left"
+        },
+        {
+            "id": "sidebar-right",
+            "label": "Sidebar Right",
+            "iconName": "PanelRight",
+            "description": "Navigation on the right side"
+        },
+        {
+            "id": "top-nav",
+            "label": "Top Nav",
+            "iconName": "LayoutTemplate",
+            "description": "Horizontal navigation at the top"
+        },
+        {
+            "id": "minimal",
+            "label": "Minimal",
+            "iconName": "Square",
+            "description": "Clean interface without sidebars"
+        }
+    ],
+    "currencyOptions": [
+        {
+            "value": "USD",
+            "label": "USD - US Dollar ($)",
+            "iconName": "DollarSign"
+        },
+        {
+            "value": "EUR",
+            "label": "EUR - Euro (€)",
+            "iconName": "DollarSign"
+        },
+        {
+            "value": "GBP",
+            "label": "GBP - British Pound (£)",
+            "iconName": "DollarSign"
+        },
+        {
+            "value": "PKR",
+            "label": "PKR - Pakistani Rupee (Rs)",
+            "iconName": "DollarSign"
+        },
+        {
+            "value": "INR",
+            "label": "INR - Indian Rupee (₹)",
+            "iconName": "DollarSign"
+        }
+    ],
+    "timezoneOptions": [
+        {
+            "value": "UTC",
+            "label": "(GMT+00:00) UTC",
+            "iconName": "Globe"
+        },
+        {
+            "value": "EST",
+            "label": "(GMT-05:00) Eastern Time",
+            "iconName": "Globe"
+        },
+        {
+            "value": "PST",
+            "label": "(GMT-08:00) Pacific Time",
+            "iconName": "Globe"
+        },
+        {
+            "value": "PKT",
+            "label": "(GMT+05:00) Islamabad, Karachi",
+            "iconName": "Globe"
+        },
+        {
+            "value": "IST",
+            "label": "(GMT+05:30) India",
+            "iconName": "Globe"
+        }
+    ]
+}

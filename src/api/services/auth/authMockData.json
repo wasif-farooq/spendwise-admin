@@ -1,0 +1,49 @@
+{
+    "currentUser": {
+        "id": "user-001",
+        "email": "john@example.com",
+        "name": "John Doe",
+        "avatar": "https://ui-avatars.com/api/?name=John+Doe&background=4F46E5&color=fff",
+        "role": "Admin",
+        "accountType": "organization",
+        "organizationId": "org-001",
+        "organizationName": "Acme Corporation",
+        "createdAt": "2023-10-01T10:00:00Z",
+        "updatedAt": "2026-01-30T12:00:00Z"
+    },
+    "token": "mock-jwt-token-12345",
+    "refreshToken": "mock-refresh-token-67890",
+    "users": [
+        {
+            "id": "user-001",
+            "email": "john@example.com",
+            "password": "password123",
+            "name": "John Doe",
+            "avatar": "https://ui-avatars.com/api/?name=John+Doe&background=4F46E5&color=fff",
+            "role": "Admin",
+            "accountType": "organization",
+            "organizationId": "org-001",
+            "createdAt": "2023-10-01T10:00:00Z"
+        },
+        {
+            "id": "user-002",
+            "email": "jane@example.com",
+            "password": "password123",
+            "name": "Jane Smith",
+            "avatar": "https://ui-avatars.com/api/?name=Jane+Smith&background=10B981&color=fff",
+            "role": "Member",
+            "accountType": "personal",
+            "createdAt": "2023-11-15T10:00:00Z"
+        },
+        {
+            "id": "user-003",
+            "email": "demo@spendwise.com",
+            "password": "demo123",
+            "name": "Demo User",
+            "avatar": "https://ui-avatars.com/api/?name=Demo+User&background=F59E0B&color=fff",
+            "role": "Viewer",
+            "accountType": "personal",
+            "createdAt": "2024-01-01T10:00:00Z"
+        }
+    ]
+}

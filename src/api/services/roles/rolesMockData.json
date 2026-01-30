@@ -1,0 +1,120 @@
+[
+    {
+        "id": 1,
+        "name": "Admin",
+        "description": "Full access to all features and settings",
+        "isDefault": true,
+        "color": "from-blue-500 to-indigo-600",
+        "iconName": "ShieldCheck",
+        "permissions": {
+            "dashboard": [
+                "view"
+            ],
+            "transactions": [
+                "view",
+                "create",
+                "edit",
+                "delete"
+            ],
+            "members": [
+                "view",
+                "create",
+                "delete"
+            ],
+            "roles": [
+                "view",
+                "create",
+                "edit",
+                "delete"
+            ],
+            "billing": [
+                "view",
+                "edit"
+            ]
+        }
+    },
+    {
+        "id": 2,
+        "name": "Member",
+        "description": "Standard access for team members",
+        "isDefault": false,
+        "color": "from-emerald-500 to-teal-600",
+        "iconName": "Users",
+        "permissions": {
+            "dashboard": [
+                "view"
+            ],
+            "transactions": [
+                "view",
+                "create",
+                "edit"
+            ],
+            "members": [
+                "view"
+            ],
+            "accounts": [
+                "view",
+                "edit"
+            ]
+        }
+    },
+    {
+        "id": 3,
+        "name": "Viewer",
+        "description": "Read-only access to dashboard and reports",
+        "isDefault": false,
+        "color": "from-violet-500 to-purple-600",
+        "iconName": "Eye",
+        "permissions": {
+            "dashboard": [
+                "view"
+            ],
+            "transactions": [
+                "view"
+            ]
+        }
+    },
+    {
+        "id": 4,
+        "name": "Accountant",
+        "description": "Manage financial records and billing",
+        "isDefault": false,
+        "color": "from-amber-500 to-orange-600",
+        "iconName": "CreditCard",
+        "permissions": {
+            "dashboard": [
+                "view"
+            ],
+            "transactions": [
+                "view",
+                "create",
+                "edit",
+                "delete"
+            ],
+            "billing": [
+                "view",
+                "edit"
+            ]
+        }
+    },
+    {
+        "id": 5,
+        "name": "Support",
+        "description": "Manage members and view logs",
+        "isDefault": false,
+        "color": "from-rose-500 to-pink-600",
+        "iconName": "Zap",
+        "permissions": {
+            "dashboard": [
+                "view"
+            ],
+            "members": [
+                "view",
+                "create"
+            ],
+            "transactions": [
+                "view"
+            ]
+        }
+    }
+]

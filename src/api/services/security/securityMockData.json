@@ -1,0 +1,47 @@
+{
+    "twoFactorEnabled": false,
+    "activeSessions": [
+        {
+            "id": "session-001",
+            "device": "Chrome on MacOS",
+            "location": "San Francisco, CA",
+            "ipAddress": "192.168.1.1",
+            "lastActive": "2 minutes ago",
+            "isCurrent": true
+        },
+        {
+            "id": "session-002",
+            "device": "Safari on iPhone",
+            "location": "San Francisco, CA",
+            "ipAddress": "192.168.1.2",
+            "lastActive": "1 hour ago",
+            "isCurrent": false
+        }
+    ],
+    "loginHistory": [
+        {
+            "id": "login-001",
+            "timestamp": "2026-01-30T12:00:00Z",
+            "device": "Chrome on MacOS",
+            "location": "San Francisco, CA",
+            "ipAddress": "192.168.1.1",
+            "status": "success"
+        },
+        {
+            "id": "login-002",
+            "timestamp": "2026-01-29T18:30:00Z",
+            "device": "Safari on iPhone",
+            "location": "San Francisco, CA",
+            "ipAddress": "192.168.1.2",
+            "status": "success"
+        },
+        {
+            "id": "login-003",
+            "timestamp": "2026-01-28T09:15:00Z",
+            "device": "Unknown Device",
+            "location": "New York, NY",
+            "ipAddress": "10.0.0.1",
+            "status": "failed"
+        }
+    ]
+}

@@ -1,0 +1,148 @@
+{
+    "overview": {
+        "totalIncome": 8500.00,
+        "totalExpenses": 4474.50,
+        "netSavings": 4025.50,
+        "savingsRate": 47.4,
+        "averageDaily": 149.15,
+        "projectedMonthly": 4474.50
+    },
+    "categoryTrends": [
+        {
+            "category": "Electronics",
+            "currentMonth": 2499.00,
+            "previousMonth": 0,
+            "change": 100,
+            "trend": "up"
+        },
+        {
+            "category": "Housing",
+            "currentMonth": 1800.00,
+            "previousMonth": 1800.00,
+            "change": 0,
+            "trend": "stable"
+        },
+        {
+            "category": "Shopping",
+            "currentMonth": 145.20,
+            "previousMonth": 200.00,
+            "change": -27.4,
+            "trend": "down"
+        },
+        {
+            "category": "Transport",
+            "currentMonth": 24.80,
+            "previousMonth": 50.00,
+            "change": -50.4,
+            "trend": "down"
+        },
+        {
+            "category": "Food & Drink",
+            "currentMonth": 5.50,
+            "previousMonth": 150.00,
+            "change": -96.3,
+            "trend": "down"
+        }
+    ],
+    "monthlyComparison": [
+        {
+            "month": "Jan 2024",
+            "income": 8500,
+            "expenses": 4474.50,
+            "savings": 4025.50
+        },
+        {
+            "month": "Dec 2023",
+            "income": 8500,
+            "expenses": 3200,
+            "savings": 5300
+        },
+        {
+            "month": "Nov 2023",
+            "income": 8500,
+            "expenses": 4100,
+            "savings": 4400
+        },
+        {
+            "month": "Oct 2023",
+            "income": 8500,
+            "expenses": 3800,
+            "savings": 4700
+        },
+        {
+            "month": "Sep 2023",
+            "income": 8500,
+            "expenses": 4500,
+            "savings": 4000
+        },
+        {
+            "month": "Aug 2023",
+            "income": 8500,
+            "expenses": 3900,
+            "savings": 4600
+        }
+    ],
+    "topExpenses": [
+        {
+            "id": "1",
+            "description": "Apple Store - MacBook Pro",
+            "category": "Electronics",
+            "amount": 2499.00,
+            "date": "2024-01-29"
+        },
+        {
+            "id": "5",
+            "description": "Rent Payment",
+            "category": "Housing",
+            "amount": 1800.00,
+            "date": "2024-01-27"
+        },
+        {
+            "id": "6",
+            "description": "Amazon.com",
+            "category": "Shopping",
+            "amount": 145.20,
+            "date": "2024-01-27"
+        },
+        {
+            "id": "4",
+            "description": "Uber Ride",
+            "category": "Transport",
+            "amount": 24.80,
+            "date": "2024-01-28"
+        },
+        {
+            "id": "2",
+            "description": "Starbucks Coffee",
+            "category": "Food & Drink",
+            "amount": 5.50,
+            "date": "2024-01-29"
+        }
+    ],
+    "savingsGoals": [
+        {
+            "id": "goal-1",
+            "name": "Emergency Fund",
+            "target": 10000,
+            "current": 7500,
+            "percentage": 75,
+            "deadline": "2024-12-31"
+        },
+        {
+            "id": "goal-2",
+            "name": "Vacation",
+            "target": 5000,
+            "current": 2000,
+            "percentage": 40,
+            "deadline": "2024-06-30"
+        },
+        {
+            "id": "goal-3",
+            "name": "New Car",
+            "target": 30000,
+            "current": 12000,
+            "percentage": 40,
+            "deadline": "2025-12-31"
+        }
+    ]
+}
