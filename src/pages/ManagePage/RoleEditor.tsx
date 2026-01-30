@@ -130,7 +130,7 @@ const RoleEditor = () => {
         <AnimatedBlock
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="max-w-6xl mx-auto space-y-12 pb-20"
+            className="w-full mx-auto space-y-12 pb-20"
         >
             <Flex as="header" direction="col" justify="between" gap={6} className="sm:flex-row sm:items-center">
                 <Flex align="center" gap={4}>
@@ -175,7 +175,7 @@ const RoleEditor = () => {
                 </Flex>
             </Flex>
 
-            <Grid cols={1} gap={12} className="lg:grid-cols-3">
+            <Grid cols={1} gap={6} className="lg:grid-cols-3">
                 {/* Left Column: Role Info */}
                 <Block className="lg:col-span-1 space-y-8">
                     <Block className="bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-xl shadow-gray-200/50 space-y-6">

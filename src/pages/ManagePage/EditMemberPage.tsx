@@ -191,7 +191,7 @@ const EditMemberPage = () => {
                 </Flex>
             </Flex>
 
-            <Grid cols={1} gap={12} className="lg:grid-cols-3">
+            <Grid cols={1} gap={6} className="lg:grid-cols-3">
                 <MemberDetailsForm
                     email={email}
                     setEmail={setEmail}
