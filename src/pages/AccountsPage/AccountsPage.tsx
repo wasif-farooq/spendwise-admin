@@ -6,56 +6,12 @@ import { AccountsGrid } from '@/views/Accounts/AccountsGrid';
 import { AddAccountModal } from '@/views/Accounts/AddAccountModal';
 import { CURRENCY_OPTIONS } from '@/views/Accounts/types';
 import type { Account } from '@/views/Accounts/types';
+import mockData from '@/data/mockData.json';
 
-const MOCK_ACCOUNTS: Account[] = [
-    {
-        id: '1',
-        name: 'Main Checking',
-        type: 'bank',
-        balance: 12450.80,
-        currency: 'USD',
-        lastActivity: '2 hours ago',
-        color: 'bg-blue-600',
-        trend: 'up',
-        change: '+2.4%'
-    },
-    {
-        id: '2',
-        name: 'Business Savings',
-        type: 'savings',
-        balance: 45000.00,
-        currency: 'USD',
-        lastActivity: '1 day ago',
-        color: 'bg-emerald-600',
-        trend: 'up',
-        change: '+0.8%'
-    },
-    {
-        id: '3',
-        name: 'Petty Cash',
-        type: 'cash',
-        balance: 850.00,
-        currency: 'USD',
-        lastActivity: '5 mins ago',
-        color: 'bg-amber-600',
-        trend: 'down',
-        change: '-1.2%'
-    },
-    {
-        id: '4',
-        name: 'Corporate Credit',
-        type: 'credit_card',
-        balance: -2340.50,
-        currency: 'USD',
-        lastActivity: '1 hour ago',
-        color: 'bg-rose-600',
-        trend: 'down',
-        change: '+15.4%'
-    },
-];
 
 const AccountsPage = () => {
-    const [accounts] = useState<Account[]>(MOCK_ACCOUNTS);
+    // Use centralized mock data, casting types as needed
+    const [accounts] = useState<Account[]>(mockData.accounts as Account[]);
     const [searchQuery, setSearchQuery] = useState('');
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [selectedType, setSelectedType] = useState<Account['type']>('bank');

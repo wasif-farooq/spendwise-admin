@@ -1,0 +1,573 @@
+{
+    "members": [
+        {
+            "id": 1,
+            "name": "John Doe",
+            "email": "john@example.com",
+            "role": "Admin",
+            "status": "Active",
+            "joinedDate": "2023-10-01",
+            "isCurrentUser": true
+        },
+        {
+            "id": 2,
+            "name": "Jane Smith",
+            "email": "jane@example.com",
+            "role": "Member",
+            "status": "Active",
+            "joinedDate": "2023-11-15",
+            "isCurrentUser": false
+        },
+        {
+            "id": 3,
+            "name": "Mike Johnson",
+            "email": "mike@example.com",
+            "role": "Viewer",
+            "status": "Pending",
+            "joinedDate": "2024-01-10",
+            "isCurrentUser": false
+        },
+        {
+            "id": 4,
+            "name": "Sarah Wilson",
+            "email": "sarah@example.com",
+            "role": "Member",
+            "status": "Active",
+            "joinedDate": "2023-12-05",
+            "isCurrentUser": false
+        },
+        {
+            "id": 5,
+            "name": "Alex Brown",
+            "email": "alex@example.com",
+            "role": "Member",
+            "status": "Active",
+            "joinedDate": "2023-09-20",
+            "isCurrentUser": false
+        },
+        {
+            "id": 6,
+            "name": "David Miller",
+            "email": "david@example.com",
+            "role": "Viewer",
+            "status": "Active",
+            "joinedDate": "2023-08-12",
+            "isCurrentUser": false
+        },
+        {
+            "id": 7,
+            "name": "Emma Davis",
+            "email": "emma@example.com",
+            "role": "Member",
+            "status": "Pending",
+            "joinedDate": "2024-01-25",
+            "isCurrentUser": false
+        },
+        {
+            "id": 8,
+            "name": "Chris Evans",
+            "email": "chris@example.com",
+            "role": "Member",
+            "status": "Active",
+            "joinedDate": "2023-11-20",
+            "isCurrentUser": false
+        }
+    ],
+    "roles": [
+        {
+            "id": 1,
+            "name": "Admin",
+            "description": "Full access to all features and settings",
+            "isDefault": true,
+            "color": "from-blue-500 to-indigo-600",
+            "iconName": "ShieldCheck",
+            "permissions": {
+                "dashboard": [
+                    "view"
+                ],
+                "transactions": [
+                    "view",
+                    "create",
+                    "edit",
+                    "delete"
+                ],
+                "members": [
+                    "view",
+                    "create",
+                    "delete"
+                ],
+                "roles": [
+                    "view",
+                    "create",
+                    "edit",
+                    "delete"
+                ],
+                "billing": [
+                    "view",
+                    "edit"
+                ]
+            }
+        },
+        {
+            "id": 2,
+            "name": "Member",
+            "description": "Standard access for team members",
+            "isDefault": false,
+            "color": "from-emerald-500 to-teal-600",
+            "iconName": "Users",
+            "permissions": {
+                "dashboard": [
+                    "view"
+                ],
+                "transactions": [
+                    "view",
+                    "create",
+                    "edit"
+                ],
+                "members": [
+                    "view"
+                ]
+            }
+        },
+        {
+            "id": 3,
+            "name": "Viewer",
+            "description": "Read-only access to dashboard and reports",
+            "isDefault": false,
+            "color": "from-violet-500 to-purple-600",
+            "iconName": "Eye",
+            "permissions": {
+                "dashboard": [
+                    "view"
+                ],
+                "transactions": [
+                    "view"
+                ]
+            }
+        },
+        {
+            "id": 4,
+            "name": "Accountant",
+            "description": "Manage financial records and billing",
+            "isDefault": false,
+            "color": "from-amber-500 to-orange-600",
+            "iconName": "CreditCard",
+            "permissions": {
+                "dashboard": [
+                    "view"
+                ],
+                "transactions": [
+                    "view",
+                    "create",
+                    "edit",
+                    "delete"
+                ],
+                "billing": [
+                    "view",
+                    "edit"
+                ]
+            }
+        },
+        {
+            "id": 5,
+            "name": "Support",
+            "description": "Manage members and view logs",
+            "isDefault": false,
+            "color": "from-rose-500 to-pink-600",
+            "iconName": "Zap",
+            "permissions": {
+                "dashboard": [
+                    "view"
+                ],
+                "members": [
+                    "view",
+                    "create"
+                ],
+                "transactions": [
+                    "view"
+                ]
+            }
+        }
+    ],
+    "billing": {
+        "currentPlan": {
+            "name": "Premium Plan",
+            "price": "$29",
+            "period": "month",
+            "nextBilling": "Feb 29, 2026",
+            "status": "Active",
+            "features": [
+                "Up to 20 team members",
+                "Unlimited transactions",
+                "Advanced reporting",
+                "Priority support",
+                "Custom categories"
+            ]
+        },
+        "paymentMethods": [
+            {
+                "id": 1,
+                "type": "Visa",
+                "last4": "4242",
+                "expiry": "12/26",
+                "isDefault": true
+            },
+            {
+                "id": 2,
+                "type": "Mastercard",
+                "last4": "8888",
+                "expiry": "08/25",
+                "isDefault": false
+            }
+        ],
+        "history": [
+            {
+                "id": "INV-001",
+                "date": "Jan 29, 2026",
+                "amount": "$29.00",
+                "status": "Paid"
+            },
+            {
+                "id": "INV-002",
+                "date": "Dec 29, 2025",
+                "amount": "$29.00",
+                "status": "Paid"
+            },
+            {
+                "id": "INV-003",
+                "date": "Nov 29, 2025",
+                "amount": "$29.00",
+                "status": "Paid"
+            }
+        ]
+    },
+    "subscription": {
+        "currentPlan": {
+            "name": "Pro Member",
+            "price": "$12",
+            "period": "month",
+            "nextBilling": "Feb 14, 2026",
+            "status": "Active",
+            "features": [
+                "Unlimited personal accounts",
+                "AI Advisor access",
+                "Advanced analytics",
+                "Priority support",
+                "Export to CSV/PDF"
+            ]
+        },
+        "recentPayments": [
+            {
+                "id": "SUB-8821",
+                "date": "Jan 14, 2026",
+                "amount": "$12.00",
+                "status": "Paid",
+                "method": "Visa ending 4242"
+            },
+            {
+                "id": "SUB-7734",
+                "date": "Dec 14, 2025",
+                "amount": "$12.00",
+                "status": "Paid",
+                "method": "Visa ending 4242"
+            },
+            {
+                "id": "SUB-6612",
+                "date": "Nov 14, 2025",
+                "amount": "$12.00",
+                "status": "Paid",
+                "method": "Visa ending 4242"
+            },
+            {
+                "id": "SUB-5590",
+                "date": "Oct 14, 2025",
+                "amount": "$12.00",
+                "status": "Pending",
+                "method": "Visa ending 4242"
+            }
+        ]
+    },
+    "transactions": [
+        {
+            "id": "1",
+            "date": "2024-01-29 14:30",
+            "description": "Apple Store - MacBook Pro",
+            "category": "Electronics",
+            "amount": 2499.00,
+            "type": "expense",
+            "status": "completed",
+            "iconName": "Smartphone",
+            "color": "bg-gray-900"
+        },
+        {
+            "id": "2",
+            "date": "2024-01-29 12:15",
+            "description": "Starbucks Coffee",
+            "category": "Food & Drink",
+            "amount": 5.50,
+            "type": "expense",
+            "status": "completed",
+            "iconName": "Coffee",
+            "color": "bg-orange-500"
+        },
+        {
+            "id": "3",
+            "date": "2024-01-28 18:45",
+            "description": "Monthly Salary",
+            "category": "Income",
+            "amount": 8500.00,
+            "type": "income",
+            "status": "completed",
+            "iconName": "TrendingUp",
+            "color": "bg-emerald-500"
+        },
+        {
+            "id": "4",
+            "date": "2024-01-28 10:20",
+            "description": "Uber Ride",
+            "category": "Transport",
+            "amount": 24.80,
+            "type": "expense",
+            "status": "completed",
+            "iconName": "Car",
+            "color": "bg-blue-500"
+        },
+        {
+            "id": "5",
+            "date": "2024-01-27 15:30",
+            "description": "Rent Payment",
+            "category": "Housing",
+            "amount": 1800.00,
+            "type": "expense",
+            "status": "pending",
+            "iconName": "Home",
+            "color": "bg-purple-500"
+        },
+        {
+            "id": "6",
+            "date": "2024-01-27 09:15",
+            "description": "Amazon.com",
+            "category": "Shopping",
+            "amount": 145.20,
+            "type": "expense",
+            "status": "completed",
+            "iconName": "ShoppingBag",
+            "color": "bg-yellow-500"
+        }
+    ],
+    "accounts": [
+        {
+            "id": "1",
+            "name": "Main Checking",
+            "type": "bank",
+            "balance": 12450.80,
+            "currency": "USD",
+            "lastActivity": "2 hours ago",
+            "color": "bg-blue-600",
+            "trend": "up",
+            "change": "+2.4%"
+        },
+        {
+            "id": "2",
+            "name": "Business Savings",
+            "type": "savings",
+            "balance": 45000.00,
+            "currency": "USD",
+            "lastActivity": "1 day ago",
+            "color": "bg-emerald-600",
+            "trend": "up",
+            "change": "+0.8%"
+        },
+        {
+            "id": "3",
+            "name": "Petty Cash",
+            "type": "cash",
+            "balance": 850.00,
+            "currency": "USD",
+            "lastActivity": "5 mins ago",
+            "color": "bg-amber-600",
+            "trend": "down",
+            "change": "-1.2%"
+        },
+        {
+            "id": "4",
+            "name": "Corporate Credit",
+            "type": "credit_card",
+            "balance": -2340.50,
+            "currency": "USD",
+            "lastActivity": "1 hour ago",
+            "color": "bg-rose-600",
+            "trend": "down",
+            "change": "+15.4%"
+        }
+    ],
+    "preferences": {
+        "colorSchemes": [
+            {
+                "id": "blue",
+                "name": "Blue",
+                "class": "bg-blue-600"
+            },
+            {
+                "id": "purple",
+                "name": "Purple",
+                "class": "bg-purple-600"
+            },
+            {
+                "id": "green",
+                "name": "Green",
+                "class": "bg-green-600"
+            },
+            {
+                "id": "orange",
+                "name": "Orange",
+                "class": "bg-orange-600"
+            },
+            {
+                "id": "rose",
+                "name": "Rose",
+                "class": "bg-rose-600"
+            }
+        ],
+        "layoutOptions": [
+            {
+                "id": "sidebar-left",
+                "label": "Sidebar Left",
+                "iconName": "PanelLeft",
+                "description": "Classic navigation on the left"
+            },
+            {
+                "id": "sidebar-right",
+                "label": "Sidebar Right",
+                "iconName": "PanelRight",
+                "description": "Navigation on the right side"
+            },
+            {
+                "id": "top-nav",
+                "label": "Top Nav",
+                "iconName": "LayoutTemplate",
+                "description": "Horizontal navigation at the top"
+            },
+            {
+                "id": "minimal",
+                "label": "Minimal",
+                "iconName": "Square",
+                "description": "Clean interface without sidebars"
+            }
+        ],
+        "currencyOptions": [
+            {
+                "value": "USD",
+                "label": "USD - US Dollar ($)",
+                "iconName": "DollarSign"
+            },
+            {
+                "value": "EUR",
+                "label": "EUR - Euro (€)",
+                "iconName": "DollarSign"
+            },
+            {
+                "value": "GBP",
+                "label": "GBP - British Pound (£)",
+                "iconName": "DollarSign"
+            },
+            {
+                "value": "JPY",
+                "label": "JPY - Japanese Yen (¥)",
+                "iconName": "DollarSign"
+            },
+            {
+                "value": "CAD",
+                "label": "CAD - Canadian Dollar ($)",
+                "iconName": "DollarSign"
+            },
+            {
+                "value": "AUD",
+                "label": "AUD - Australian Dollar ($)",
+                "iconName": "DollarSign"
+            },
+            {
+                "value": "PKR",
+                "label": "PKR - Pakistani Rupee (Rs)",
+                "iconName": "DollarSign"
+            },
+            {
+                "value": "INR",
+                "label": "INR - Indian Rupee (₹)",
+                "iconName": "DollarSign"
+            },
+            {
+                "value": "AED",
+                "label": "AED - UAE Dirham (د.إ)",
+                "iconName": "DollarSign"
+            },
+            {
+                "value": "SAR",
+                "label": "SAR - Saudi Riyal (﷼)",
+                "iconName": "DollarSign"
+            },
+            {
+                "value": "CNY",
+                "label": "CNY - Chinese Yuan (¥)",
+                "iconName": "DollarSign"
+            },
+            {
+                "value": "BRL",
+                "label": "BRL - Brazilian Real (R$)",
+                "iconName": "DollarSign"
+            }
+        ],
+        "timezoneOptions": [
+            {
+                "value": "EST",
+                "label": "(GMT-05:00) Eastern Time",
+                "iconName": "Globe"
+            },
+            {
+                "value": "PST",
+                "label": "(GMT-08:00) Pacific Time",
+                "iconName": "Globe"
+            },
+            {
+                "value": "UTC",
+                "label": "(GMT+00:00) UTC",
+                "iconName": "Globe"
+            },
+            {
+                "value": "GMT",
+                "label": "(GMT+00:00) London",
+                "iconName": "Globe"
+            },
+            {
+                "value": "CET",
+                "label": "(GMT+01:00) Central Europe",
+                "iconName": "Globe"
+            },
+            {
+                "value": "IST",
+                "label": "(GMT+05:30) India",
+                "iconName": "Globe"
+            },
+            {
+                "value": "PKT",
+                "label": "(GMT+05:00) Islamabad, Karachi",
+                "iconName": "Globe"
+            },
+            {
+                "value": "SGT",
+                "label": "(GMT+08:00) Singapore",
+                "iconName": "Globe"
+            },
+            {
+                "value": "JST",
+                "label": "(GMT+09:00) Tokyo",
+                "iconName": "Globe"
+            },
+            {
+                "value": "AEST",
+                "label": "(GMT+10:00) Sydney",
+                "iconName": "Globe"
+            }
+        ]
+    }
+}

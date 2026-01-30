@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { Sun, Moon, Globe, DollarSign, Palette as PaletteIcon, PanelLeft, PanelRight, LayoutTemplate, Square } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 import { CustomSelect } from '@ui';
 import { useLayout } from '../../context/LayoutContext';
 import {
@@ -10,52 +11,36 @@ import {
     Grid
 } from '@shared';
 import { Button } from '@ui';
+import mockData from '@/data/mockData.json';
+
+const iconMap: Record<string, LucideIcon> = {
+    PanelLeft,
+    PanelRight,
+    LayoutTemplate,
+    Square,
+    DollarSign,
+    Globe
+};
 
 const Preferences = () => {
     const { layout, setLayout, colorScheme, setColorScheme, theme, setTheme } = useLayout();
 
-    const colorSchemes = [
-        { id: 'blue', name: 'Blue', class: 'bg-blue-600' },
-        { id: 'purple', name: 'Purple', class: 'bg-purple-600' },
-        { id: 'green', name: 'Green', class: 'bg-green-600' },
-        { id: 'orange', name: 'Orange', class: 'bg-orange-600' },
-        { id: 'rose', name: 'Rose', class: 'bg-rose-600' },
-    ] as const;
+    const colorSchemes = mockData.preferences.colorSchemes;
 
-    const layoutOptions = [
-        { id: 'sidebar-left', label: 'Sidebar Left', icon: PanelLeft, description: 'Classic navigation on the left' },
-        { id: 'sidebar-right', label: 'Sidebar Right', icon: PanelRight, description: 'Navigation on the right side' },
-        { id: 'top-nav', label: 'Top Nav', icon: LayoutTemplate, description: 'Horizontal navigation at the top' },
-        { id: 'minimal', label: 'Minimal', icon: Square, description: 'Clean interface without sidebars' },
-    ] as const;
+    const layoutOptions = mockData.preferences.layoutOptions.map(opt => ({
+        ...opt,
+        icon: iconMap[opt.iconName] || Square
+    }));
 
-    const currencyOptions = [
-        { value: 'USD', label: 'USD - US Dollar ($)', icon: DollarSign },
-        { value: 'EUR', label: 'EUR - Euro (€)', icon: DollarSign },
-        { value: 'GBP', label: 'GBP - British Pound (£)', icon: DollarSign },
-        { value: 'JPY', label: 'JPY - Japanese Yen (¥)', icon: DollarSign },
-        { value: 'CAD', label: 'CAD - Canadian Dollar ($)', icon: DollarSign },
-        { value: 'AUD', label: 'AUD - Australian Dollar ($)', icon: DollarSign },
-        { value: 'PKR', label: 'PKR - Pakistani Rupee (Rs)', icon: DollarSign },
-        { value: 'INR', label: 'INR - Indian Rupee (₹)', icon: DollarSign },
-        { value: 'AED', label: 'AED - UAE Dirham (د.إ)', icon: DollarSign },
-        { value: 'SAR', label: 'SAR - Saudi Riyal (﷼)', icon: DollarSign },
-        { value: 'CNY', label: 'CNY - Chinese Yuan (¥)', icon: DollarSign },
-        { value: 'BRL', label: 'BRL - Brazilian Real (R$)', icon: DollarSign },
-    ];
+    const currencyOptions = mockData.preferences.currencyOptions.map(opt => ({
+        ...opt,
+        icon: iconMap[opt.iconName] || DollarSign
+    }));
 
-    const timezoneOptions = [
-        { value: 'EST', label: '(GMT-05:00) Eastern Time', icon: Globe },
-        { value: 'PST', label: '(GMT-08:00) Pacific Time', icon: Globe },
-        { value: 'UTC', label: '(GMT+00:00) UTC', icon: Globe },
-        { value: 'GMT', label: '(GMT+00:00) London', icon: Globe },
-        { value: 'CET', label: '(GMT+01:00) Central Europe', icon: Globe },
-        { value: 'IST', label: '(GMT+05:30) India', icon: Globe },
-        { value: 'PKT', label: '(GMT+05:00) Islamabad, Karachi', icon: Globe },
-        { value: 'SGT', label: '(GMT+08:00) Singapore', icon: Globe },
-        { value: 'JST', label: '(GMT+09:00) Tokyo', icon: Globe },
-        { value: 'AEST', label: '(GMT+10:00) Sydney', icon: Globe },
-    ];
+    const timezoneOptions = mockData.preferences.timezoneOptions.map(opt => ({
+        ...opt,
+        icon: iconMap[opt.iconName] || Globe
+    }));
 
     return (
         <Block
@@ -110,7 +95,7 @@ const Preferences = () => {
                                 {colorSchemes.map((scheme) => (
                                     <button
                                         key={scheme.id}
-                                        onClick={() => setColorScheme(scheme.id)}
+                                        onClick={() => setColorScheme(scheme.id as any)}
                                         className={`h-10 w-10 rounded-full transition-all duration-200 ${scheme.class} ${colorScheme === scheme.id ? 'ring-4 ring-offset-2 ring-primary scale-110' : 'hover:scale-105'
                                             }`}
                                         title={scheme.name}

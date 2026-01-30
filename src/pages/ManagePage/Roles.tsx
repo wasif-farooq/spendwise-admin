@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { ShieldCheck, Users, Eye, CreditCard, Zap } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 import { useState, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Block } from '@shared';
@@ -9,6 +10,15 @@ import { RolesGrid } from '@/views/Manage/Roles/RolesGrid';
 import { RolesFilterDrawer } from '@/views/Manage/Roles/RolesFilterDrawer';
 import { DeleteRoleModal } from '@/views/Manage/Roles/DeleteRoleModal';
 import type { Role, RoleFilters } from '@/views/Manage/Roles/types';
+import mockData from '@/data/mockData.json';
+
+const iconMap: Record<string, LucideIcon> = {
+    ShieldCheck,
+    Users,
+    Eye,
+    CreditCard,
+    Zap
+};
 
 const Roles = () => {
     const navigate = useNavigate();
@@ -21,53 +31,13 @@ const Roles = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 6;
 
-    const [roles, setRoles] = useState<Role[]>([
-        {
-            id: 1,
-            name: 'Admin',
-            description: 'Full access to all features and settings',
-            isDefault: true,
-            color: 'from-blue-500 to-indigo-600',
-            icon: ShieldCheck,
-            permissions: { dashboard: ['view'], transactions: ['view', 'create', 'edit', 'delete'], members: ['view', 'create', 'delete'], roles: ['view', 'create', 'edit', 'delete'], billing: ['view', 'edit'] }
-        },
-        {
-            id: 2,
-            name: 'Member',
-            description: 'Standard access for team members',
-            isDefault: false,
-            color: 'from-emerald-500 to-teal-600',
-            icon: Users,
-            permissions: { dashboard: ['view'], transactions: ['view', 'create', 'edit'], members: ['view'] }
-        },
-        {
-            id: 3,
-            name: 'Viewer',
-            description: 'Read-only access to dashboard and reports',
-            isDefault: false,
-            color: 'from-violet-500 to-purple-600',
-            icon: Eye,
-            permissions: { dashboard: ['view'], transactions: ['view'] }
-        },
-        {
-            id: 4,
-            name: 'Accountant',
-            description: 'Manage financial records and billing',
-            isDefault: false,
-            color: 'from-amber-500 to-orange-600',
-            icon: CreditCard,
-            permissions: { dashboard: ['view'], transactions: ['view', 'create', 'edit', 'delete'], billing: ['view', 'edit'] }
-        },
-        {
-            id: 5,
-            name: 'Support',
-            description: 'Manage members and view logs',
-            isDefault: false,
-            color: 'from-rose-500 to-pink-600',
-            icon: Zap,
-            permissions: { dashboard: ['view'], members: ['view', 'create'], transactions: ['view'] }
-        },
-    ]);
+    // Use centralized mock data and map icon names to components
+    const [roles, setRoles] = useState<Role[]>(() => {
+        return mockData.roles.map(r => ({
+            ...r,
+            icon: iconMap[r.iconName as keyof typeof iconMap] || ShieldCheck
+        })) as Role[];
+    });
 
     const [searchQuery, setSearchQuery] = useState('');
     const [filters, setFilters] = useState<RoleFilters>({

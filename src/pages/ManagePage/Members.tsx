@@ -8,6 +8,7 @@ import { MembersFilterDrawer } from '@/views/Manage/Members/MembersFilterDrawer'
 import { InviteMemberModal } from '@/views/Manage/Members/InviteMemberModal';
 import { RemoveMemberModal } from '@/views/Manage/Members/RemoveMemberModal';
 import type { Member, MemberFilters } from '@/views/Manage/Members/types';
+import mockData from '@/data/mockData.json';
 
 const Members = () => {
     const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
@@ -25,17 +26,8 @@ const Members = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 5;
 
-    // Mock data for members
-    const [members, setMembers] = useState<Member[]>([
-        { id: 1, name: 'John Doe', email: 'john@example.com', role: 'Admin', status: 'Active', joinedDate: '2023-10-01', isCurrentUser: true },
-        { id: 2, name: 'Jane Smith', email: 'jane@example.com', role: 'Member', status: 'Active', joinedDate: '2023-11-15', isCurrentUser: false },
-        { id: 3, name: 'Mike Johnson', email: 'mike@example.com', role: 'Viewer', status: 'Pending', joinedDate: '2024-01-10', isCurrentUser: false },
-        { id: 4, name: 'Sarah Wilson', email: 'sarah@example.com', role: 'Member', status: 'Active', joinedDate: '2023-12-05', isCurrentUser: false },
-        { id: 5, name: 'Alex Brown', email: 'alex@example.com', role: 'Member', status: 'Active', joinedDate: '2023-09-20', isCurrentUser: false },
-        { id: 6, name: 'David Miller', email: 'david@example.com', role: 'Viewer', status: 'Active', joinedDate: '2023-08-12', isCurrentUser: false },
-        { id: 7, name: 'Emma Davis', email: 'emma@example.com', role: 'Member', status: 'Pending', joinedDate: '2024-01-25', isCurrentUser: false },
-        { id: 8, name: 'Chris Evans', email: 'chris@example.com', role: 'Member', status: 'Active', joinedDate: '2023-11-20', isCurrentUser: false },
-    ]);
+    // Use centralized mock data
+    const [members, setMembers] = useState<Member[]>(mockData.members);
 
     const [searchQuery, setSearchQuery] = useState('');
     const [filters, setFilters] = useState<MemberFilters>({

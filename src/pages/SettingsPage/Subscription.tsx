@@ -4,30 +4,16 @@ import { Block, Grid } from '@shared';
 import { SubscriptionHeader } from '@/views/Settings/Subscription/SubscriptionHeader';
 import { SubscriptionPlan } from '@/views/Settings/Subscription/SubscriptionPlan';
 import { RecentPayments } from '@/views/Settings/Subscription/RecentPayments';
+import mockData from '@/data/mockData.json';
 
 const Subscription = () => {
 
-    const currentPlan = {
-        name: 'Pro Member',
-        price: '$12',
-        period: 'month',
-        nextBilling: 'Feb 14, 2026',
-        status: 'Active',
-        features: [
-            'Unlimited personal accounts',
-            'AI Advisor access',
-            'Advanced analytics',
-            'Priority support',
-            'Export to CSV/PDF'
-        ]
-    };
-
-    const recentPayments = [
-        { id: 'SUB-8821', date: 'Jan 14, 2026', amount: '$12.00', status: 'Paid' as const, method: 'Visa ending 4242' },
-        { id: 'SUB-7734', date: 'Dec 14, 2025', amount: '$12.00', status: 'Paid' as const, method: 'Visa ending 4242' },
-        { id: 'SUB-6612', date: 'Nov 14, 2025', amount: '$12.00', status: 'Paid' as const, method: 'Visa ending 4242' },
-        { id: 'SUB-5590', date: 'Oct 14, 2025', amount: '$12.00', status: 'Pending' as const, method: 'Visa ending 4242' },
-    ];
+    const currentPlan = mockData.subscription.currentPlan;
+    // Cast the status string to the specific union type required by RecentPayments
+    const recentPayments = mockData.subscription.recentPayments.map(p => ({
+        ...p,
+        status: p.status as 'Paid' | 'Pending' | 'Failed'
+    }));
 
     return (
         <Block
