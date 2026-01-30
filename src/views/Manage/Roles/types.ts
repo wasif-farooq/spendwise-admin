@@ -2,6 +2,7 @@ import type { LucideIcon } from 'lucide-react';
 
 export interface RolePermission {
     [resource: string]: string[];
+    accounts: string[];
 }
 
 export interface Role {

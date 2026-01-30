@@ -1,32 +1,39 @@
 import { motion } from 'framer-motion';
 import { useState, useMemo, useEffect } from 'react';
-import { Block } from '@shared';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { Block, Flex } from '@shared';
 
 import { MembersHeader } from '@/views/Manage/Members/MembersHeader';
 import { MembersTable } from '@/views/Manage/Members/MembersTable';
 import { MembersFilterDrawer } from '@/views/Manage/Members/MembersFilterDrawer';
-import { InviteMemberModal } from '@/views/Manage/Members/InviteMemberModal';
 import { RemoveMemberModal } from '@/views/Manage/Members/RemoveMemberModal';
 import type { Member, MemberFilters } from '@/views/Manage/Members/types';
 import mockData from '@/data/mockData.json';
 
 const Members = () => {
-    const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
+    const navigate = useNavigate();
+    const location = useLocation();
+
     const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
     const [isRemoveModalOpen, setIsRemoveModalOpen] = useState(false);
     const [removingMember, setRemovingMember] = useState<Member | null>(null);
     const [isProcessing, setIsProcessing] = useState(false);
-
-    const [inviteEmail, setInviteEmail] = useState('');
-    const [inviteRole, setInviteRole] = useState('member');
-    const [isInviting, setIsInviting] = useState(false);
     const [feedback, setFeedback] = useState<{ type: 'success' | 'error', message: string } | null>(null);
+
+    // Check for success feedback from navigation
+    useEffect(() => {
+        if (location.state?.invitationSent && location.state?.email) {
+            setFeedback({ type: 'success', message: `Invitation sent to ${location.state.email}!` });
+            window.history.replaceState({}, document.title);
+            setTimeout(() => setFeedback(null), 3000);
+        }
+    }, [location]);
 
     // Pagination state
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 5;
 
-    // Use centralized mock data
+    // Use centralized mock data (in real app, this would be fetched)
     const [members, setMembers] = useState<Member[]>(mockData.members);
 
     const [searchQuery, setSearchQuery] = useState('');
@@ -66,21 +73,8 @@ const Members = () => {
         setCurrentPage(1);
     }, [searchQuery, filters]);
 
-    const handleInvite = (e: React.FormEvent) => {
-        e.preventDefault();
-        setIsInviting(true);
-        setFeedback(null);
-
-        // Simulate API call
-        setTimeout(() => {
-            setIsInviting(false);
-            setFeedback({ type: 'success', message: `Invitation sent to ${inviteEmail}!` });
-            setInviteEmail('');
-            setTimeout(() => {
-                setIsInviteModalOpen(false);
-                setFeedback(null);
-            }, 1500);
-        }, 1500);
+    const handleInviteClick = () => {
+        navigate('invite');
     };
 
     const handleRemoveMember = () => {
@@ -102,24 +96,36 @@ const Members = () => {
 
     const clearFilters = () => {
         setFilters({ roles: [], statuses: [], startDate: '', endDate: '' });
-        setSearchQuery('');
     };
 
     const activeFilterCount = filters.roles.length + filters.statuses.length + (filters.startDate ? 1 : 0) + (filters.endDate ? 1 : 0);
 
     return (
-        <Block
-            as={motion.div}
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="space-y-12"
-        >
+        <Block className="space-y-6">
+            {/* Feedback Message */}
+            {feedback && (
+                <motion.div
+                    initial={{ opacity: 0, y: -20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0 }}
+                    className={`p-4 rounded-xl border ${feedback.type === 'success'
+                        ? 'bg-green-50 border-green-100 text-green-700'
+                        : 'bg-red-50 border-red-100 text-red-700'
+                        }`}
+                >
+                    <Flex align="center" gap={3}>
+                        <div className={`w-2 h-2 rounded-full ${feedback.type === 'success' ? 'bg-green-500' : 'bg-red-500'}`} />
+                        <span className="font-bold">{feedback.message}</span>
+                    </Flex>
+                </motion.div>
+            )}
+
             <MembersHeader
                 searchQuery={searchQuery}
                 setSearchQuery={setSearchQuery}
                 activeFilterCount={activeFilterCount}
                 onOpenFilter={() => setIsFilterDrawerOpen(true)}
-                onOpenInvite={() => setIsInviteModalOpen(true)}
+                onOpenInvite={handleInviteClick}
             />
 
             <MembersTable
@@ -138,27 +144,15 @@ const Members = () => {
                 onClose={() => setIsFilterDrawerOpen(false)}
                 filters={filters}
                 setFilters={setFilters}
-                clearFilters={clearFilters}
+                onReset={clearFilters}
             />
 
             <RemoveMemberModal
                 isOpen={isRemoveModalOpen}
                 onClose={() => setIsRemoveModalOpen(false)}
                 onConfirm={handleRemoveMember}
-                member={removingMember}
+                memberName={removingMember?.name || ''}
                 isProcessing={isProcessing}
-            />
-
-            <InviteMemberModal
-                isOpen={isInviteModalOpen}
-                onClose={() => setIsInviteModalOpen(false)}
-                handleInvite={handleInvite}
-                inviteEmail={inviteEmail}
-                setInviteEmail={setInviteEmail}
-                inviteRole={inviteRole}
-                setInviteRole={setInviteRole}
-                isInviting={isInviting}
-                feedback={feedback}
             />
         </Block>
     );

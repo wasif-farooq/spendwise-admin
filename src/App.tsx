@@ -20,6 +20,7 @@ import SettingsSubscription from './pages/SettingsPage/Subscription';
 import ManagePage from './pages/ManagePage';
 import ManageGeneral from './pages/ManagePage/General';
 import ManageMembers from './pages/ManagePage/Members';
+import InviteMemberPage from './pages/ManagePage/InviteMemberPage';
 import ManageBilling from './pages/ManagePage/Billing';
 import ManageRoles from './pages/ManagePage/Roles';
 import RoleEditor from './pages/ManagePage/RoleEditor';
@@ -55,6 +56,7 @@ function App() {
               <Route index element={<Navigate to="general" replace />} />
               <Route path="general" element={<ManageGeneral />} />
               <Route path="members" element={<ManageMembers />} />
+              <Route path="members/invite" element={<InviteMemberPage />} />
               <Route path="roles" element={<ManageRoles />} />
               <Route path="roles/new" element={<RoleEditor />} />
               <Route path="roles/:id/edit" element={<RoleEditor />} />

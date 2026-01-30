@@ -126,6 +126,10 @@
                 ],
                 "members": [
                     "view"
+                ],
+                "accounts": [
+                    "view",
+                    "edit"
                 ]
             }
         },
