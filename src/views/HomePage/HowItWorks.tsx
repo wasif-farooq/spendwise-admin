@@ -1,5 +1,5 @@
 import { CreditCard, Users, Calendar, History } from 'lucide-react';
-import { Block, Grid, AnimatedBlock } from '@shared';
+import { Block, Grid, AnimatedBlock, Container, Heading, Text } from '@shared';
 
 const steps = [
     {
@@ -26,18 +26,18 @@ const steps = [
 
 export const HowItWorks = () => {
     return (
-        <section id="how-it-works" className="py-20 bg-white">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="text-center max-w-3xl mx-auto mb-16">
-                    <h2 className="text-3xl font-bold text-gray-900 mb-4">How It Works</h2>
-                    <p className="text-lg text-gray-600">
+        <Block as="section" id="how-it-works" className="py-20 bg-white">
+            <Container>
+                <Block className="text-center max-w-3xl mx-auto mb-16">
+                    <Heading as="h2" weight="bold" color="text-gray-900" className="text-3xl mb-4">How It Works</Heading>
+                    <Text size="lg" color="text-gray-600">
                         Get started with SpendWise in four simple steps and take control of your finances.
-                    </p>
-                </div>
+                    </Text>
+                </Block>
 
-                <div className="relative">
+                <Block className="relative">
                     {/* Connector Line (Desktop) */}
-                    <div className="hidden lg:block absolute top-1/2 left-0 w-full h-0.5 bg-gray-100 -translate-y-1/2 z-0"></div>
+                    <Block className="hidden lg:block absolute top-1/2 left-0 w-full h-0.5 bg-gray-100 -translate-y-1/2 z-0"></Block>
 
                     <Grid cols={1} gap={8} className="md:grid-cols-2 lg:grid-cols-4 relative z-10">
                         {steps.map((step, index) => (
@@ -57,13 +57,13 @@ export const HowItWorks = () => {
                                         {index + 1}
                                     </Block>
                                 </Block>
-                                <h3 className="text-xl font-semibold text-gray-900 mb-2">{step.title}</h3>
-                                <p className="text-gray-600 text-sm leading-relaxed">{step.description}</p>
+                                <Heading as="h3" size="xl" weight="semibold" color="text-gray-900" className="mb-2">{step.title}</Heading>
+                                <Text size="sm" color="text-gray-600" className="leading-relaxed">{step.description}</Text>
                             </AnimatedBlock>
                         ))}
                     </Grid>
-                </div>
-            </div>
-        </section>
+                </Block>
+            </Container>
+        </Block>
     );
 };

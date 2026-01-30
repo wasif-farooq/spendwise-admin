@@ -32,11 +32,12 @@ export const ExchangeRatesSidebar = ({
                     <Text size="xs" weight="black" color="text-gray-400" className="uppercase tracking-widest ml-1">Search Currency</Text>
                     <Block className="relative group">
                         <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 group-focus-within:text-primary transition-colors" />
-                        <input
+                        <Block
+                            as="input"
                             type="text"
                             placeholder="Search code or name..."
                             value={searchQuery}
-                            onChange={(e) => onSearchChange(e.target.value)}
+                            onChange={(e: any) => onSearchChange(e.target.value)}
                             className="w-full pl-12 pr-4 py-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-primary font-bold text-gray-900 placeholder:text-gray-400 transition-all"
                         />
                     </Block>
@@ -59,9 +60,9 @@ export const ExchangeRatesSidebar = ({
                 </Block>
                 <Heading as="h3" weight="black" className="text-lg mb-2">Market Overview</Heading>
                 <Text color="text-white/80" size="sm" weight="medium" className="mb-6 leading-relaxed">The global market is showing high volatility today. Stay updated with real-time alerts.</Text>
-                <button className="w-full py-3 bg-white/20 backdrop-blur-md rounded-xl font-black text-sm hover:bg-white/30 transition-all">
+                <Block as="button" className="w-full py-3 bg-white/20 backdrop-blur-md rounded-xl font-black text-sm hover:bg-white/30 transition-all">
                     Enable Alerts
-                </button>
+                </Block>
             </Block>
         </Block>
     );

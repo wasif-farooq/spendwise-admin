@@ -1,4 +1,4 @@
-import { Building2, Info } from 'lucide-react';
+import { Building2, Info, ChevronRight } from 'lucide-react';
 import { Block, Flex, Heading, Text, Grid } from '@shared';
 
 interface ProfileCompletionCardsProps {
@@ -25,9 +25,7 @@ export const ProfileCompletionCards = ({ accountType }: ProfileCompletionCardsPr
                 </Text>
                 <Flex align="center" gap={2} className="mt-8 text-primary font-black text-sm group-hover:translate-x-2 transition-transform">
                     Configure Profile
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
-                    </svg>
+                    <ChevronRight className="w-4 h-4" />
                 </Flex>
             </Block>
 
@@ -42,9 +40,7 @@ export const ProfileCompletionCards = ({ accountType }: ProfileCompletionCardsPr
                 <Text size="sm" color="text-gray-500" weight="medium" className="leading-relaxed">Customize your workspace URL for easier access and professional branding across your team.</Text>
                 <Flex align="center" gap={2} className="mt-8 text-primary font-black text-sm group-hover:translate-x-2 transition-transform">
                     Manage URL
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
-                    </svg>
+                    <ChevronRight className="w-4 h-4" />
                 </Flex>
             </Block>
         </Grid>

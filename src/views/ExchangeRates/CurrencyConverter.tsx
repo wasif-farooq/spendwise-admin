@@ -44,10 +44,11 @@ export const CurrencyConverter = () => {
                         <Text size="xs" weight="black" color="text-gray-400" className="uppercase tracking-widest ml-1">Amount</Text>
                         <Block className="relative">
                             <DollarSign className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-                            <input
+                            <Block
+                                as="input"
                                 type="number"
                                 value={amount}
-                                onChange={(e) => setAmount(e.target.value)}
+                                onChange={(e: any) => setAmount(e.target.value)}
                                 className="w-full pl-12 pr-4 py-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-primary font-black text-xl text-gray-900 transition-all"
                                 placeholder="0.00"
                             />
@@ -64,12 +65,13 @@ export const CurrencyConverter = () => {
                     </Block>
 
                     <Block className="lg:col-span-1 flex justify-center pb-2">
-                        <button
+                        <Block
+                            as="button"
                             onClick={handleSwap}
                             className="p-4 bg-primary text-white rounded-2xl shadow-lg shadow-primary/20 hover:scale-110 active:scale-95 transition-all group/swap"
                         >
                             <RefreshCw className="h-6 w-6 group-hover/swap:rotate-180 transition-transform duration-500" />
-                        </button>
+                        </Block>
                     </Block>
 
                     <Block className="lg:col-span-3 space-y-3">

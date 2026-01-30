@@ -1,6 +1,6 @@
 import { AnimatePresence } from 'framer-motion';
 import { Plus, Building2, Banknote, CreditCard, Wallet } from 'lucide-react';
-import { Block, Heading, Text } from '@shared';
+import { Block, Heading, Text, Grid } from '@shared';
 import { AccountCard } from '@ui';
 import type { Account } from './types';
 
@@ -22,7 +22,7 @@ export const AccountsGrid = ({ accounts, onAddAccount }: AccountsGridProps) => {
     };
 
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <Grid cols={1} gap={8} className="md:grid-cols-2 lg:grid-cols-3">
             <AnimatePresence mode="popLayout">
                 {accounts.map((account) => (
                     <AccountCard key={account.id} account={account} getIcon={getIcon} />
@@ -30,7 +30,8 @@ export const AccountsGrid = ({ accounts, onAddAccount }: AccountsGridProps) => {
             </AnimatePresence>
 
             {/* Add New Account Card */}
-            <button
+            <Block
+                as="button"
                 onClick={onAddAccount}
                 className="rounded-[3rem] border-4 border-dashed border-gray-100 hover:border-primary/20 hover:bg-primary/5 transition-all group flex flex-col items-center justify-center p-12 space-y-4 min-h-[350px]"
             >
@@ -41,7 +42,7 @@ export const AccountsGrid = ({ accounts, onAddAccount }: AccountsGridProps) => {
                     <Heading size="xl" weight="black" color="text-gray-900">Add New Account</Heading>
                     <Text size="sm" weight="medium" color="text-gray-500" className="mt-1">Connect a bank or add cash</Text>
                 </Block>
-            </button>
-        </div>
+            </Block>
+        </Grid>
     );
 };

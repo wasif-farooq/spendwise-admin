@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Block, Flex, Heading, Text, Grid, AnimatedBlock } from '@shared';
 import { Button } from '@ui';
-import { ArrowLeft, Check, Save } from 'lucide-react';
+import { ArrowLeft, Save } from 'lucide-react';
 import mockData from '@/data/mockData.json';
 
 import { MemberDetailsForm } from '@/views/Manage/InviteMember/MemberDetailsForm';
@@ -13,6 +13,18 @@ import type { InvitationData } from '@/views/Manage/InviteMember/types';
 const EditMemberPage = () => {
     const navigate = useNavigate();
     const { id } = useParams();
+
+    // ... (state code intentionally omitted/preserved in search) ...
+    // Note: Since I can't preserve lines effectively without matching huge blocks, I will match the loader and the back button specifically.
+    // Wait, the instruction says "Replace matches". I will target the Loader first.
+
+    // ...
+    // Using multiple chunks for efficiency if possible? The tool supports single chunk.
+    // I will try to target specific blocks. But first, let's see if I can do it in one go if they are close? No, they are far apart.
+    // I will use replace_file_content multiple times or maybe just target the render method if I include everything.
+    // The previous view_file output is complete. I can replace the whole render return or parts.
+    // Let's replace the loader first.
+
 
     // State
     const [email, setEmail] = useState('');
@@ -149,7 +161,7 @@ const EditMemberPage = () => {
     if (isLoading) {
         return (
             <Flex justify="center" align="center" className="min-h-[60vh]">
-                <div className="w-8 h-8 border-4 border-gray-200 border-t-primary rounded-full animate-spin" />
+                <Block className="w-8 h-8 border-4 border-gray-200 border-t-primary rounded-full animate-spin" />
             </Flex>
         );
     }
@@ -163,12 +175,13 @@ const EditMemberPage = () => {
             {/* Header */}
             <Flex as="header" direction="col" justify="between" gap={6} className="sm:flex-row sm:items-center">
                 <Flex align="center" gap={4}>
-                    <button
+                    <Block
+                        as="button"
                         onClick={() => navigate('/manage/members')}
                         className="p-3 rounded-2xl bg-gray-100 text-gray-500 hover:bg-gray-200 transition-all"
                     >
                         <ArrowLeft className="h-6 w-6" />
-                    </button>
+                    </Block>
                     <Block>
                         <Heading as="h2" weight="black" className="text-3xl tracking-tight text-gray-900">
                             Edit Member

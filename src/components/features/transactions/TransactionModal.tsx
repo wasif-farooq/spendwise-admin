@@ -130,44 +130,46 @@ const customSelectStyles: StylesConfig<SelectOption, false> = {
     }),
 };
 
+import { Block, Flex, Text, Grid } from '@shared';
+
 const CustomOption = ({ innerProps, label, data }: any) => (
-    <div {...innerProps} className="flex items-center gap-4 p-3 hover:bg-primary/5 rounded-2xl cursor-pointer transition-all group">
+    <Block {...innerProps} className="flex items-center gap-4 p-3 hover:bg-primary/5 rounded-2xl cursor-pointer transition-all group">
         {data.icon && (
-            <div className={`h-11 w-11 rounded-xl flex items-center justify-center transition-transform group-hover:scale-110 ${data.bg} ${data.color}`}>
+            <Block className={`h-11 w-11 rounded-xl flex items-center justify-center transition-transform group-hover:scale-110 ${data.bg} ${data.color}`}>
                 <data.icon size={22} />
-            </div>
+            </Block>
         )}
-        <div className="flex-1 min-w-0">
-            <p className="text-sm font-black text-gray-900 truncate">{label}</p>
-            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Account</p>
-        </div>
+        <Block className="flex-1 min-w-0">
+            <Text className="text-sm font-black text-gray-900 truncate">{label}</Text>
+            <Text className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Account</Text>
+        </Block>
         {data.balance && (
-            <div className="text-right">
-                <p className="text-sm font-black text-gray-900">{data.balance}</p>
-                <p className="text-[10px] font-bold text-emerald-500 uppercase tracking-wider">Available</p>
-            </div>
+            <Block className="text-right">
+                <Text className="text-sm font-black text-gray-900">{data.balance}</Text>
+                <Text className="text-[10px] font-bold text-emerald-500 uppercase tracking-wider">Available</Text>
+            </Block>
         )}
-    </div>
+    </Block>
 );
 
 const CustomSingleValue = ({ data }: any) => (
-    <div className="flex items-center justify-between w-full gap-3">
-        <div className="flex items-center gap-3 min-w-0">
+    <Flex align="center" justify="between" className="w-full gap-3">
+        <Flex align="center" gap={3} className="min-w-0">
             {data.icon && (
-                <div className={`h-10 w-10 rounded-xl flex items-center justify-center flex-shrink-0 ${data.bg} ${data.color}`}>
+                <Block className={`h-10 w-10 rounded-xl flex items-center justify-center flex-shrink-0 ${data.bg} ${data.color}`}>
                     <data.icon size={20} />
-                </div>
+                </Block>
             )}
-            <span className="text-sm font-black text-gray-900 truncate whitespace-nowrap">
+            <Text as="span" className="text-sm font-black text-gray-900 truncate whitespace-nowrap">
                 {data.label}
-            </span>
-        </div>
+            </Text>
+        </Flex>
         {data.balance && (
-            <span className="text-[10px] font-black text-gray-500 bg-gray-100 px-2.5 py-1.5 rounded-lg whitespace-nowrap flex-shrink-0">
+            <Text as="span" className="text-[10px] font-black text-gray-500 bg-gray-100 px-2.5 py-1.5 rounded-lg whitespace-nowrap flex-shrink-0">
                 {data.balance}
-            </span>
+            </Text>
         )}
-    </div>
+    </Flex>
 );
 
 export const TransactionModal = ({ isOpen, onClose }: TransactionModalProps) => {
@@ -245,8 +247,9 @@ export const TransactionModal = ({ isOpen, onClose }: TransactionModalProps) => 
         >
             <form onSubmit={handleSubmit} className="space-y-8">
                 {/* Transaction Type Toggle */}
-                <div className="flex p-1.5 bg-gray-100 rounded-[1.5rem] w-full max-w-sm mx-auto">
-                    <button
+                <Flex className="p-1.5 bg-gray-100 rounded-[1.5rem] w-full max-w-sm mx-auto">
+                    <Block
+                        as="button"
                         type="button"
                         onClick={() => setTransactionType('expense')}
                         className={`flex-1 py-3 rounded-[1.25rem] text-[10px] font-black uppercase tracking-widest transition-all ${isExpense
@@ -255,8 +258,9 @@ export const TransactionModal = ({ isOpen, onClose }: TransactionModalProps) => 
                             }`}
                     >
                         Expense
-                    </button>
-                    <button
+                    </Block>
+                    <Block
+                        as="button"
                         type="button"
                         onClick={() => setTransactionType('income')}
                         className={`flex-1 py-3 rounded-[1.25rem] text-[10px] font-black uppercase tracking-widest transition-all ${isIncome
@@ -265,8 +269,9 @@ export const TransactionModal = ({ isOpen, onClose }: TransactionModalProps) => 
                             }`}
                     >
                         Income
-                    </button>
-                    <button
+                    </Block>
+                    <Block
+                        as="button"
                         type="button"
                         onClick={() => setTransactionType('transfer')}
                         className={`flex-1 py-3 rounded-[1.25rem] text-[10px] font-black uppercase tracking-widest transition-all ${isTransfer
@@ -275,13 +280,13 @@ export const TransactionModal = ({ isOpen, onClose }: TransactionModalProps) => 
                             }`}
                     >
                         Transfer
-                    </button>
-                </div>
+                    </Block>
+                </Flex>
 
-                <div className="space-y-6">
+                <Block className="space-y-6">
                     {/* Account Selection (Full Width, Above Amount) */}
-                    <div className="space-y-6">
-                        <div className="space-y-2">
+                    <Block className="space-y-6">
+                        <Block className="space-y-2">
                             <label className="flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1 select-none">
                                 <Wallet size={14} className={iconColor} />
                                 {isTransfer ? 'From Account' : 'Account'}
@@ -295,10 +300,10 @@ export const TransactionModal = ({ isOpen, onClose }: TransactionModalProps) => 
                                 placeholder="Select Account"
                                 isSearchable
                             />
-                        </div>
+                        </Block>
 
                         {isTransfer && (
-                            <div className="space-y-2">
+                            <Block className="space-y-2">
                                 <label className="flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1 select-none">
                                     <Wallet size={14} className={iconColor} />
                                     To Account
@@ -312,12 +317,12 @@ export const TransactionModal = ({ isOpen, onClose }: TransactionModalProps) => 
                                     placeholder="Select Destination Account"
                                     isSearchable
                                 />
-                            </div>
+                            </Block>
                         )}
-                    </div>
+                    </Block>
 
                     {/* Amount Section */}
-                    <div className={`p-8 rounded-[2.5rem] border transition-all duration-500 text-center space-y-2 ${color === 'rose' ? 'bg-rose-50 border-rose-100' :
+                    <Block className={`p-8 rounded-[2.5rem] border transition-all duration-500 text-center space-y-2 ${color === 'rose' ? 'bg-rose-50 border-rose-100' :
                         color === 'emerald' ? 'bg-emerald-50 border-emerald-100' :
                             'bg-indigo-50 border-indigo-100'
                         }`}>
@@ -327,11 +332,11 @@ export const TransactionModal = ({ isOpen, onClose }: TransactionModalProps) => 
                             }`}>
                             {isExpense ? 'You Spent' : isIncome ? 'You Received' : 'You are Transferring'}
                         </label>
-                        <div className="flex items-center justify-center gap-2">
-                            <span className={`text-4xl font-black ${color === 'rose' ? 'text-rose-600' :
+                        <Flex align="center" justify="center" gap={2}>
+                            <Text as="span" className={`text-4xl font-black ${color === 'rose' ? 'text-rose-600' :
                                 color === 'emerald' ? 'text-emerald-600' :
                                     'text-indigo-600'
-                                }`}>$</span>
+                                }`}>$</Text>
                             <input
                                 type="number"
                                 step="0.01"
@@ -345,12 +350,12 @@ export const TransactionModal = ({ isOpen, onClose }: TransactionModalProps) => 
                                 autoFocus
                                 required
                             />
-                        </div>
-                    </div>
+                        </Flex>
+                    </Block>
 
                     {/* Description (Full Width) */}
                     {!isTransfer && (
-                        <div className="space-y-2">
+                        <Block className="space-y-2">
                             <label className="flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1 select-none">
                                 <FileText size={14} className={iconColor} />
                                 Description
@@ -360,13 +365,13 @@ export const TransactionModal = ({ isOpen, onClose }: TransactionModalProps) => 
                                 className="rounded-2xl h-14 px-5 bg-gray-50 border-none focus:ring-4 focus:ring-primary/5 font-bold"
                                 required
                             />
-                        </div>
+                        </Block>
                     )}
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <Grid cols={1} gap={6} className="md:grid-cols-2">
                         {/* Category Selection (Expense/Income only) */}
                         {!isTransfer && (
-                            <div className="space-y-2">
+                            <Block className="space-y-2">
                                 <label className="flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1 select-none">
                                     <Tag size={14} className={iconColor} />
                                     Category
@@ -383,11 +388,11 @@ export const TransactionModal = ({ isOpen, onClose }: TransactionModalProps) => 
                                     required
                                     formatCreateLabel={(inputValue) => `Create "${inputValue}"`}
                                 />
-                            </div>
+                            </Block>
                         )}
 
                         {/* Date Selection */}
-                        <div className="space-y-2">
+                        <Block className="space-y-2">
                             <label className="flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1 select-none">
                                 <Calendar size={14} className={iconColor} />
                                 Transaction Date
@@ -398,17 +403,17 @@ export const TransactionModal = ({ isOpen, onClose }: TransactionModalProps) => 
                                 className="rounded-2xl h-14 px-5 bg-gray-50 border-none focus:ring-4 focus:ring-primary/5 font-bold"
                                 required
                             />
-                        </div>
-                    </div>
+                        </Block>
+                    </Grid>
 
                     {/* Receipt Selection (Expense/Income only) */}
                     {!isTransfer && (
-                        <div className="space-y-2">
+                        <Block className="space-y-2">
                             <label className="flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">
                                 <Camera size={14} className={iconColor} />
                                 Receipt
                             </label>
-                            <div className="relative h-[60px]">
+                            <Block className="relative h-[60px]">
                                 <input
                                     type="file"
                                     accept="image/*"
@@ -423,16 +428,16 @@ export const TransactionModal = ({ isOpen, onClose }: TransactionModalProps) => 
                                         className="w-full h-full border-2 border-dashed border-gray-200 rounded-2xl flex items-center justify-center gap-2 text-gray-400 hover:border-primary hover:text-primary transition-all group"
                                     >
                                         <Upload size={18} className="group-hover:scale-110 transition-transform" />
-                                        <span className="text-xs font-bold">Upload Receipt</span>
+                                        <Text as="span" className="text-xs font-bold">Upload Receipt</Text>
                                     </button>
                                 ) : (
-                                    <div className="w-full h-full relative group">
+                                    <Block className="w-full h-full relative group">
                                         <img
                                             src={receipt}
                                             alt="Receipt preview"
                                             className="w-full h-full object-cover rounded-2xl border border-gray-100"
                                         />
-                                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl flex items-center justify-center">
+                                        <Flex align="center" justify="center" className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl">
                                             <button
                                                 type="button"
                                                 onClick={removeReceipt}
@@ -440,15 +445,15 @@ export const TransactionModal = ({ isOpen, onClose }: TransactionModalProps) => 
                                             >
                                                 <CloseIcon size={16} />
                                             </button>
-                                        </div>
-                                    </div>
+                                        </Flex>
+                                    </Block>
                                 )}
-                            </div>
-                        </div>
+                            </Block>
+                        </Block>
                     )}
-                </div>
+                </Block>
 
-                <div className="pt-4 flex flex-col sm:flex-row gap-4">
+                <Flex className="pt-4 flex-col sm:flex-row gap-4">
                     <Button
                         variant="outline"
                         type="button"
@@ -466,7 +471,7 @@ export const TransactionModal = ({ isOpen, onClose }: TransactionModalProps) => 
                     >
                         Create {isExpense ? 'Expense' : isIncome ? 'Income' : 'Transfer'}
                     </Button>
-                </div>
+                </Flex>
             </form>
         </Modal>
     );

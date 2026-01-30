@@ -12,9 +12,9 @@ export const ExchangeRatesHeader = () => {
                 <Text color="text-gray-500" weight="medium" className="mt-2">Real-time currency conversion rates across global markets.</Text>
             </Block>
             <Flex align="center" gap={4}>
-                <button className="p-3 bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all text-gray-500">
+                <Block as="button" className="p-3 bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all text-gray-500">
                     <RefreshCw className="h-5 w-5" />
-                </button>
+                </Block>
                 <Block className="bg-primary/10 px-4 py-2 rounded-2xl">
                     <Text size="xs" weight="black" className="text-primary uppercase tracking-widest">Last Updated: Just Now</Text>
                 </Block>

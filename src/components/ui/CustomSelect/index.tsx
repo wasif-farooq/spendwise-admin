@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { ChevronDown, Check } from 'lucide-react';
 import { AnimatePresence } from 'framer-motion';
-import { AnimatedBlock } from '@shared';
+import { AnimatedBlock, Block, Flex, Text } from '@shared';
 
 interface Option {
     value: string;
@@ -32,20 +32,21 @@ export const CustomSelect = ({ label, options, value, onChange }: CustomSelectPr
     }, []);
 
     return (
-        <div className="relative" ref={containerRef}>
-            <label className="block text-sm font-bold text-gray-700 mb-2 ml-1">{label}</label>
-            <button
+        <Block className="relative" ref={containerRef}>
+            <Text as="label" className="block text-sm font-bold text-gray-700 mb-2 ml-1">{label}</Text>
+            <Block
+                as="button"
                 type="button"
                 onClick={() => setIsOpen(!isOpen)}
                 className={`w-full flex items-center justify-between px-5 py-4 bg-gray-50 border-2 transition-all duration-200 rounded-2xl ${isOpen ? 'border-primary bg-white ring-4 ring-primary/10' : 'border-transparent hover:bg-gray-100'
                     }`}
             >
-                <div className="flex items-center">
+                <Flex align="center">
                     {selectedOption.icon && <selectedOption.icon className="h-5 w-5 mr-3 text-primary" />}
-                    <span className="font-semibold text-gray-900">{selectedOption.label}</span>
-                </div>
+                    <Text as="span" className="font-semibold text-gray-900">{selectedOption.label}</Text>
+                </Flex>
                 <ChevronDown className={`h-5 w-5 text-gray-400 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
-            </button>
+            </Block>
 
             <AnimatePresence>
                 {isOpen && (
@@ -56,7 +57,8 @@ export const CustomSelect = ({ label, options, value, onChange }: CustomSelectPr
                         className="absolute z-50 w-full mt-2 bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden p-2"
                     >
                         {options.map((option) => (
-                            <button
+                            <Block
+                                as="button"
                                 key={option.value}
                                 type="button"
                                 onClick={() => {
@@ -66,16 +68,16 @@ export const CustomSelect = ({ label, options, value, onChange }: CustomSelectPr
                                 className={`w-full flex items-center justify-between px-4 py-3 rounded-xl transition-colors ${value === option.value ? 'bg-primary/5 text-primary' : 'text-gray-600 hover:bg-gray-50'
                                     }`}
                             >
-                                <div className="flex items-center">
+                                <Flex align="center">
                                     {option.icon && <option.icon className={`h-5 w-5 mr-3 ${value === option.value ? 'text-primary' : 'text-gray-400'}`} />}
-                                    <span className="font-medium">{option.label}</span>
-                                </div>
+                                    <Text as="span" className="font-medium">{option.label}</Text>
+                                </Flex>
                                 {value === option.value && <Check className="h-4 w-4" />}
-                            </button>
+                            </Block>
                         ))}
                     </AnimatedBlock>
                 )}
             </AnimatePresence>
-        </div>
+        </Block>
     );
 };

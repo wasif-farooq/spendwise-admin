@@ -1,4 +1,4 @@
-import { Grid } from '@shared';
+import { Grid, Block, Container, Heading, Text, Flex } from '@shared';
 import { TestimonialCard } from '@ui';
 
 const testimonials = [
@@ -24,14 +24,14 @@ const testimonials = [
 
 export const Testimonials = () => {
     return (
-        <section id="testimonials" className="py-20 bg-gray-50">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="text-center max-w-3xl mx-auto mb-16">
-                    <h2 className="text-3xl font-bold text-gray-900 mb-4">Trusted by Individuals & Teams</h2>
-                    <p className="text-lg text-gray-600">
+        <Block as="section" id="testimonials" className="py-20 bg-gray-50">
+            <Container>
+                <Block className="text-center max-w-3xl mx-auto mb-16">
+                    <Heading as="h2" weight="bold" color="text-gray-900" className="text-3xl mb-4">Trusted by Individuals & Teams</Heading>
+                    <Text size="lg" color="text-gray-600">
                         See what our users have to say about their experience with SpendWise.
-                    </p>
-                </div>
+                    </Text>
+                </Block>
 
                 <Grid cols={1} className="md:grid-cols-3" gap={8}>
                     {testimonials.map((testimonial, index) => (
@@ -44,13 +44,13 @@ export const Testimonials = () => {
                 </Grid>
 
                 {/* Trust Badges */}
-                <div className="mt-20 flex flex-wrap justify-center items-center gap-12 opacity-40 grayscale">
-                    <div className="text-2xl font-black tracking-tighter text-gray-400">TECHFLOW</div>
-                    <div className="text-2xl font-black tracking-tighter text-gray-400">GREENEARTH</div>
-                    <div className="text-2xl font-black tracking-tighter text-gray-400">DESIGNPRO</div>
-                    <div className="text-2xl font-black tracking-tighter text-gray-400">FINSYNC</div>
-                </div>
-            </div>
-        </section>
+                <Flex className="mt-20 flex-wrap justify-center items-center gap-12 opacity-40 grayscale">
+                    <Text className="text-2xl font-black tracking-tighter text-gray-400">TECHFLOW</Text>
+                    <Text className="text-2xl font-black tracking-tighter text-gray-400">GREENEARTH</Text>
+                    <Text className="text-2xl font-black tracking-tighter text-gray-400">DESIGNPRO</Text>
+                    <Text className="text-2xl font-black tracking-tighter text-gray-400">FINSYNC</Text>
+                </Flex>
+            </Container>
+        </Block>
     );
 };

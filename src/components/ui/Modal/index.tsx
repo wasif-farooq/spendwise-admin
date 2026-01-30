@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
 import { Block, Heading, AnimatedBlock, Flex } from '@shared';
+import { Button } from '@ui';
 
 interface ModalProps {
     isOpen: boolean;
@@ -24,7 +25,7 @@ export const Modal = ({ isOpen, onClose, title, children, maxWidth = 'max-w-lg' 
     return (
         <AnimatePresence>
             {isOpen && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+                <Block className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
                     {/* Backdrop */}
                     <AnimatedBlock
                         initial={{ opacity: 0 }}
@@ -44,17 +45,18 @@ export const Modal = ({ isOpen, onClose, title, children, maxWidth = 'max-w-lg' 
                         <Block className="p-8">
                             <Flex align="center" justify="between" className="mb-6">
                                 <Heading as="h3" size="2xl" weight="bold" color="text-gray-900">{title}</Heading>
-                                <button
+                                <Button
+                                    variant="ghost"
                                     onClick={onClose}
-                                    className="p-2 hover:bg-gray-100 rounded-2xl transition-colors text-gray-400 hover:text-gray-600"
+                                    className="p-2 hover:bg-gray-100 rounded-2xl transition-colors text-gray-400 hover:text-gray-600 h-auto"
                                 >
                                     <X className="h-6 w-6" />
-                                </button>
+                                </Button>
                             </Flex>
                             {children}
                         </Block>
                     </AnimatedBlock>
-                </div>
+                </Block>
             )}
         </AnimatePresence>
     );

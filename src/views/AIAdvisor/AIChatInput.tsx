@@ -1,6 +1,6 @@
 import { Send } from 'lucide-react';
 import { Block, Flex, Text } from '@shared';
-import { SuggestedPrompt } from '@ui';
+import { SuggestedPrompt, Button } from '@ui';
 
 interface AIChatInputProps {
     inputValue: string;
@@ -31,21 +31,22 @@ export const AIChatInput = ({
 
                 {/* Input Box */}
                 <Block className="relative group">
-                    <input
+                    <Block
+                        as="input"
                         type="text"
                         value={inputValue}
-                        onChange={(e) => onInputChange(e.target.value)}
-                        onKeyPress={(e) => e.key === 'Enter' && onSendMessage()}
+                        onChange={(e: any) => onInputChange(e.target.value)}
+                        onKeyPress={(e: any) => e.key === 'Enter' && onSendMessage()}
                         placeholder="Ask your advisor anything..."
                         className="w-full px-6 py-4 bg-gray-50 border border-gray-200 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary focus:bg-white transition-all pr-16"
                     />
-                    <button
+                    <Button
                         onClick={() => onSendMessage()}
                         disabled={!inputValue.trim()}
-                        className="absolute right-2 top-2 bottom-2 px-4 bg-primary text-white rounded-xl shadow-lg shadow-primary/20 hover:bg-primary/90 transition-all disabled:opacity-50 disabled:shadow-none"
+                        className="absolute right-2 top-2 bottom-2 px-4 bg-primary text-white rounded-xl shadow-lg shadow-primary/20 hover:bg-primary/90 transition-all disabled:opacity-50 disabled:shadow-none h-auto"
                     >
                         <Send className="h-5 w-5" />
-                    </button>
+                    </Button>
                 </Block>
                 <Text size="xs" color="text-gray-400" align="center">
                     SpendWise AI can make mistakes. Verify important financial information.

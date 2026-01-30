@@ -1,5 +1,6 @@
 import React from 'react';
 import { cn } from '@/utils/cn';
+import { Block, Text } from '@shared';
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
     label?: string;
@@ -9,11 +10,11 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     ({ label, error, className, ...props }, ref) => {
         return (
-            <div className="w-full space-y-1.5">
+            <Block className="w-full space-y-1.5">
                 {label && (
-                    <label className="text-sm font-medium text-gray-700">
+                    <Text as="label" className="text-sm font-medium text-gray-700">
                         {label}
-                    </label>
+                    </Text>
                 )}
                 <input
                     ref={ref}
@@ -25,11 +26,11 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
                     {...props}
                 />
                 {error && (
-                    <p className="text-xs font-medium text-red-500">
+                    <Text className="text-xs font-medium text-red-500">
                         {error}
-                    </p>
+                    </Text>
                 )}
-            </div>
+            </Block>
         );
     }
 );

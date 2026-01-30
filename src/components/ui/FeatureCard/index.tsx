@@ -1,5 +1,5 @@
 import type { LucideIcon } from 'lucide-react';
-import { AnimatedBlock } from '@shared';
+import { AnimatedBlock, Block, Heading, Text } from '@shared';
 
 interface FeatureCardProps {
     title: string;
@@ -17,11 +17,11 @@ export const FeatureCard: React.FC<FeatureCardProps> = ({ title, description, ic
             transition={{ duration: 0.5, delay }}
             className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow group"
         >
-            <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
+            <Block className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
                 <Icon className="h-6 w-6 text-primary" />
-            </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">{title}</h3>
-            <p className="text-gray-600">{description}</p>
+            </Block>
+            <Heading as="h3" className="text-xl font-semibold text-gray-900 mb-2">{title}</Heading>
+            <Text className="text-gray-600">{description}</Text>
         </AnimatedBlock>
     );
 };

@@ -1,6 +1,6 @@
 import { LayoutDashboard, Users, Calendar, History, PieChart, Cloud } from 'lucide-react';
 import { FeatureCard } from '@ui';
-import { Grid } from '@shared';
+import { Grid, Block, Container, Heading, Text } from '@shared';
 
 const features = [
     {
@@ -37,14 +37,14 @@ const features = [
 
 export const Features = () => {
     return (
-        <section id="features" className="py-20 bg-gray-50">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="text-center max-w-3xl mx-auto mb-16">
-                    <h2 className="text-3xl font-bold text-gray-900 mb-4">Everything you need to manage expenses</h2>
-                    <p className="text-lg text-gray-600">
+        <Block as="section" id="features" className="py-20 bg-gray-50">
+            <Container>
+                <Block className="text-center max-w-3xl mx-auto mb-16">
+                    <Heading as="h2" weight="bold" color="text-gray-900" className="text-3xl mb-4">Everything you need to manage expenses</Heading>
+                    <Text size="lg" color="text-gray-600">
                         Powerful features designed for individuals and teams to take control of their financial health.
-                    </p>
-                </div>
+                    </Text>
+                </Block>
 
                 <Grid cols={1} className="md:grid-cols-2 lg:grid-cols-3" gap={8}>
                     {features.map((feature, index) => (
@@ -57,7 +57,7 @@ export const Features = () => {
                         />
                     ))}
                 </Grid>
-            </div>
-        </section>
+            </Container>
+        </Block>
     );
 };

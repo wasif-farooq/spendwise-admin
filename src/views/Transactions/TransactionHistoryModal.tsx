@@ -65,36 +65,36 @@ export const TransactionHistoryModal = ({ isOpen, onClose, transaction }: Transa
             title="Modification History"
             maxWidth="max-w-3xl"
         >
-            <div className="space-y-8">
+            <Block className="space-y-8">
                 {transaction && (
                     <Block className="bg-gray-50 p-6 rounded-3xl flex items-center justify-between">
                         <Flex align="center" gap={4}>
-                            <div className={`h-12 w-12 rounded-xl flex items-center justify-center text-white shadow-lg ${transaction.color}`}>
+                            <Block className={`h-12 w-12 rounded-xl flex items-center justify-center text-white shadow-lg ${transaction.color}`}>
                                 <transaction.icon size={20} />
-                            </div>
+                            </Block>
                             <Block>
                                 <Heading as="h4" weight="black" color="text-gray-900">{transaction.description}</Heading>
                                 <Text size="xs" weight="bold" color="text-gray-500" className="uppercase tracking-widest">{transaction.category}</Text>
                             </Block>
                         </Flex>
-                        <div className="text-right">
+                        <Block className="text-right">
                             <Text size="xl" weight="black" color="text-gray-900">
                                 {transaction.type === 'income' ? '+' : '-'}${transaction.amount.toLocaleString()}
                             </Text>
                             <Text size="xs" weight="black" color="text-gray-400" className="uppercase tracking-widest">Current Amount</Text>
-                        </div>
+                        </Block>
                     </Block>
                 )}
 
-                <div className="relative space-y-8 before:absolute before:inset-0 before:ml-5 before:-translate-x-px before:h-full before:w-0.5 before:bg-gradient-to-b before:from-primary/20 before:via-gray-100 before:to-transparent">
+                <Block className="relative space-y-8 before:absolute before:inset-0 before:ml-5 before:-translate-x-px before:h-full before:w-0.5 before:bg-gradient-to-b before:from-primary/20 before:via-gray-100 before:to-transparent">
                     {MOCK_HISTORY.map((item) => (
-                        <div key={item.id} className="relative flex items-start gap-6 pl-12 group">
-                            <div className={`absolute left-0 h-10 w-10 rounded-full border-4 border-white shadow-md flex items-center justify-center transition-transform group-hover:scale-110 ${item.type === 'create' ? 'bg-emerald-500 text-white' :
+                        <Block key={item.id} className="relative flex items-start gap-6 pl-12 group">
+                            <Block className={`absolute left-0 h-10 w-10 rounded-full border-4 border-white shadow-md flex items-center justify-center transition-transform group-hover:scale-110 ${item.type === 'create' ? 'bg-emerald-500 text-white' :
                                 item.type === 'category' ? 'bg-blue-500 text-white' : 'bg-primary text-white'
                                 }`}>
                                 {item.type === 'create' ? <Plus size={16} /> :
                                     item.type === 'category' ? <TrendingUp size={16} /> : <Edit2 size={16} />}
-                            </div>
+                            </Block>
                             <Block className="flex-1 bg-white border border-gray-100 p-6 rounded-[2rem] shadow-sm hover:shadow-md transition-all">
                                 <Flex direction="col" align="center" justify="between" gap={2} className="sm:flex-row mb-4">
                                     <Flex align="center" gap={2}>
@@ -118,16 +118,16 @@ export const TransactionHistoryModal = ({ isOpen, onClose, transaction }: Transa
                                     </Flex>
                                 )}
                             </Block>
-                        </div>
+                        </Block>
                     ))}
-                </div>
+                </Block>
 
-                <div className="pt-6 border-t border-gray-100 flex justify-end">
+                <Block className="pt-6 border-t border-gray-100 flex justify-end">
                     <Button onClick={onClose} className="rounded-2xl px-8">
                         Close History
                     </Button>
-                </div>
-            </div>
+                </Block>
+            </Block>
         </Modal>
     );
 };

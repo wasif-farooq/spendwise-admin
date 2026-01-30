@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { FAQItem } from '@ui';
+import { Block, Container, Heading, Text } from '@shared';
 
 const faqs = [
     {
@@ -24,16 +25,16 @@ export const FAQ = () => {
     const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
     return (
-        <section id="faq" className="py-20 bg-white">
-            <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="text-center mb-16">
-                    <h2 className="text-3xl font-bold text-gray-900 mb-4">Frequently Asked Questions</h2>
-                    <p className="text-lg text-gray-600">
+        <Block as="section" id="faq" className="py-20 bg-white">
+            <Container className="max-w-3xl mx-auto">
+                <Block className="text-center mb-16">
+                    <Heading as="h2" weight="bold" color="text-gray-900" className="text-3xl mb-4">Frequently Asked Questions</Heading>
+                    <Text size="lg" color="text-gray-600">
                         Everything you need to know about SpendWise and how it works.
-                    </p>
-                </div>
+                    </Text>
+                </Block>
 
-                <div className="space-y-4">
+                <Block className="space-y-4">
                     {faqs.map((faq, index) => (
                         <FAQItem
                             key={index}
@@ -43,8 +44,8 @@ export const FAQ = () => {
                             onClick={() => setActiveIndex(activeIndex === index ? null : index)}
                         />
                     ))}
-                </div>
-            </div>
-        </section>
+                </Block>
+            </Container>
+        </Block>
     );
 };

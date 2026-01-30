@@ -35,6 +35,10 @@ const Roles = () => {
     const [roles, setRoles] = useState<Role[]>(() => {
         return mockData.roles.map(r => ({
             ...r,
+            permissions: {
+                ...r.permissions,
+                accounts: r.permissions.accounts || []
+            },
             icon: iconMap[r.iconName as keyof typeof iconMap] || ShieldCheck
         })) as Role[];
     });

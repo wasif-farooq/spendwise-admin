@@ -35,14 +35,14 @@ export const AIChatHistory = ({ messages, isTyping }: AIChatHistoryProps) => {
                     </Block>
                     <Block className="bg-white border border-gray-100 p-4 rounded-2xl rounded-tl-none">
                         <Flex gap={1}>
-                            <span className="w-1.5 h-1.5 bg-gray-300 rounded-full animate-bounce" />
-                            <span className="w-1.5 h-1.5 bg-gray-300 rounded-full animate-bounce [animation-delay:0.2s]" />
-                            <span className="w-1.5 h-1.5 bg-gray-300 rounded-full animate-bounce [animation-delay:0.4s]" />
+                            <Block className="w-1.5 h-1.5 bg-gray-300 rounded-full animate-bounce" />
+                            <Block className="w-1.5 h-1.5 bg-gray-300 rounded-full animate-bounce [animation-delay:0.2s]" />
+                            <Block className="w-1.5 h-1.5 bg-gray-300 rounded-full animate-bounce [animation-delay:0.4s]" />
                         </Flex>
                     </Block>
                 </AnimatedBlock>
             )}
-            <div ref={messagesEndRef} />
+            <Block ref={messagesEndRef} />
         </Block>
     );
 };

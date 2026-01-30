@@ -69,25 +69,25 @@ const SettingsPage = () => {
                 className="bg-white rounded-[3.5rem] border border-gray-100 shadow-sm p-6 sm:p-12 min-h-[600px] relative overflow-hidden"
             >
                 {/* Subtle background decoration */}
-                <div className="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
+                <Block className="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
 
-                <div className="relative z-10">
+                <Block className="relative z-10">
                     <Outlet />
-                </div>
+                </Block>
             </Block>
 
             {/* Help Section (Bottom) */}
             <Grid cols={1} gap={6} className="sm:grid-cols-2">
                 <Flex align="center" justify="between" className="bg-gradient-to-br from-primary to-blue-600 rounded-[2.5rem] p-8 text-white shadow-xl shadow-primary/20 group cursor-pointer overflow-hidden relative">
-                    <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:scale-110 transition-transform duration-500">
+                    <Block className="absolute top-0 right-0 p-8 opacity-10 group-hover:scale-110 transition-transform duration-500">
                         <Shield className="h-32 w-32" />
-                    </div>
+                    </Block>
                     <Block className="relative z-10">
                         <Heading as="h4" size="2xl" weight="black" className="tracking-tight">Need help?</Heading>
                         <Text color="text-white/80" weight="medium" className="mt-1">Check our documentation or contact support.</Text>
-                        <button className="mt-6 px-8 py-3 bg-white text-primary font-bold rounded-2xl hover:bg-white/90 transition-all active:scale-95">
+                        <Block as="button" className="mt-6 px-8 py-3 bg-white text-primary font-bold rounded-2xl hover:bg-white/90 transition-all active:scale-95">
                             Go to Help Center
-                        </button>
+                        </Block>
                     </Block>
                 </Flex>
 

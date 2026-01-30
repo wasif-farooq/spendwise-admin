@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { MoreVertical, TrendingUp, TrendingDown, Eye, Edit2 } from 'lucide-react';
 import { Block, Flex, Heading, Text, AnimatedBlock } from '@shared';
+import { Button } from '@ui';
 
 interface AccountCardProps {
     account: {
@@ -34,9 +35,9 @@ export const AccountCard = ({ account, getIcon }: AccountCardProps) => {
                         {getIcon(account.type)}
                     </Block>
                     <Flex direction="col" align="end" gap={2}>
-                        <button className="p-2 hover:bg-gray-100 rounded-xl transition-colors text-gray-400">
+                        <Button variant="ghost" className="p-2 hover:bg-gray-100 rounded-xl transition-colors text-gray-400 h-auto">
                             <MoreVertical size={20} />
-                        </button>
+                        </Button>
                         <Flex align="center" gap={1} className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider ${account.trend === 'up' ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'}`}>
                             {account.trend === 'up' ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
                             {account.change}
@@ -62,20 +63,21 @@ export const AccountCard = ({ account, getIcon }: AccountCardProps) => {
 
             <Block className="px-8 py-6 bg-gray-50/50 border-t border-gray-100 flex items-center justify-between">
                 <Flex align="center" gap={2}>
-                    <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+                    <Block className="w-2 h-2 rounded-full bg-primary animate-pulse" />
                     <Text size="xs" weight="black" color="text-gray-400" className="uppercase tracking-widest">Active: {account.lastActivity}</Text>
                 </Flex>
                 <Flex align="center" gap={1}>
-                    <button
+                    <Button
+                        variant="ghost"
                         onClick={() => navigate(`/accounts/${account.id}/transactions`)}
-                        className="p-2 hover:bg-primary/10 hover:text-primary rounded-xl transition-all text-gray-400"
+                        className="p-2 hover:bg-primary/10 hover:text-primary rounded-xl transition-all text-gray-400 h-auto"
                         title="View Transactions"
                     >
                         <Eye size={18} />
-                    </button>
-                    <button className="p-2 hover:bg-primary/10 hover:text-primary rounded-xl transition-all text-gray-400" title="Edit Account">
+                    </Button>
+                    <Button variant="ghost" className="p-2 hover:bg-primary/10 hover:text-primary rounded-xl transition-all text-gray-400 h-auto" title="Edit Account">
                         <Edit2 size={18} />
-                    </button>
+                    </Button>
                 </Flex>
             </Block>
         </AnimatedBlock>

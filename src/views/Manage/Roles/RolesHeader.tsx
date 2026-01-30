@@ -38,7 +38,8 @@ export const RolesHeader = ({
                             </svg>
                         </Block>
                     </Block>
-                    <button
+                    <Block
+                        as="button"
                         onClick={onOpenFilter}
                         className={`p-4 rounded-2xl border transition-all relative ${activeFilterCount > 0
                             ? 'bg-primary/5 border-primary text-primary shadow-lg shadow-primary/10'
@@ -55,7 +56,7 @@ export const RolesHeader = ({
                                 {activeFilterCount}
                             </Text>
                         )}
-                    </button>
+                    </Block>
                 </Flex>
                 <Button
                     onClick={onCreateRole}

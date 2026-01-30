@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { Shield, CheckCircle2, Clock, Edit2, UserMinus, Users, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Block, Flex, Heading, Text } from '@shared';
+import { Button } from '@ui';
 import type { Member } from './types';
 
 interface MembersTableProps {
@@ -99,26 +100,28 @@ export const MembersTable = ({
                                     </td>
                                     <td className="px-8 py-6 text-right">
                                         <Flex align="center" justify="end" gap={2}>
-                                            <button
+                                            <Button
+                                                variant="ghost"
                                                 onClick={() => navigate(`/manage/members/${member.id}/edit`)}
                                                 disabled={member.isCurrentUser}
-                                                className={`p-2 rounded-xl transition-all ${member.isCurrentUser
+                                                className={`p-2 rounded-xl transition-all h-auto ${member.isCurrentUser
                                                     ? 'text-gray-300 cursor-not-allowed'
                                                     : 'text-gray-400 hover:bg-gray-100 hover:text-primary'
                                                     }`}
                                             >
                                                 <Edit2 className="h-5 w-5" />
-                                            </button>
-                                            <button
+                                            </Button>
+                                            <Button
+                                                variant="ghost"
                                                 onClick={() => onOpenRemove(member)}
                                                 disabled={member.isCurrentUser}
-                                                className={`p-2 rounded-xl transition-all ${member.isCurrentUser
+                                                className={`p-2 rounded-xl transition-all h-auto ${member.isCurrentUser
                                                     ? 'text-gray-300 cursor-not-allowed'
                                                     : 'text-gray-400 hover:bg-red-50 hover:text-red-600'
                                                     }`}
                                             >
                                                 <UserMinus className="h-5 w-5" />
-                                            </button>
+                                            </Button>
                                         </Flex>
                                     </td>
                                 </tr>
@@ -134,12 +137,13 @@ export const MembersTable = ({
                                             <Heading weight="black" className="text-lg text-gray-900">No members found</Heading>
                                             <Text size="sm" color="text-gray-500" weight="medium">Try adjusting your search or filters.</Text>
                                         </Block>
-                                        <button
+                                        <Button
+                                            variant="ghost"
                                             onClick={clearFilters}
-                                            className="text-primary font-black text-sm hover:underline"
+                                            className="text-primary font-black text-sm hover:underline p-0 h-auto"
                                         >
                                             Clear all filters
-                                        </button>
+                                        </Button>
                                     </Flex>
                                 </td>
                             </tr>
@@ -154,32 +158,34 @@ export const MembersTable = ({
                     Showing <Text as="span" weight="bold" className="text-gray-900">{filteredMembersCount > 0 ? (currentPage - 1) * itemsPerPage + 1 : 0}</Text> to <Text as="span" weight="bold" className="text-gray-900">{Math.min(currentPage * itemsPerPage, filteredMembersCount)}</Text> of <Text as="span" weight="bold" className="text-gray-900">{filteredMembersCount}</Text> members
                 </Text>
                 <Flex align="center" gap={2}>
-                    <button
+                    <Button
+                        variant="ghost"
                         onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                         disabled={currentPage === 1}
-                        className="p-2 rounded-xl border border-gray-200 text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                        className="p-2 rounded-xl border border-gray-200 text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all h-auto"
                     >
                         <ChevronLeft className="h-5 w-5" />
-                    </button>
+                    </Button>
                     {[...Array(totalPages)].map((_, i) => (
-                        <button
+                        <Button
                             key={i}
                             onClick={() => setCurrentPage(i + 1)}
-                            className={`w-10 h-10 rounded-xl text-sm font-bold transition-all ${currentPage === i + 1
-                                ? 'bg-primary text-white shadow-lg shadow-primary/20'
-                                : 'text-gray-500 hover:bg-gray-50 border border-transparent hover:border-gray-200'
+                            className={`w-10 h-10 rounded-xl text-sm font-bold transition-all p-0 ${currentPage === i + 1
+                                ? 'bg-primary text-white shadow-lg shadow-primary/20 hover:bg-primary'
+                                : 'text-gray-500 hover:bg-gray-50 border border-transparent hover:border-gray-200 bg-transparent'
                                 }`}
                         >
                             {i + 1}
-                        </button>
+                        </Button>
                     ))}
-                    <button
+                    <Button
+                        variant="ghost"
                         onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                         disabled={currentPage === totalPages}
-                        className="p-2 rounded-xl border border-gray-200 text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                        className="p-2 rounded-xl border border-gray-200 text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all h-auto"
                     >
                         <ChevronRight className="h-5 w-5" />
-                    </button>
+                    </Button>
                 </Flex>
             </Flex>
         </Block>

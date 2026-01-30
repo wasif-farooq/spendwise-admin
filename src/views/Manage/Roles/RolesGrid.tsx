@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { Edit2, Trash2, Lock, Shield, Layout, Zap, Users, CreditCard, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Block, Flex, Heading, Text, Grid } from '@shared';
+import { Button } from '@ui';
 import type { Role } from './types';
 
 interface RolesGridProps {
@@ -59,26 +60,28 @@ export const RolesGrid = ({
                                         <role.icon className="h-7 w-7" />
                                     </Block>
                                     <Flex align="center" gap={2}>
-                                        <button
+                                        <Button
+                                            variant="ghost"
                                             onClick={() => onEditRole(role.id)}
                                             disabled={role.isDefault}
-                                            className={`p-2.5 rounded-xl transition-all ${role.isDefault
+                                            className={`p-2.5 rounded-xl transition-all h-auto ${role.isDefault
                                                 ? 'text-gray-200 cursor-not-allowed'
                                                 : 'text-gray-400 hover:bg-gray-100 hover:text-primary'
                                                 }`}
                                         >
                                             <Edit2 className="h-4 w-4" />
-                                        </button>
-                                        <button
+                                        </Button>
+                                        <Button
+                                            variant="ghost"
                                             onClick={() => onOpenDelete(role)}
                                             disabled={role.isDefault}
-                                            className={`p-2.5 rounded-xl transition-all ${role.isDefault
+                                            className={`p-2.5 rounded-xl transition-all h-auto ${role.isDefault
                                                 ? 'text-gray-200 cursor-not-allowed'
                                                 : 'text-gray-400 hover:bg-red-50 hover:text-red-600'
                                                 }`}
                                         >
                                             <Trash2 className="h-4 w-4" />
-                                        </button>
+                                        </Button>
                                     </Flex>
                                 </Flex>
 
@@ -150,12 +153,13 @@ export const RolesGrid = ({
                             <Heading weight="black" className="text-lg text-gray-900">No roles found</Heading>
                             <Text size="sm" color="text-gray-500" weight="medium">Try adjusting your search or filters.</Text>
                         </Block>
-                        <button
+                        <Button
+                            variant="ghost"
                             onClick={clearFilters}
-                            className="text-primary font-black text-sm hover:underline"
+                            className="text-primary font-black text-sm hover:underline p-0 h-auto"
                         >
                             Clear all filters
-                        </button>
+                        </Button>
                     </Block>
                 )}
             </Grid>
@@ -166,32 +170,35 @@ export const RolesGrid = ({
                     Showing <Text as="span" weight="bold" className="text-gray-900">{filteredRolesCount > 0 ? (currentPage - 1) * itemsPerPage + 1 : 0}</Text> to <Text as="span" weight="bold" className="text-gray-900">{Math.min(currentPage * itemsPerPage, filteredRolesCount)}</Text> of <Text as="span" weight="bold" className="text-gray-900">{filteredRolesCount}</Text> roles
                 </Text>
                 <Flex align="center" gap={2}>
-                    <button
+                    <Button
+                        variant="ghost"
                         onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                         disabled={currentPage === 1}
-                        className="p-3 rounded-2xl border border-gray-100 text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                        className="p-3 rounded-2xl border border-gray-100 text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all h-auto"
                     >
                         <ChevronLeft className="h-5 w-5" />
-                    </button>
+                    </Button>
                     {[...Array(totalPages)].map((_, i) => (
-                        <button
+                        <Button
                             key={i}
+                            variant="ghost"
                             onClick={() => setCurrentPage(i + 1)}
-                            className={`w-11 h-11 rounded-2xl text-sm font-black transition-all ${currentPage === i + 1
-                                ? 'bg-primary text-white shadow-lg shadow-primary/20'
-                                : 'text-gray-500 hover:bg-gray-50'
+                            className={`w-11 h-11 rounded-2xl text-sm font-black transition-all p-0 ${currentPage === i + 1
+                                ? 'bg-primary text-white shadow-lg shadow-primary/20 hover:bg-primary'
+                                : 'text-gray-500 hover:bg-gray-50 border border-transparent hover:border-gray-50'
                                 }`}
                         >
                             {i + 1}
-                        </button>
+                        </Button>
                     ))}
-                    <button
+                    <Button
+                        variant="ghost"
                         onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                         disabled={currentPage === totalPages}
-                        className="p-3 rounded-2xl border border-gray-100 text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                        className="p-3 rounded-2xl border border-gray-100 text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all h-auto"
                     >
                         <ChevronRight className="h-5 w-5" />
-                    </button>
+                    </Button>
                 </Flex>
             </Flex>
         </Block>

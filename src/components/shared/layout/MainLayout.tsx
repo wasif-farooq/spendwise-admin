@@ -2,14 +2,16 @@ import { Outlet } from 'react-router-dom';
 import { Navbar } from '@ui';
 import { Footer } from '@ui';
 
+import { Block } from '@shared';
+
 export const MainLayout = () => {
     return (
-        <div className="min-h-screen bg-background font-sans text-foreground flex flex-col">
+        <Block className="min-h-screen bg-background font-sans text-foreground flex flex-col">
             <Navbar />
-            <main className="flex-grow pt-16">
+            <Block as="main" className="flex-grow pt-16">
                 <Outlet />
-            </main>
+            </Block>
             <Footer />
-        </div>
+        </Block>
     );
 };

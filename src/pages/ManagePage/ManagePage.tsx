@@ -68,12 +68,12 @@ const ManagePage = () => {
                 className="bg-white rounded-[3.5rem] shadow-sm ring-1 ring-gray-900/5 p-6 sm:p-12 min-h-[700px] relative overflow-hidden"
             >
                 {/* Subtle background decoration */}
-                <div className="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
-                <div className="absolute bottom-0 left-0 -ml-16 -mb-16 w-64 h-64 bg-blue-500/5 rounded-full blur-3xl pointer-events-none" />
+                <Block className="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
+                <Block className="absolute bottom-0 left-0 -ml-16 -mb-16 w-64 h-64 bg-blue-500/5 rounded-full blur-3xl pointer-events-none" />
 
-                <div className="relative z-10">
+                <Block className="relative z-10">
                     <Outlet />
-                </div>
+                </Block>
             </Block>
         </Container>
     );

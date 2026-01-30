@@ -65,12 +65,13 @@ export const MembersFilterDrawer = ({
                                 </Block>
                                 <Heading as="h3" weight="black" className="text-xl text-gray-900">Advanced Filters</Heading>
                             </Flex>
-                            <button
+                            <Button
+                                variant="ghost"
                                 onClick={onClose}
-                                className="p-2 rounded-xl hover:bg-gray-100 text-gray-400 transition-colors"
+                                className="p-2 rounded-xl hover:bg-gray-100 text-gray-400 transition-colors h-auto"
                             >
                                 <X className="h-6 w-6" />
-                            </button>
+                            </Button>
                         </Flex>
 
                         <Block className="flex-grow overflow-y-auto p-8 space-y-10">
@@ -79,16 +80,17 @@ export const MembersFilterDrawer = ({
                                 <Text size="xs" weight="black" className="uppercase tracking-widest text-gray-400">Filter by Role</Text>
                                 <Flex gap={3} className="flex-wrap">
                                     {['Admin', 'Member', 'Viewer'].map(role => (
-                                        <button
+                                        <Button
                                             key={role}
+                                            variant="ghost"
                                             onClick={() => toggleFilter('roles', role)}
-                                            className={`px-5 py-3 rounded-2xl text-sm font-bold transition-all border-2 ${filters.roles.includes(role)
+                                            className={`px-5 py-3 rounded-2xl text-sm font-bold transition-all border-2 h-auto ${filters.roles.includes(role)
                                                 ? 'border-primary bg-primary/5 text-primary'
                                                 : 'border-gray-50 bg-gray-50 text-gray-500 hover:border-gray-200'
                                                 }`}
                                         >
                                             {role}
-                                        </button>
+                                        </Button>
                                     ))}
                                 </Flex>
                             </Block>
@@ -98,16 +100,17 @@ export const MembersFilterDrawer = ({
                                 <Text size="xs" weight="black" className="uppercase tracking-widest text-gray-400">Filter by Status</Text>
                                 <Flex gap={3} className="flex-wrap">
                                     {['Active', 'Pending'].map(status => (
-                                        <button
+                                        <Button
                                             key={status}
+                                            variant="ghost"
                                             onClick={() => toggleFilter('statuses', status)}
-                                            className={`px-5 py-3 rounded-2xl text-sm font-bold transition-all border-2 ${filters.statuses.includes(status)
+                                            className={`px-5 py-3 rounded-2xl text-sm font-bold transition-all border-2 h-auto ${filters.statuses.includes(status)
                                                 ? 'border-primary bg-primary/5 text-primary'
                                                 : 'border-gray-50 bg-gray-50 text-gray-500 hover:border-gray-200'
                                                 }`}
                                         >
                                             {status}
-                                        </button>
+                                        </Button>
                                     ))}
                                 </Flex>
                             </Block>
@@ -161,16 +164,17 @@ export const MembersFilterDrawer = ({
                         </Block>
 
                         <Flex gap={4} className="p-8 border-t border-gray-100 bg-gray-50/50">
-                            <button
+                            <Button
+                                variant="ghost"
                                 onClick={clearFilters}
-                                className="flex-grow py-4 rounded-2xl border-2 border-gray-200 text-gray-500 font-black text-sm flex items-center justify-center hover:bg-white transition-all"
+                                className="flex-grow py-4 rounded-2xl border-2 border-gray-200 text-gray-500 font-black text-sm flex items-center justify-center hover:bg-white transition-all h-auto"
                             >
                                 <RotateCcw className="h-4 w-4 mr-2" />
                                 Reset
-                            </button>
+                            </Button>
                             <Button
                                 onClick={onClose}
-                                className="flex-grow py-4 rounded-2xl shadow-xl shadow-primary/20 font-black text-sm"
+                                className="flex-grow py-4 rounded-2xl shadow-xl shadow-primary/20 font-black text-sm h-auto"
                             >
                                 Apply Filters
                             </Button>

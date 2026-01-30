@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import { Block, Flex, Heading, Text, AnimatedBlock, Inline } from '@shared';
-import { Button } from '@ui';
+import { Button, Input } from '@ui';
 import { Check, CreditCard, Search, ChevronLeft, ChevronRight } from 'lucide-react';
 import mockData from '@/data/mockData.json';
 import type { InvitationData } from '@/views/Manage/InviteMember/types';
@@ -62,16 +62,16 @@ export const AccountAccessForm = ({
             </Flex>
 
             {/* Search Bar */}
-            <div className="relative">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <input
+            <Block className="relative">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 z-10" />
+                <Input
                     type="text"
                     placeholder="Search accounts..."
                     value={searchQuery}
                     onChange={(e) => handleSearch(e.target.value)}
-                    className="w-full pl-12 pr-4 py-4 rounded-2xl bg-white border border-gray-100 shadow-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-medium placeholder:text-gray-400"
+                    className="pl-12 pr-4 py-4 rounded-2xl bg-white border-gray-100 shadow-sm focus:outline-none focus:ring-primary/20 focus:border-primary transition-all font-medium placeholder:text-gray-400"
                 />
-            </div>
+            </Block>
 
             <Block className="space-y-6">
                 {paginatedAccounts.length > 0 ? (
@@ -92,15 +92,15 @@ export const AccountAccessForm = ({
                                     <Flex align="center" justify="between">
                                         <Flex align="center" gap={6}>
                                             {/* Selection Checkbox */}
-                                            <div
-                                                onClick={(e) => { e.stopPropagation(); toggleAccountSelection(String(account.id)); }}
+                                            <Block
+                                                onClick={(e: React.MouseEvent) => { e.stopPropagation(); toggleAccountSelection(String(account.id)); }}
                                                 className={`w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-all cursor-pointer ${isSelected
                                                     ? 'bg-primary border-primary'
                                                     : 'bg-white border-gray-300 hover:border-gray-400'
                                                     }`}
                                             >
                                                 {isSelected && <Check className="w-4 h-4 text-white" strokeWidth={4} />}
-                                            </div>
+                                            </Block>
 
                                             <Flex align="center" gap={4}>
                                                 <Block className={`p-3 rounded-2xl shadow-sm ${account.color || 'bg-gray-200'}`}>
@@ -117,7 +117,7 @@ export const AccountAccessForm = ({
                                         {isSelected && (
                                             <Flex align="center" gap={4}>
                                                 <Text size="sm" weight="bold" color="text-gray-500">Override Permissions</Text>
-                                                <div
+                                                <Block
                                                     onClick={() => toggleOverride(String(account.id))}
                                                     className={`w-12 h-7 rounded-full transition-all relative flex items-center px-1 cursor-pointer ${isOverridden ? 'bg-primary shadow-lg shadow-primary/20' : 'bg-gray-200'}`}
                                                 >
@@ -126,7 +126,7 @@ export const AccountAccessForm = ({
                                                         animate={{ x: isOverridden ? 20 : 0 }}
                                                         className="w-5 h-5 bg-white rounded-full shadow-sm"
                                                     />
-                                                </div>
+                                                </Block>
                                             </Flex>
                                         )}
                                     </Flex>
@@ -137,7 +137,7 @@ export const AccountAccessForm = ({
                                         {isSelected && isOverridden && accountPermissions.map((perm) => {
                                             const isAllowed = config?.permissions?.includes(perm.id);
                                             return (
-                                                <motion.div
+                                                <AnimatedBlock
                                                     key={perm.id}
                                                     initial={{ opacity: 0, height: 0 }}
                                                     animate={{ opacity: 1, height: 'auto' }}
@@ -181,7 +181,7 @@ export const AccountAccessForm = ({
                                                             </Block>
                                                         </Flex>
                                                     </Block>
-                                                </motion.div>
+                                                </AnimatedBlock>
                                             );
                                         })}
                                     </AnimatePresence>

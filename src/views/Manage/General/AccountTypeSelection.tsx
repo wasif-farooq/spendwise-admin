@@ -16,7 +16,8 @@ export const AccountTypeSelection = ({ accountType, onTypeChange }: AccountTypeS
                 <Heading as="h3" weight="black" className="uppercase tracking-widest text-xs text-gray-900">Select Account Type</Heading>
             </Flex>
             <Grid cols={1} gap={6} className="sm:grid-cols-2">
-                <button
+                <Block
+                    as="button"
                     onClick={() => onTypeChange('personal')}
                     className={`relative p-8 rounded-[3rem] border-4 transition-all text-left group ${accountType === 'personal'
                         ? 'border-primary bg-primary/5 shadow-xl shadow-primary/10'
@@ -34,9 +35,10 @@ export const AccountTypeSelection = ({ accountType, onTypeChange }: AccountTypeS
                             <ShieldCheck className="h-4 w-4" />
                         </Block>
                     )}
-                </button>
+                </Block>
 
-                <button
+                <Block
+                    as="button"
                     onClick={() => onTypeChange('organization')}
                     className={`relative p-8 rounded-[3rem] border-4 transition-all text-left group ${accountType === 'organization'
                         ? 'border-primary bg-primary/5 shadow-xl shadow-primary/10'
@@ -54,7 +56,7 @@ export const AccountTypeSelection = ({ accountType, onTypeChange }: AccountTypeS
                             <ShieldCheck className="h-4 w-4" />
                         </Block>
                     )}
-                </button>
+                </Block>
             </Grid>
         </Block>
     );

@@ -40,19 +40,19 @@ export const ConversionModals = ({
 
                     <Block className="space-y-4 px-4">
                         <Heading as="h4" size="sm" weight="black" className="uppercase tracking-widest text-gray-900">What changes?</Heading>
-                        <ul className="space-y-3">
+                        <Block as="ul" className="space-y-3">
                             {[
                                 'Invite team members and assign roles',
                                 'Define custom permission levels',
                                 'Shared workspace and collaborative tools',
                                 'Centralized billing and reporting'
                             ].map((item, i) => (
-                                <li key={i} className="flex items-center text-sm text-gray-600 font-medium">
+                                <Block as="li" key={i} className="flex items-center text-sm text-gray-600 font-medium">
                                     <Block className="w-1.5 h-1.5 rounded-full bg-primary mr-3" />
                                     {item}
-                                </li>
+                                </Block>
                             ))}
-                        </ul>
+                        </Block>
                     </Block>
 
                     <Flex direction="col" gap={4} className="sm:flex-row pt-4">

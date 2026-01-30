@@ -21,8 +21,8 @@ interface TransactionListProps {
 
 export const TransactionList = ({ transactions, onTransactionClick }: TransactionListProps) => {
     return (
-        <div className="bg-white rounded-[3rem] border border-gray-100 shadow-sm overflow-hidden">
-            <div className="overflow-x-auto">
+        <Block className="bg-white rounded-[3rem] border border-gray-100 shadow-sm overflow-hidden">
+            <Block className="overflow-x-auto">
                 <table className="w-full">
                     <thead>
                         <tr className="border-b border-gray-100 bg-gray-50/50">
@@ -48,9 +48,9 @@ export const TransactionList = ({ transactions, onTransactionClick }: Transactio
                         ))}
                     </tbody>
                 </table>
-            </div>
+            </Block>
 
-            <div className="p-8 border-t border-gray-100 bg-gray-50/30">
+            <Block className="p-8 border-t border-gray-100 bg-gray-50/30">
                 <Flex justify="between" align="center">
                     <Text size="sm" weight="bold" color="text-gray-500">Showing {transactions.length} transactions</Text>
                     <Flex gap={2}>
@@ -58,15 +58,15 @@ export const TransactionList = ({ transactions, onTransactionClick }: Transactio
                         <Button variant="outline" size="sm" className="rounded-xl">Next</Button>
                     </Flex>
                 </Flex>
-            </div>
+            </Block>
 
             {transactions.length === 0 && (
                 <Block className="py-20 text-center">
-                    <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4 text-gray-300">
+                    <Block className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4 text-gray-300">
                         <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                         </svg>
-                    </div>
+                    </Block>
                     <Text size="lg" weight="bold" color="text-gray-900">No transactions found</Text>
                     <Text color="text-gray-500" className="mt-1">Try adjusting your search or filters</Text>
                     <Button
@@ -78,6 +78,6 @@ export const TransactionList = ({ transactions, onTransactionClick }: Transactio
                     </Button>
                 </Block>
             )}
-        </div>
+        </Block>
     );
 };

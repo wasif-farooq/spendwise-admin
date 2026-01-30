@@ -38,10 +38,11 @@ export const MembersHeader = ({
                             </svg>
                         </Block>
                     </Block>
-                    <button
+                    <Button
+                        variant="ghost"
                         onClick={onOpenFilter}
-                        className={`p-4 rounded-2xl border transition-all relative ${activeFilterCount > 0
-                            ? 'bg-primary/5 border-primary text-primary shadow-lg shadow-primary/10'
+                        className={`p-4 rounded-2xl border transition-all relative h-auto ${activeFilterCount > 0
+                            ? 'bg-primary/5 border-primary text-primary shadow-lg shadow-primary/10 hover:bg-primary/10'
                             : 'bg-gray-50 border-transparent text-gray-500 hover:bg-gray-100'
                             }`}
                     >
@@ -55,7 +56,7 @@ export const MembersHeader = ({
                                 {activeFilterCount}
                             </Text>
                         )}
-                    </button>
+                    </Button>
                 </Flex>
                 <Button
                     onClick={onOpenInvite}

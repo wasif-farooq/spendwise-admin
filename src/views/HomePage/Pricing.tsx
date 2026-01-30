@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from '@hooks/redux';
 import { toggleBillingCycle } from '@store/uiSlice';
 import { PricingCard } from '@ui';
-import { Grid, Flex } from '@shared';
+import { Grid, Flex, Block, Container, Heading, Text } from '@shared';
 
 export const Pricing = () => {
     const dispatch = useAppDispatch();
@@ -40,37 +40,38 @@ export const Pricing = () => {
     ];
 
     return (
-        <section id="pricing" className="py-20 bg-white">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="text-center max-w-3xl mx-auto mb-12">
-                    <h2 className="text-3xl font-bold text-gray-900 mb-4">Simple, transparent pricing</h2>
-                    <p className="text-lg text-gray-600 mb-8">
+        <Block as="section" id="pricing" className="py-20 bg-white">
+            <Container>
+                <Block className="text-center max-w-3xl mx-auto mb-12">
+                    <Heading as="h2" weight="bold" color="text-gray-900" className="text-3xl mb-4">Simple, transparent pricing</Heading>
+                    <Text size="lg" color="text-gray-600" className="mb-8">
                         Choose the plan that's right for you or your organization.
-                    </p>
+                    </Text>
 
                     <Flex align="center" justify="center" gap={4}>
-                        <span className={!isYearly ? 'text-gray-900 font-medium' : 'text-gray-500'}>Monthly</span>
-                        <button
+                        <Text as="span" weight={!isYearly ? 'medium' : undefined} color={!isYearly ? 'text-gray-900' : 'text-gray-500'}>Monthly</Text>
+                        <Block
+                            as="button"
                             onClick={() => dispatch(toggleBillingCycle())}
                             className="relative w-12 h-6 rounded-full bg-gray-200 transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
                         >
-                            <div
+                            <Block
                                 className={`absolute top-1 left-1 w-4 h-4 rounded-full bg-white transition-transform ${isYearly ? 'translate-x-6' : ''
                                     }`}
                             />
-                        </button>
-                        <span className={isYearly ? 'text-gray-900 font-medium' : 'text-gray-500'}>
-                            Yearly <span className="text-secondary text-sm font-bold">(Save 20%)</span>
-                        </span>
+                        </Block>
+                        <Text as="span" weight={isYearly ? 'medium' : undefined} color={isYearly ? 'text-gray-900' : 'text-gray-500'}>
+                            Yearly <Text as="span" size="sm" weight="bold" className="text-secondary">(Save 20%)</Text>
+                        </Text>
                     </Flex>
-                </div>
+                </Block>
 
                 <Grid cols={1} gap={8} className="md:grid-cols-2 max-w-4xl mx-auto">
                     {plans.map((plan, index) => (
                         <PricingCard key={index} {...plan} />
                     ))}
                 </Grid>
-            </div>
-        </section>
+            </Container>
+        </Block>
     );
 };

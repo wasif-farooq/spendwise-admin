@@ -36,11 +36,11 @@ export const AIInsightsSidebar = () => {
                 <Heading as="h2" size="xl" weight="bold" color="text-gray-900">AI Insights</Heading>
             </Flex>
 
-            <div className="space-y-4">
+            <Block className="space-y-4">
                 {INSIGHTS.map((insight, idx) => (
                     <InsightCard key={idx} insight={insight} />
                 ))}
-            </div>
+            </Block>
 
             <Block className="mt-8 p-4 rounded-2xl bg-primary text-white space-y-3">
                 <Text size="sm" weight="bold">Goal Progress</Text>

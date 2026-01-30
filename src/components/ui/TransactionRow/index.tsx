@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { History, MoreVertical, type LucideIcon } from 'lucide-react';
-import { Flex, Text, Inline } from '@shared';
+import { Flex, Text, Inline, Block } from '@shared';
 
 interface TransactionRowProps {
     transaction: {
@@ -27,12 +27,12 @@ export const TransactionRow = ({ transaction: t, onViewHistory }: TransactionRow
             className="group hover:bg-gray-50/50 transition-colors"
         >
             <td className="px-8 py-6">
-                <div className="flex items-center gap-4">
-                    <div className={`h-12 w-12 rounded-xl flex items-center justify-center text-white shadow-lg ${t.color} group-hover:scale-110 transition-transform`}>
+                <Flex align="center" gap={4}>
+                    <Block className={`h-12 w-12 rounded-xl flex items-center justify-center text-white shadow-lg ${t.color} group-hover:scale-110 transition-transform`}>
                         <t.icon size={20} />
-                    </div>
+                    </Block>
                     <Text weight="black" color="text-gray-900">{t.description}</Text>
-                </div>
+                </Flex>
             </td>
             <td className="px-8 py-6">
                 <Inline className="px-4 py-2 bg-gray-100 rounded-full text-[10px] font-black text-gray-500 uppercase tracking-widest">
@@ -45,7 +45,7 @@ export const TransactionRow = ({ transaction: t, onViewHistory }: TransactionRow
             <td className="px-8 py-6">
                 <Flex align="center" gap={1.5} className={`text-[10px] font-black uppercase tracking-widest ${t.status === 'completed' ? 'text-emerald-600' : 'text-amber-600'
                     }`}>
-                    <div className={`w-1.5 h-1.5 rounded-full ${t.status === 'completed' ? 'bg-emerald-500' : 'bg-amber-500 animate-pulse'
+                    <Block className={`w-1.5 h-1.5 rounded-full ${t.status === 'completed' ? 'bg-emerald-500' : 'bg-amber-500 animate-pulse'
                         }`} />
                     {t.status}
                 </Flex>
@@ -56,7 +56,7 @@ export const TransactionRow = ({ transaction: t, onViewHistory }: TransactionRow
                 </Text>
             </td>
             <td className="px-8 py-6 text-right">
-                <div className="flex items-center justify-end gap-2">
+                <Flex align="center" justify="end" gap={2}>
                     <button
                         onClick={() => onViewHistory(t)}
                         className="p-2 text-gray-400 hover:text-primary hover:bg-primary/5 rounded-xl transition-all"
@@ -67,7 +67,7 @@ export const TransactionRow = ({ transaction: t, onViewHistory }: TransactionRow
                     <button className="p-2 text-gray-400 hover:text-primary hover:bg-primary/5 rounded-xl transition-all">
                         <MoreVertical size={20} />
                     </button>
-                </div>
+                </Flex>
             </td>
         </motion.tr>
     );

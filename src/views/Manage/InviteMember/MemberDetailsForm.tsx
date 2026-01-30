@@ -77,23 +77,24 @@ export const MemberDetailsForm = ({
                     </Heading>
 
                     {/* Role Search */}
-                    <div className="relative">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                        <input
+                    <Block className="relative">
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 z-10" />
+                        <Input
                             type="text"
                             placeholder="Find role..."
                             value={roleSearchQuery}
                             onChange={(e) => handleRoleSearch(e.target.value)}
-                            className="w-full pl-9 pr-3 py-2.5 text-sm rounded-xl bg-gray-50 border border-transparent focus:bg-white focus:border-primary/20 focus:ring-2 focus:ring-primary/10 transition-all font-medium placeholder:text-gray-400"
+                            className="pl-9 pr-3 py-2.5 text-sm rounded-xl bg-gray-50 border-transparent focus:bg-white focus:border-primary/20 focus:ring-primary/10 transition-all font-medium placeholder:text-gray-400"
                         />
-                    </div>
+                    </Block>
 
                     <Grid cols={1} gap={3}>
                         {paginatedRoles.length > 0 ? (
                             paginatedRoles.map((role) => {
                                 const isSelected = selectedRoles.includes(role.name.toLowerCase());
                                 return (
-                                    <button
+                                    <Block
+                                        as="button"
                                         key={role.id}
                                         type="button"
                                         onClick={() => toggleRole(role.name)}
@@ -102,9 +103,9 @@ export const MemberDetailsForm = ({
                                             : 'border-gray-100 bg-gray-50 hover:border-gray-200 hover:bg-gray-100/50'
                                             }`}
                                     >
-                                        <div className={`p-2 rounded-xl flex-shrink-0 ${isSelected ? 'bg-primary text-white' : 'bg-white text-gray-400 shadow-sm'}`}>
+                                        <Block className={`p-2 rounded-xl flex-shrink-0 ${isSelected ? 'bg-primary text-white' : 'bg-white text-gray-400 shadow-sm'}`}>
                                             <Shield className="w-5 h-5" />
-                                        </div>
+                                        </Block>
                                         <Block>
                                             <Text weight="black" size="md" color={isSelected ? 'text-primary' : 'text-gray-700'}>
                                                 {role.name}
@@ -113,7 +114,7 @@ export const MemberDetailsForm = ({
                                                 {role.description}
                                             </Text>
                                         </Block>
-                                    </button>
+                                    </Block>
                                 );
                             })
                         ) : (

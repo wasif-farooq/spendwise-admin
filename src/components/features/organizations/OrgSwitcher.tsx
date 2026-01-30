@@ -10,7 +10,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { setAccountType } from '@/store/uiSlice';
 import type { RootState } from '@/store/store';
-import { AnimatedBlock } from '@shared';
+import { AnimatedBlock, Block, Flex, Heading, Text } from '@shared';
 
 interface Organization {
     id: string;
@@ -60,37 +60,38 @@ export const OrgSwitcher: React.FC<OrgSwitcherProps> = ({ isCollapsed = false })
     };
 
     return (
-        <div className="relative" ref={dropdownRef}>
+        <Block className="relative" ref={dropdownRef}>
             {/* Trigger */}
-            <button
+            <Block
+                as="button"
                 onClick={toggleDropdown}
-                className={`w-full flex items-center gap-3 p-3 rounded-2xl transition-all duration-300 group ${isOpen
+                className={`w-full flex items-center gap-3 p-3 rounded-2xl transition-all duration-300 group cursor-pointer ${isOpen
                     ? 'bg-primary/10 ring-2 ring-primary/20'
                     : 'hover:bg-gray-50'
                     }`}
             >
-                <div className={`flex-shrink-0 h-10 w-10 rounded-xl flex items-center justify-center transition-all duration-300 ${activeOrg.type === 'personal'
+                <Block className={`flex-shrink-0 h-10 w-10 rounded-xl flex items-center justify-center transition-all duration-300 ${activeOrg.type === 'personal'
                     ? 'bg-blue-100 text-blue-600'
                     : 'bg-purple-100 text-purple-600'
                     } ${isOpen ? 'scale-110 shadow-lg' : 'group-hover:scale-105'}`}>
                     {activeOrg.type === 'personal' ? <User size={20} /> : <Building2 size={20} />}
-                </div>
+                </Block>
 
                 {!isCollapsed && (
                     <>
-                        <div className="flex-1 text-left min-w-0">
-                            <p className="text-sm font-black text-gray-900 truncate">{activeOrg.name}</p>
-                            <p className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">
+                        <Block className="flex-1 text-left min-w-0">
+                            <Text className="text-sm font-black text-gray-900 truncate">{activeOrg.name}</Text>
+                            <Text className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">
                                 {activeOrg.type}
-                            </p>
-                        </div>
+                            </Text>
+                        </Block>
                         <ChevronDown
                             size={16}
                             className={`text-gray-400 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}
                         />
                     </>
                 )}
-            </button>
+            </Block>
 
             {/* Dropdown */}
             <AnimatePresence>
@@ -103,44 +104,45 @@ export const OrgSwitcher: React.FC<OrgSwitcherProps> = ({ isCollapsed = false })
                         className={`absolute left-0 right-0 mt-2 bg-white/80 backdrop-blur-xl border border-white/20 rounded-[2rem] shadow-2xl shadow-primary/10 z-50 overflow-hidden min-w-[240px] ${isCollapsed ? 'left-full ml-4 top-0' : ''
                             }`}
                     >
-                        <div className="p-3 space-y-1">
-                            <div className="px-4 py-2 mb-2">
-                                <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Switch Workspace</h4>
-                            </div>
+                        <Block className="p-3 space-y-1">
+                            <Block className="px-4 py-2 mb-2">
+                                <Heading as="h4" className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Switch Workspace</Heading>
+                            </Block>
 
                             {MOCK_ORGS.map((org) => (
-                                <button
+                                <Block
+                                    as="button"
                                     key={org.id}
                                     onClick={() => handleSwitch(org)}
-                                    className={`w-full flex items-center gap-3 p-3 rounded-xl transition-all group ${activeOrg.id === org.id
+                                    className={`w-full flex items-center gap-3 p-3 rounded-xl transition-all group cursor-pointer ${activeOrg.id === org.id
                                         ? 'bg-primary text-white shadow-lg shadow-primary/20'
                                         : 'hover:bg-primary/5 text-gray-700'
                                         }`}
                                 >
-                                    <div className={`h-8 w-8 rounded-lg flex items-center justify-center ${activeOrg.id === org.id
+                                    <Block className={`h-8 w-8 rounded-lg flex items-center justify-center ${activeOrg.id === org.id
                                         ? 'bg-white/20'
                                         : org.type === 'personal' ? 'bg-blue-50 text-blue-600' : 'bg-purple-50 text-purple-600'
                                         }`}>
                                         {org.type === 'personal' ? <User size={16} /> : <Building2 size={16} />}
-                                    </div>
-                                    <span className="flex-1 text-sm font-bold text-left truncate">{org.name}</span>
+                                    </Block>
+                                    <Text as="span" className="flex-1 text-sm font-bold text-left truncate">{org.name}</Text>
                                     {activeOrg.id === org.id && <Check size={16} className="text-white" />}
-                                </button>
+                                </Block>
                             ))}
-                        </div>
+                        </Block>
 
-                        <div className="bg-primary/5 p-4 flex items-center gap-3">
-                            <div className="bg-primary/10 p-2 rounded-lg">
+                        <Flex align="center" gap={3} className="bg-primary/5 p-4">
+                            <Block className="bg-primary/10 p-2 rounded-lg">
                                 <Sparkles size={14} className="text-primary" />
-                            </div>
-                            <p className="text-[10px] text-primary font-bold leading-tight">
+                            </Block>
+                            <Text className="text-[10px] text-primary font-bold leading-tight">
                                 Upgrade to Pro for unlimited organizations.
-                            </p>
-                        </div>
+                            </Text>
+                        </Flex>
                     </AnimatedBlock>
                 )}
             </AnimatePresence>
-        </div>
+        </Block>
     );
 };
 

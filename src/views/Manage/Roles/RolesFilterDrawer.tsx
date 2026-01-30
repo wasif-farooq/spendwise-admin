@@ -57,12 +57,13 @@ export const RolesFilterDrawer = ({
                                 </Block>
                                 <Heading as="h3" weight="black" className="text-xl text-gray-900">Advanced Filters</Heading>
                             </Flex>
-                            <button
+                            <Button
+                                variant="ghost"
                                 onClick={onClose}
-                                className="p-2 rounded-xl hover:bg-gray-100 text-gray-400 transition-colors"
+                                className="p-2 rounded-xl hover:bg-gray-100 text-gray-400 transition-colors h-auto"
                             >
                                 <X className="h-6 w-6" />
-                            </button>
+                            </Button>
                         </Flex>
 
                         <Block className="flex-grow overflow-y-auto p-8 space-y-10">
@@ -71,16 +72,17 @@ export const RolesFilterDrawer = ({
                                 <Text size="xs" weight="black" className="uppercase tracking-widest text-gray-400">Role Type</Text>
                                 <Flex gap={3} className="flex-wrap">
                                     {['System', 'Custom'].map(type => (
-                                        <button
+                                        <Button
                                             key={type}
+                                            variant="ghost"
                                             onClick={() => toggleFilter('types', type)}
-                                            className={`px-5 py-3 rounded-2xl text-sm font-bold transition-all border-2 ${filters.types.includes(type)
+                                            className={`px-5 py-3 rounded-2xl text-sm font-bold transition-all border-2 h-auto ${filters.types.includes(type)
                                                 ? 'border-primary bg-primary/5 text-primary'
                                                 : 'border-gray-50 bg-gray-50 text-gray-500 hover:border-gray-200'
                                                 }`}
                                         >
                                             {type}
-                                        </button>
+                                        </Button>
                                     ))}
                                 </Flex>
                             </Block>
@@ -89,13 +91,14 @@ export const RolesFilterDrawer = ({
                             <Block className="space-y-4">
                                 <Text size="xs" weight="black" className="uppercase tracking-widest text-gray-400">Min. Permissions</Text>
                                 <Block className="space-y-6">
-                                    <input
+                                    <Block
+                                        as="input"
                                         type="range"
                                         min="0"
                                         max="20"
                                         step="1"
                                         value={filters.minPermissions}
-                                        onChange={(e) => setFilters(prev => ({ ...prev, minPermissions: parseInt(e.target.value) }))}
+                                        onChange={(e: any) => setFilters(prev => ({ ...prev, minPermissions: parseInt(e.target.value) }))}
                                         className="w-full h-2 bg-gray-100 rounded-lg appearance-none cursor-pointer accent-primary"
                                     />
                                     <Flex align="center" justify="between">
@@ -123,16 +126,17 @@ export const RolesFilterDrawer = ({
                         </Block>
 
                         <Flex gap={4} className="p-8 border-t border-gray-100 bg-gray-50/50">
-                            <button
+                            <Button
+                                variant="ghost"
                                 onClick={clearFilters}
-                                className="flex-grow py-4 rounded-2xl border-2 border-gray-200 text-gray-500 font-black text-sm flex items-center justify-center hover:bg-white transition-all"
+                                className="flex-grow py-4 rounded-2xl border-2 border-gray-200 text-gray-500 font-black text-sm flex items-center justify-center hover:bg-white transition-all h-auto"
                             >
                                 <RotateCcw className="h-4 w-4 mr-2" />
                                 Reset
-                            </button>
+                            </Button>
                             <Button
                                 onClick={onClose}
-                                className="flex-grow py-4 rounded-2xl shadow-xl shadow-primary/20 font-black text-sm"
+                                className="flex-grow py-4 rounded-2xl shadow-xl shadow-primary/20 font-black text-sm h-auto"
                             >
                                 Apply Filters
                             </Button>

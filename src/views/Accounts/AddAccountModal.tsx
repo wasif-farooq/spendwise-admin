@@ -1,6 +1,6 @@
 import { Info, Check } from 'lucide-react';
 import Select from 'react-select';
-import { Block, Flex, Text } from '@shared';
+import { Block, Flex, Text, Grid } from '@shared';
 import { Button, Modal, Input } from '@ui';
 import { ACCOUNT_TYPES, CURRENCY_OPTIONS, customSelectStyles } from './types';
 import type { Account } from './types';
@@ -38,9 +38,10 @@ export const AddAccountModal = ({
                             <Text size="xs" weight="bold">Choose how you'll use this account</Text>
                         </Flex>
                     </Flex>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <Grid cols={1} gap={4} className="sm:grid-cols-2">
                         {ACCOUNT_TYPES.map((type) => (
-                            <button
+                            <Block
+                                as="button"
                                 key={type.id}
                                 type="button"
                                 onClick={() => onTypeChange(type.id)}
@@ -57,17 +58,17 @@ export const AddAccountModal = ({
                                     <Text size="xs" weight="bold" color="text-gray-500" className="truncate">{type.description}</Text>
                                 </Block>
                                 {selectedType === type.id && (
-                                    <div className="absolute top-3 right-3 h-5 w-5 bg-primary text-white rounded-full flex items-center justify-center shadow-lg shadow-primary/20">
+                                    <Block className="absolute top-3 right-3 h-5 w-5 bg-primary text-white rounded-full flex items-center justify-center shadow-lg shadow-primary/20">
                                         <Check size={12} strokeWidth={4} />
-                                    </div>
+                                    </Block>
                                 )}
-                            </button>
+                            </Block>
                         ))}
-                    </div>
+                    </Grid>
                 </Block>
 
                 <Block className="space-y-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <Grid cols={1} gap={6} className="md:grid-cols-2">
                         <Block className="space-y-2">
                             <Input label="Account Name" placeholder="e.g. Personal Savings" required />
                             <Text size="xs" weight="bold" color="text-gray-400" className="ml-1">Give your account a recognizable name</Text>
@@ -83,12 +84,12 @@ export const AddAccountModal = ({
                                 isSearchable
                             />
                         </Block>
-                    </div>
+                    </Grid>
 
                     <Block className="space-y-2">
                         <Input label="Initial Balance" type="number" placeholder="0.00" required />
                         <Flex align="center" gap={2} className="ml-1">
-                            <div className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                            <Block className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
                             <Text size="xs" weight="bold" color="text-gray-400">This will be your starting balance for tracking</Text>
                         </Flex>
                     </Block>

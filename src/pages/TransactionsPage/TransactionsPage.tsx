@@ -29,11 +29,11 @@ interface Transaction {
     amount: number;
     type: 'expense' | 'income';
     status: 'completed' | 'pending';
-    icon: LucideIconType;
+    icon: LucideIcon;
     color: string;
 }
 
-const iconMap: Record<string, LucideIconType> = {
+const iconMap: Record<string, LucideIcon> = {
     Smartphone,
     Coffee,
     TrendingUp,

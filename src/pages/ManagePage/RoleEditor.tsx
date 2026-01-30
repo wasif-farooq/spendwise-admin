@@ -164,7 +164,7 @@ const RoleEditor = () => {
                     >
                         {isProcessing ? (
                             <Flex align="center">
-                                <div className="h-4 w-4 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2" />
+                                <Block className="h-4 w-4 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2" />
                                 Saving...
                             </Flex>
                         ) : (

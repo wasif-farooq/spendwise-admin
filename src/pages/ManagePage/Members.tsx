@@ -1,7 +1,6 @@
-import { motion } from 'framer-motion';
 import { useState, useMemo, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Block, Flex } from '@shared';
+import { Block, Flex, AnimatedBlock } from '@shared';
 
 import { MembersHeader } from '@/views/Manage/Members/MembersHeader';
 import { MembersTable } from '@/views/Manage/Members/MembersTable';
@@ -104,7 +103,7 @@ const Members = () => {
         <Block className="space-y-6">
             {/* Feedback Message */}
             {feedback && (
-                <motion.div
+                <AnimatedBlock
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0 }}
@@ -114,10 +113,10 @@ const Members = () => {
                         }`}
                 >
                     <Flex align="center" gap={3}>
-                        <div className={`w-2 h-2 rounded-full ${feedback.type === 'success' ? 'bg-green-500' : 'bg-red-500'}`} />
+                        <Block className={`w-2 h-2 rounded-full ${feedback.type === 'success' ? 'bg-green-500' : 'bg-red-500'}`} />
                         <span className="font-bold">{feedback.message}</span>
                     </Flex>
-                </motion.div>
+                </AnimatedBlock>
             )}
 
             <MembersHeader
@@ -144,14 +143,14 @@ const Members = () => {
                 onClose={() => setIsFilterDrawerOpen(false)}
                 filters={filters}
                 setFilters={setFilters}
-                onReset={clearFilters}
+                clearFilters={clearFilters}
             />
 
             <RemoveMemberModal
                 isOpen={isRemoveModalOpen}
                 onClose={() => setIsRemoveModalOpen(false)}
                 onConfirm={handleRemoveMember}
-                memberName={removingMember?.name || ''}
+                member={removingMember}
                 isProcessing={isProcessing}
             />
         </Block>

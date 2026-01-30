@@ -1,6 +1,7 @@
 import { Check, X } from 'lucide-react';
 import { Button } from '@ui';
 import { cn } from '@utils/cn';
+import { Block, Flex, Heading, Text } from '@shared';
 
 interface PricingFeature {
     text: string;
@@ -29,7 +30,7 @@ export const PricingCard: React.FC<PricingCardProps> = ({
     onSelect,
 }) => {
     return (
-        <div
+        <Block
             className={cn(
                 'relative rounded-2xl p-8 shadow-sm border transition-all duration-300 hover:shadow-md',
                 isPopular
@@ -38,36 +39,36 @@ export const PricingCard: React.FC<PricingCardProps> = ({
             )}
         >
             {isPopular && (
-                <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                    <span className="inline-block bg-primary text-white text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wide">
+                <Block className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                    <Text as="span" className="inline-block bg-primary text-white text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wide">
                         Most Popular
-                    </span>
-                </div>
+                    </Text>
+                </Block>
             )}
 
-            <div className="text-center mb-8">
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">{name}</h3>
-                <p className="text-sm text-gray-500 mb-6">{description}</p>
-                <div className="flex items-baseline justify-center">
-                    <span className="text-4xl font-bold text-gray-900">{price}</span>
-                    <span className="text-gray-500 ml-1">/{period}</span>
-                </div>
-            </div>
+            <Block className="text-center mb-8">
+                <Heading as="h3" className="text-lg font-semibold text-gray-900 mb-2">{name}</Heading>
+                <Text className="text-sm text-gray-500 mb-6">{description}</Text>
+                <Flex align="baseline" justify="center">
+                    <Text as="span" className="text-4xl font-bold text-gray-900">{price}</Text>
+                    <Text as="span" className="text-gray-500 ml-1">/{period}</Text>
+                </Flex>
+            </Block>
 
-            <ul className="space-y-4 mb-8">
+            <Block as="ul" className="space-y-4 mb-8">
                 {features.map((feature, index) => (
-                    <li key={index} className="flex items-start">
+                    <Flex as="li" key={index} align="start">
                         {feature.included ? (
                             <Check className="h-5 w-5 text-secondary flex-shrink-0 mr-3" />
                         ) : (
                             <X className="h-5 w-5 text-gray-300 flex-shrink-0 mr-3" />
                         )}
-                        <span className={cn('text-sm', feature.included ? 'text-gray-600' : 'text-gray-400')}>
+                        <Text as="span" className={cn('text-sm', feature.included ? 'text-gray-600' : 'text-gray-400')}>
                             {feature.text}
-                        </span>
-                    </li>
+                        </Text>
+                    </Flex>
                 ))}
-            </ul>
+            </Block>
 
             <Button
                 variant={isPopular ? 'primary' : 'outline'}
@@ -76,6 +77,6 @@ export const PricingCard: React.FC<PricingCardProps> = ({
             >
                 {buttonText}
             </Button>
-        </div>
+        </Block>
     );
 };
