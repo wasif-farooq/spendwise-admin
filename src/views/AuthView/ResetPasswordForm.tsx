@@ -1,30 +1,36 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Input } from '../../components/Input';
-import { Button } from '../../components/Button';
+import { Input, Button } from '@ui';
+import {
+    Block,
+    Heading,
+    Text,
+    Container
+} from '@shared';
 import { CreditCard } from 'lucide-react';
 
 export const ResetPasswordForm = () => {
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-            <motion.div
+        <Container as="div" size="full" className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+            <Block
+                as={motion.div}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="max-w-md w-full space-y-8 bg-white p-8 rounded-2xl shadow-xl border border-gray-100"
             >
-                <div className="text-center">
+                <Block className="text-center">
                     <Link to="/" className="inline-flex items-center mb-6">
                         <CreditCard className="h-10 w-10 text-primary" />
-                        <span className="ml-2 text-2xl font-bold text-gray-900">ExpenseFlow</span>
+                        <Heading as="span" size="2xl" weight="bold" color="text-gray-900" className="ml-2">SpendWise</Heading>
                     </Link>
-                    <h2 className="text-3xl font-bold text-gray-900">Set new password</h2>
-                    <p className="mt-2 text-sm text-gray-600">
+                    <Heading as="h2" size="3xl" weight="bold" color="text-gray-900">Set new password</Heading>
+                    <Text size="sm" color="text-gray-600" className="mt-2">
                         Your new password must be different from previously used passwords.
-                    </p>
-                </div>
+                    </Text>
+                </Block>
 
                 <form className="mt-8 space-y-6">
-                    <div className="space-y-4">
+                    <Block className="space-y-4">
                         <Input
                             label="New Password"
                             type="password"
@@ -37,13 +43,13 @@ export const ResetPasswordForm = () => {
                             placeholder="••••••••"
                             required
                         />
-                    </div>
+                    </Block>
 
                     <Button type="submit" className="w-full py-6 text-lg">
                         Reset password
                     </Button>
                 </form>
-            </motion.div>
-        </div>
+            </Block>
+        </Container>
     );
 };

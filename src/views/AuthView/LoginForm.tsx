@@ -3,8 +3,14 @@ import { motion } from 'framer-motion';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { loginSchema, type LoginInput } from './schemas/authSchemas';
-import { Input } from '../../components/Input';
-import { Button } from '../../components/Button';
+import { Input, Button } from '@ui';
+import {
+    Block,
+    Flex,
+    Heading,
+    Text,
+    Container
+} from '@shared';
 import { SocialLogin } from './components/SocialLogin';
 import { CreditCard } from 'lucide-react';
 
@@ -27,28 +33,29 @@ export const LoginForm = () => {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-            <motion.div
+        <Container as="div" size="full" className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+            <Block
+                as={motion.div}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="max-w-md w-full space-y-8 bg-white p-8 rounded-2xl shadow-xl border border-gray-100"
             >
-                <div className="text-center">
+                <Block className="text-center">
                     <Link to="/" className="inline-flex items-center mb-6">
                         <CreditCard className="h-10 w-10 text-primary" />
-                        <span className="ml-2 text-2xl font-bold text-gray-900">ExpenseFlow</span>
+                        <Heading as="span" size="2xl" weight="bold" color="text-gray-900" className="ml-2">SpendWise</Heading>
                     </Link>
-                    <h2 className="text-3xl font-bold text-gray-900">Welcome back</h2>
-                    <p className="mt-2 text-sm text-gray-600">
+                    <Heading as="h2" size="3xl" weight="bold" color="text-gray-900">Welcome back</Heading>
+                    <Text size="sm" color="text-gray-600" className="mt-2">
                         Don't have an account?{' '}
                         <Link to="/register" className="font-medium text-primary hover:underline">
                             Sign up for free
                         </Link>
-                    </p>
-                </div>
+                    </Text>
+                </Block>
 
                 <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
-                    <div className="space-y-4">
+                    <Block className="space-y-4">
                         <Input
                             label="Email address"
                             type="email"
@@ -56,7 +63,7 @@ export const LoginForm = () => {
                             {...register('email')}
                             error={errors.email?.message}
                         />
-                        <div className="space-y-1">
+                        <Block className="space-y-1">
                             <Input
                                 label="Password"
                                 type="password"
@@ -64,16 +71,16 @@ export const LoginForm = () => {
                                 {...register('password')}
                                 error={errors.password?.message}
                             />
-                            <div className="flex justify-end">
+                            <Flex justify="end">
                                 <Link
                                     to="/forgot-password"
                                     className="text-sm font-medium text-primary hover:underline"
                                 >
                                     Forgot password?
                                 </Link>
-                            </div>
-                        </div>
-                    </div>
+                            </Flex>
+                        </Block>
+                    </Block>
 
                     <Button type="submit" className="w-full py-6 text-lg" disabled={isSubmitting}>
                         {isSubmitting ? 'Signing in...' : 'Sign in'}
@@ -81,7 +88,7 @@ export const LoginForm = () => {
                 </form>
 
                 <SocialLogin />
-            </motion.div>
-        </div>
+            </Block>
+        </Container>
     );
 };

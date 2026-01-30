@@ -1,10 +1,15 @@
 import { motion } from 'framer-motion';
 import { CreditCard, Plus, Download, Check, ArrowUpRight, Zap, ShieldCheck, Clock } from 'lucide-react';
-import { useState } from 'react';
-import { Button } from '../../components/Button';
+import { Button } from '@ui';
+import {
+    Block,
+    Flex,
+    Heading,
+    Text,
+    Grid
+} from '@shared';
 
 const Billing = () => {
-    const [isChangingPlan, setIsChangingPlan] = useState(false);
 
     const currentPlan = {
         name: 'Premium Plan',
@@ -33,143 +38,157 @@ const Billing = () => {
     ];
 
     return (
-        <motion.div
+        <Block
+            as={motion.div}
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             className="space-y-12"
         >
-            <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-                <div>
-                    <h2 className="text-3xl font-black text-gray-900 tracking-tight">Billing & Subscription</h2>
-                    <p className="text-gray-500 mt-1 font-medium">Manage your plan, payment methods, and billing history.</p>
-                </div>
-            </header>
+            <Flex as="header" direction="col" justify="between" gap={6} className="sm:flex-row sm:items-center">
+                <Block>
+                    <Heading as="h2" weight="black" className="text-3xl tracking-tight text-gray-900">Billing & Subscription</Heading>
+                    <Text color="text-gray-500" weight="medium" className="mt-1">Manage your plan, payment methods, and billing history.</Text>
+                </Block>
+            </Flex>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <Grid cols={1} gap={8} className="lg:grid-cols-3">
                 {/* Plan Overview */}
-                <div className="lg:col-span-2 space-y-8">
-                    <section className="bg-gradient-to-br from-primary to-blue-600 rounded-[3rem] p-8 sm:p-10 text-white shadow-xl shadow-primary/20 relative overflow-hidden group">
-                        <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:scale-110 transition-transform duration-500">
+                <Block className="lg:col-span-2 space-y-8">
+                    <Block
+                        as="section"
+                        className="bg-gradient-to-br from-primary to-blue-600 rounded-[3rem] p-8 sm:p-10 text-white shadow-xl shadow-primary/20 relative overflow-hidden group"
+                    >
+                        <Block className="absolute top-0 right-0 p-8 opacity-10 group-hover:scale-110 transition-transform duration-500">
                             <Zap className="h-48 w-48" />
-                        </div>
+                        </Block>
 
-                        <div className="relative z-10">
-                            <div className="flex items-center justify-between mb-8">
-                                <div className="px-4 py-1.5 bg-white/20 backdrop-blur-md rounded-full text-xs font-black uppercase tracking-widest">
+                        <Block className="relative z-10">
+                            <Flex align="center" justify="between" className="mb-8">
+                                <Text
+                                    weight="black"
+                                    className="px-4 py-1.5 bg-white/20 backdrop-blur-md rounded-full text-xs uppercase tracking-widest"
+                                >
                                     Current Plan
-                                </div>
-                                <div className="flex items-center text-white/80 text-sm font-bold">
+                                </Text>
+                                <Flex align="center" className="text-white/80 text-sm font-bold">
                                     <Clock className="h-4 w-4 mr-2" />
                                     Next billing: {currentPlan.nextBilling}
-                                </div>
-                            </div>
+                                </Flex>
+                            </Flex>
 
-                            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-8">
-                                <div>
-                                    <h3 className="text-4xl font-black tracking-tight">{currentPlan.name}</h3>
-                                    <div className="mt-2 flex items-baseline">
-                                        <span className="text-5xl font-black">{currentPlan.price}</span>
-                                        <span className="ml-2 text-white/70 font-bold text-lg">/{currentPlan.period}</span>
-                                    </div>
-                                </div>
+                            <Flex direction="col" gap={8} className="sm:flex-row sm:items-end justify-between">
+                                <Block>
+                                    <Heading as="h3" size="3xl" weight="black" className="tracking-tight">{currentPlan.name}</Heading>
+                                    <Flex align="baseline" className="mt-2">
+                                        <Text size="5xl" weight="black">{currentPlan.price}</Text>
+                                        <Text size="lg" weight="bold" className="ml-2 text-white/70">/{currentPlan.period}</Text>
+                                    </Flex>
+                                </Block>
                                 <Button
-                                    onClick={() => setIsChangingPlan(true)}
                                     className="bg-white text-primary hover:bg-white/90 px-10 py-4 rounded-2xl font-black shadow-lg shadow-black/10 transition-all active:scale-95"
                                 >
                                     Change Plan
                                 </Button>
-                            </div>
+                            </Flex>
 
-                            <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <Grid cols={1} gap={4} className="mt-10 sm:grid-cols-2">
                                 {currentPlan.features.map((feature, i) => (
-                                    <div key={i} className="flex items-center text-sm font-bold text-white/90">
-                                        <div className="bg-white/20 p-1 rounded-lg mr-3">
+                                    <Flex key={i} align="center" className="text-sm font-bold text-white/90">
+                                        <Block className="bg-white/20 p-1 rounded-lg mr-3">
                                             <Check className="h-3.5 w-3.5" />
-                                        </div>
+                                        </Block>
                                         {feature}
-                                    </div>
+                                    </Flex>
                                 ))}
-                            </div>
-                        </div>
-                    </section>
+                            </Grid>
+                        </Block>
+                    </Block>
 
                     {/* Payment Methods */}
-                    <section className="bg-white rounded-[3rem] p-8 sm:p-10 border border-gray-100 shadow-sm">
-                        <div className="flex items-center justify-between mb-8">
-                            <div className="flex items-center space-x-3">
-                                <div className="bg-primary/10 p-2.5 rounded-xl">
+                    <Block as="section" className="bg-white rounded-[3rem] p-8 sm:p-10 border border-gray-100 shadow-sm">
+                        <Flex align="center" justify="between" className="mb-8">
+                            <Flex align="center" gap={3}>
+                                <Block className="bg-primary/10 p-2.5 rounded-xl">
                                     <CreditCard className="h-5 w-5 text-primary" />
-                                </div>
-                                <h3 className="text-xl font-black text-gray-900 tracking-tight">Payment Methods</h3>
-                            </div>
+                                </Block>
+                                <Heading as="h3" weight="black" className="text-xl tracking-tight text-gray-900">Payment Methods</Heading>
+                            </Flex>
                             <button className="text-primary font-black text-sm flex items-center hover:underline">
                                 <Plus className="h-4 w-4 mr-1" />
                                 Add New
                             </button>
-                        </div>
+                        </Flex>
 
-                        <div className="space-y-4">
+                        <Block className="space-y-4">
                             {paymentMethods.map((method) => (
-                                <div key={method.id} className="flex items-center justify-between p-6 rounded-[2rem] border border-gray-100 bg-gray-50/50 hover:bg-white hover:shadow-md transition-all group">
-                                    <div className="flex items-center">
-                                        <div className="bg-white p-3 rounded-xl shadow-sm mr-5 group-hover:scale-110 transition-transform">
+                                <Flex
+                                    key={method.id}
+                                    align="center"
+                                    justify="between"
+                                    className="p-6 rounded-[2rem] border border-gray-100 bg-gray-50/50 hover:bg-white hover:shadow-md transition-all group"
+                                >
+                                    <Flex align="center">
+                                        <Block className="bg-white p-3 rounded-xl shadow-sm mr-5 group-hover:scale-110 transition-transform">
                                             <CreditCard className="h-6 w-6 text-gray-400" />
-                                        </div>
-                                        <div>
-                                            <p className="font-bold text-gray-900">{method.type} ending in {method.last4}</p>
-                                            <p className="text-xs text-gray-500 font-bold uppercase tracking-wider mt-0.5">Expires {method.expiry}</p>
-                                        </div>
-                                    </div>
-                                    <div className="flex items-center space-x-4">
+                                        </Block>
+                                        <Block>
+                                            <Text weight="bold" className="text-gray-900">{method.type} ending in {method.last4}</Text>
+                                            <Text size="xs" color="text-gray-500" weight="bold" className="uppercase tracking-wider mt-0.5">Expires {method.expiry}</Text>
+                                        </Block>
+                                    </Flex>
+                                    <Flex align="center" gap={4}>
                                         {method.isDefault && (
-                                            <span className="px-3 py-1 bg-green-100 text-green-700 text-[10px] font-black uppercase tracking-widest rounded-full">
+                                            <Text
+                                                weight="black"
+                                                className="px-3 py-1 bg-green-100 text-green-700 text-[10px] uppercase tracking-widest rounded-full"
+                                            >
                                                 Default
-                                            </span>
+                                            </Text>
                                         )}
                                         <button className="p-2 text-gray-400 hover:text-primary transition-colors">
                                             <ArrowUpRight className="h-5 w-5" />
                                         </button>
-                                    </div>
-                                </div>
+                                    </Flex>
+                                </Flex>
                             ))}
-                        </div>
-                    </section>
-                </div>
+                        </Block>
+                    </Block>
+                </Block>
 
                 {/* Billing History */}
-                <div className="space-y-8">
-                    <section className="bg-white rounded-[3rem] p-8 border border-gray-100 shadow-sm h-full">
-                        <div className="flex items-center space-x-3 mb-8">
-                            <div className="bg-blue-50 p-2.5 rounded-xl">
+                <Block className="space-y-8">
+                    <Block as="section" className="bg-white rounded-[3rem] p-8 border border-gray-100 shadow-sm h-full">
+                        <Flex align="center" gap={3} className="mb-8">
+                            <Block className="bg-blue-50 p-2.5 rounded-xl">
                                 <ShieldCheck className="h-5 w-5 text-blue-600" />
-                            </div>
-                            <h3 className="text-xl font-black text-gray-900 tracking-tight">Billing History</h3>
-                        </div>
+                            </Block>
+                            <Heading as="h3" weight="black" className="text-xl tracking-tight text-gray-900">Billing History</Heading>
+                        </Flex>
 
-                        <div className="space-y-6">
+                        <Block className="space-y-6">
                             {billingHistory.map((invoice) => (
-                                <div key={invoice.id} className="flex items-center justify-between group">
-                                    <div>
-                                        <p className="font-bold text-gray-900">{invoice.date}</p>
-                                        <p className="text-xs text-gray-400 font-bold uppercase tracking-widest mt-0.5">{invoice.id}</p>
-                                    </div>
-                                    <div className="text-right">
-                                        <p className="font-black text-gray-900">{invoice.amount}</p>
+                                <Flex key={invoice.id} align="center" justify="between" className="group">
+                                    <Block>
+                                        <Text weight="bold" className="text-gray-900">{invoice.date}</Text>
+                                        <Text size="xs" color="text-gray-400" weight="bold" className="uppercase tracking-widest mt-0.5">{invoice.id}</Text>
+                                    </Block>
+                                    <Block className="text-right">
+                                        <Text weight="black" className="text-gray-900">{invoice.amount}</Text>
                                         <button className="text-primary hover:text-primary/80 transition-colors mt-1">
                                             <Download className="h-4 w-4" />
                                         </button>
-                                    </div>
-                                </div>
+                                    </Block>
+                                </Flex>
                             ))}
-                        </div>
+                        </Block>
 
                         <button className="w-full mt-10 py-4 bg-gray-50 text-gray-500 font-black text-sm rounded-2xl hover:bg-gray-100 transition-all border border-gray-100">
                             View All Invoices
                         </button>
-                    </section>
-                </div>
-            </div>
-        </motion.div>
+                    </Block>
+                </Block>
+            </Grid>
+        </Block>
     );
 };
 

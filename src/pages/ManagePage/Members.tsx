@@ -1,9 +1,14 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { UserPlus, Shield, UserMinus, Edit2, X, Check, ChevronLeft, ChevronRight, Users, Filter, RotateCcw, Calendar, CheckCircle2, Clock, AlertTriangle } from 'lucide-react';
 import { useState, useMemo, useEffect, useRef } from 'react';
-import { Button } from '../../components/Button';
-import { Input } from '../../components/Input';
-import { Modal } from '../../components/Modal';
+import { Button, Input, Modal } from '@ui';
+import {
+    Block,
+    Flex,
+    Heading,
+    Text,
+    Grid
+} from '@shared';
 
 const Members = () => {
     const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
@@ -129,46 +134,51 @@ const Members = () => {
     };
 
     return (
-        <motion.div
+        <Block
+            as={motion.div}
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             className="space-y-12"
         >
-            <header className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-                <div>
-                    <h2 className="text-3xl font-black text-gray-900 tracking-tight">Team Members</h2>
-                    <p className="text-gray-500 mt-1 font-medium">Manage your organization's members and their roles.</p>
-                </div>
-                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
-                    <div className="flex items-center gap-2">
-                        <div className="relative group flex-grow sm:flex-grow-0">
+            <Flex as="header" direction="col" justify="between" gap={6} className="lg:flex-row lg:items-center">
+                <Block>
+                    <Heading as="h2" weight="black" className="text-3xl tracking-tight text-gray-900">Team Members</Heading>
+                    <Text color="text-gray-500" weight="medium" className="mt-1">Manage your organization's members and their roles.</Text>
+                </Block>
+                <Flex direction="col" gap={4} className="sm:flex-row sm:items-center">
+                    <Flex align="center" gap={2}>
+                        <Block className="relative group flex-grow sm:flex-grow-0">
                             <Input
                                 placeholder="Search members..."
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                                 className="bg-gray-50 border-none h-14 rounded-2xl focus:ring-2 focus:ring-primary pl-12 w-full sm:w-64 font-bold"
                             />
-                            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-primary transition-colors">
+                            <Block className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-primary transition-colors">
                                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                                 </svg>
-                            </div>
-                        </div>
+                            </Block>
+                        </Block>
                         <button
                             onClick={() => setIsFilterDrawerOpen(true)}
                             className={`p-4 rounded-2xl border transition-all relative ${activeFilterCount > 0
-                                    ? 'bg-primary/5 border-primary text-primary shadow-lg shadow-primary/10'
-                                    : 'bg-gray-50 border-transparent text-gray-500 hover:bg-gray-100'
+                                ? 'bg-primary/5 border-primary text-primary shadow-lg shadow-primary/10'
+                                : 'bg-gray-50 border-transparent text-gray-500 hover:bg-gray-100'
                                 }`}
                         >
                             <Filter className="h-6 w-6" />
                             {activeFilterCount > 0 && (
-                                <span className="absolute -top-1 -right-1 w-5 h-5 bg-primary text-white text-[10px] font-black rounded-full flex items-center justify-center border-2 border-white">
+                                <Text
+                                    as="span"
+                                    weight="black"
+                                    className="absolute -top-1 -right-1 w-5 h-5 bg-primary text-white text-[10px] rounded-full flex items-center justify-center border-2 border-white"
+                                >
                                     {activeFilterCount}
-                                </span>
+                                </Text>
                             )}
                         </button>
-                    </div>
+                    </Flex>
                     <Button
                         onClick={() => setIsInviteModalOpen(true)}
                         className="px-8 py-4 rounded-2xl shadow-xl shadow-primary/20 flex items-center justify-center font-black"
@@ -176,11 +186,11 @@ const Members = () => {
                         <UserPlus className="h-5 w-5 mr-2" />
                         Invite Member
                     </Button>
-                </div>
-            </header>
+                </Flex>
+            </Flex>
 
-            <div className="bg-gray-50/50 rounded-[3rem] border border-gray-100 overflow-hidden">
-                <div className="overflow-x-auto">
+            <Block className="bg-gray-50/50 rounded-[3rem] border border-gray-100 overflow-hidden">
+                <Block className="overflow-x-auto">
                     <table className="w-full text-left border-collapse">
                         <thead>
                             <tr className="border-b border-gray-200/60">
@@ -195,50 +205,62 @@ const Members = () => {
                                 paginatedMembers.map((member) => (
                                     <tr key={member.id} className="group hover:bg-white transition-colors">
                                         <td className="px-8 py-6">
-                                            <div className="flex items-center">
-                                                <div className="h-12 w-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary font-bold text-lg mr-4 border border-primary/20">
+                                            <Flex align="center">
+                                                <Block className="h-12 w-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary font-bold text-lg mr-4 border border-primary/20">
                                                     {member.name.charAt(0)}
-                                                </div>
-                                                <div>
-                                                    <p className="font-bold text-gray-900 flex items-center">
+                                                </Block>
+                                                <Block>
+                                                    <Text weight="bold" className="text-gray-900 flex items-center">
                                                         {member.name}
                                                         {member.isCurrentUser && (
-                                                            <span className="ml-2 px-2 py-0.5 bg-primary/10 text-primary text-[10px] font-black uppercase tracking-wider rounded-md">
+                                                            <Text
+                                                                as="span"
+                                                                weight="black"
+                                                                className="ml-2 px-2 py-0.5 bg-primary/10 text-primary text-[10px] uppercase tracking-wider rounded-md"
+                                                            >
                                                                 You
-                                                            </span>
+                                                            </Text>
                                                         )}
-                                                    </p>
-                                                    <p className="text-sm text-gray-500 font-medium">{member.email}</p>
-                                                </div>
-                                            </div>
+                                                    </Text>
+                                                    <Text size="sm" color="text-gray-500" weight="medium">{member.email}</Text>
+                                                </Block>
+                                            </Flex>
                                         </td>
                                         <td className="px-8 py-6">
-                                            <div className="flex items-center">
-                                                <div className={`p-1.5 rounded-lg mr-2 ${member.role === 'Admin' ? 'bg-purple-100 text-purple-600' :
+                                            <Flex align="center">
+                                                <Block className={`p-1.5 rounded-lg mr-2 ${member.role === 'Admin' ? 'bg-purple-100 text-purple-600' :
                                                     member.role === 'Member' ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-600'
                                                     }`}>
                                                     <Shield className="h-3.5 w-3.5" />
-                                                </div>
-                                                <span className="text-sm font-bold text-gray-700">{member.role}</span>
-                                            </div>
+                                                </Block>
+                                                <Text size="sm" weight="bold" className="text-gray-700">{member.role}</Text>
+                                            </Flex>
                                         </td>
                                         <td className="px-8 py-6">
-                                            <div className="flex items-center">
+                                            <Flex align="center">
                                                 {member.status === 'Active' ? (
-                                                    <span className="flex items-center text-xs font-black text-emerald-600 uppercase tracking-widest bg-emerald-50 px-3 py-1.5 rounded-xl border border-emerald-100">
+                                                    <Text
+                                                        as="span"
+                                                        weight="black"
+                                                        className="flex items-center text-xs text-emerald-600 uppercase tracking-widest bg-emerald-50 px-3 py-1.5 rounded-xl border border-emerald-100"
+                                                    >
                                                         <CheckCircle2 className="h-3 w-3 mr-1.5" />
                                                         Active
-                                                    </span>
+                                                    </Text>
                                                 ) : (
-                                                    <span className="flex items-center text-xs font-black text-amber-600 uppercase tracking-widest bg-amber-50 px-3 py-1.5 rounded-xl border border-amber-100">
+                                                    <Text
+                                                        as="span"
+                                                        weight="black"
+                                                        className="flex items-center text-xs text-amber-600 uppercase tracking-widest bg-amber-50 px-3 py-1.5 rounded-xl border border-amber-100"
+                                                    >
                                                         <Clock className="h-3 w-3 mr-1.5" />
                                                         Pending
-                                                    </span>
+                                                    </Text>
                                                 )}
-                                            </div>
+                                            </Flex>
                                         </td>
                                         <td className="px-8 py-6 text-right">
-                                            <div className="flex items-center justify-end space-x-2">
+                                            <Flex align="center" justify="end" gap={2}>
                                                 <button
                                                     disabled={member.isCurrentUser}
                                                     className={`p-2 rounded-xl transition-all ${member.isCurrentUser
@@ -258,41 +280,41 @@ const Members = () => {
                                                 >
                                                     <UserMinus className="h-5 w-5" />
                                                 </button>
-                                            </div>
+                                            </Flex>
                                         </td>
                                     </tr>
                                 ))
                             ) : (
                                 <tr>
                                     <td colSpan={4} className="px-8 py-20 text-center">
-                                        <div className="flex flex-col items-center justify-center space-y-4">
-                                            <div className="p-4 bg-gray-50 rounded-3xl">
+                                        <Flex direction="col" align="center" justify="center" gap={4}>
+                                            <Block className="p-4 bg-gray-50 rounded-3xl">
                                                 <Users className="h-8 w-8 text-gray-300" />
-                                            </div>
-                                            <div>
-                                                <p className="text-lg font-black text-gray-900">No members found</p>
-                                                <p className="text-sm text-gray-500 font-medium">Try adjusting your search or filters.</p>
-                                            </div>
+                                            </Block>
+                                            <Block>
+                                                <Heading weight="black" className="text-lg text-gray-900">No members found</Heading>
+                                                <Text size="sm" color="text-gray-500" weight="medium">Try adjusting your search or filters.</Text>
+                                            </Block>
                                             <button
                                                 onClick={clearFilters}
                                                 className="text-primary font-black text-sm hover:underline"
                                             >
                                                 Clear all filters
                                             </button>
-                                        </div>
+                                        </Flex>
                                     </td>
                                 </tr>
                             )}
                         </tbody>
                     </table>
-                </div>
+                </Block>
 
                 {/* Pagination UI */}
-                <div className="px-8 py-6 border-t border-gray-100 flex items-center justify-between bg-white/50">
-                    <p className="text-sm text-gray-500 font-medium">
-                        Showing <span className="font-bold text-gray-900">{filteredMembers.length > 0 ? (currentPage - 1) * itemsPerPage + 1 : 0}</span> to <span className="font-bold text-gray-900">{Math.min(currentPage * itemsPerPage, filteredMembers.length)}</span> of <span className="font-bold text-gray-900">{filteredMembers.length}</span> members
-                    </p>
-                    <div className="flex items-center space-x-2">
+                <Flex align="center" justify="between" className="px-8 py-6 border-t border-gray-100 bg-white/50">
+                    <Text size="sm" color="text-gray-500" weight="medium">
+                        Showing <Text as="span" weight="bold" className="text-gray-900">{filteredMembers.length > 0 ? (currentPage - 1) * itemsPerPage + 1 : 0}</Text> to <Text as="span" weight="bold" className="text-gray-900">{Math.min(currentPage * itemsPerPage, filteredMembers.length)}</Text> of <Text as="span" weight="bold" className="text-gray-900">{filteredMembers.length}</Text> members
+                    </Text>
+                    <Flex align="center" gap={2}>
                         <button
                             onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                             disabled={currentPage === 1}
@@ -319,98 +341,100 @@ const Members = () => {
                         >
                             <ChevronRight className="h-5 w-5" />
                         </button>
-                    </div>
-                </div>
-            </div>
+                    </Flex>
+                </Flex>
+            </Block>
 
             {/* Filter Drawer */}
             <AnimatePresence>
                 {isFilterDrawerOpen && (
                     <>
-                        <motion.div
+                        <Block
+                            as={motion.div}
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                             onClick={() => setIsFilterDrawerOpen(false)}
                             className="fixed inset-0 bg-gray-900/40 backdrop-blur-sm z-[60]"
                         />
-                        <motion.div
+                        <Block
+                            as={motion.div}
                             initial={{ x: '100%' }}
                             animate={{ x: 0 }}
                             exit={{ x: '100%' }}
                             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
                             className="fixed top-0 right-0 h-full w-full max-w-md bg-white shadow-2xl z-[70] overflow-hidden flex flex-col"
                         >
-                            <div className="p-8 border-b border-gray-100 flex items-center justify-between">
-                                <div className="flex items-center space-x-3">
-                                    <div className="bg-primary/10 p-2 rounded-xl">
+                            <Flex align="center" justify="between" className="p-8 border-b border-gray-100">
+                                <Flex align="center" gap={3}>
+                                    <Block className="bg-primary/10 p-2 rounded-xl">
                                         <Filter className="h-5 w-5 text-primary" />
-                                    </div>
-                                    <h3 className="text-xl font-black text-gray-900">Advanced Filters</h3>
-                                </div>
+                                    </Block>
+                                    <Heading as="h3" weight="black" className="text-xl text-gray-900">Advanced Filters</Heading>
+                                </Flex>
                                 <button
                                     onClick={() => setIsFilterDrawerOpen(false)}
                                     className="p-2 rounded-xl hover:bg-gray-100 text-gray-400 transition-colors"
                                 >
                                     <X className="h-6 w-6" />
                                 </button>
-                            </div>
+                            </Flex>
 
-                            <div className="flex-grow overflow-y-auto p-8 space-y-10">
+                            <Block className="flex-grow overflow-y-auto p-8 space-y-10">
                                 {/* Role Filter */}
-                                <div className="space-y-4">
-                                    <p className="text-xs font-black text-gray-400 uppercase tracking-widest">Filter by Role</p>
-                                    <div className="flex flex-wrap gap-3">
+                                <Block className="space-y-4">
+                                    <Text size="xs" weight="black" className="uppercase tracking-widest text-gray-400">Filter by Role</Text>
+                                    <Flex gap={3} className="flex-wrap">
                                         {['Admin', 'Member', 'Viewer'].map(role => (
                                             <button
                                                 key={role}
                                                 onClick={() => toggleFilter('roles', role)}
                                                 className={`px-5 py-3 rounded-2xl text-sm font-bold transition-all border-2 ${filters.roles.includes(role)
-                                                        ? 'border-primary bg-primary/5 text-primary'
-                                                        : 'border-gray-50 bg-gray-50 text-gray-500 hover:border-gray-200'
+                                                    ? 'border-primary bg-primary/5 text-primary'
+                                                    : 'border-gray-50 bg-gray-50 text-gray-500 hover:border-gray-200'
                                                     }`}
                                             >
                                                 {role}
                                             </button>
                                         ))}
-                                    </div>
-                                </div>
+                                    </Flex>
+                                </Block>
 
                                 {/* Status Filter */}
-                                <div className="space-y-4">
-                                    <p className="text-xs font-black text-gray-400 uppercase tracking-widest">Filter by Status</p>
-                                    <div className="flex flex-wrap gap-3">
+                                <Block className="space-y-4">
+                                    <Text size="xs" weight="black" className="uppercase tracking-widest text-gray-400">Filter by Status</Text>
+                                    <Flex gap={3} className="flex-wrap">
                                         {['Active', 'Pending'].map(status => (
                                             <button
                                                 key={status}
                                                 onClick={() => toggleFilter('statuses', status)}
                                                 className={`px-5 py-3 rounded-2xl text-sm font-bold transition-all border-2 ${filters.statuses.includes(status)
-                                                        ? 'border-primary bg-primary/5 text-primary'
-                                                        : 'border-gray-50 bg-gray-50 text-gray-500 hover:border-gray-200'
+                                                    ? 'border-primary bg-primary/5 text-primary'
+                                                    : 'border-gray-50 bg-gray-50 text-gray-500 hover:border-gray-200'
                                                     }`}
                                             >
                                                 {status}
                                             </button>
                                         ))}
-                                    </div>
-                                </div>
+                                    </Flex>
+                                </Block>
 
                                 {/* Date Range */}
-                                <div className="space-y-4">
-                                    <p className="text-xs font-black text-gray-400 uppercase tracking-widest">Join Date</p>
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <div
+                                <Block className="space-y-4">
+                                    <Text size="xs" weight="black" className="uppercase tracking-widest text-gray-400">Join Date</Text>
+                                    <Grid cols={2} gap={4}>
+                                        <Block
                                             onClick={() => startDateRef.current?.showPicker()}
                                             className={`p-4 rounded-2xl border-2 transition-all cursor-pointer ${filters.startDate ? 'border-primary bg-primary/5' : 'border-gray-50 bg-gray-50 hover:border-gray-200'
                                                 }`}
                                         >
-                                            <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">From</p>
-                                            <div className="flex items-center justify-between mt-1">
-                                                <span className={`text-sm font-bold ${filters.startDate ? 'text-primary' : 'text-gray-900'}`}>
+                                            <Text size="xs" weight="black" className="uppercase tracking-widest text-gray-400">From</Text>
+                                            <Flex align="center" justify="between" className="mt-1">
+                                                <Text size="sm" weight="bold" className={filters.startDate ? 'text-primary' : 'text-gray-900'}>
                                                     {formatDate(filters.startDate)}
-                                                </span>
+                                                </Text>
                                                 <Calendar className={`h-4 w-4 ${filters.startDate ? 'text-primary' : 'text-gray-400'}`} />
-                                            </div>
+                                            </Flex>
                                             <input
                                                 ref={startDateRef}
                                                 type="date"
@@ -418,19 +442,19 @@ const Members = () => {
                                                 value={filters.startDate}
                                                 onChange={(e) => setFilters(prev => ({ ...prev, startDate: e.target.value }))}
                                             />
-                                        </div>
-                                        <div
+                                        </Block>
+                                        <Block
                                             onClick={() => endDateRef.current?.showPicker()}
                                             className={`p-4 rounded-2xl border-2 transition-all cursor-pointer ${filters.endDate ? 'border-primary bg-primary/5' : 'border-gray-50 bg-gray-50 hover:border-gray-200'
                                                 }`}
                                         >
-                                            <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">To</p>
-                                            <div className="flex items-center justify-between mt-1">
-                                                <span className={`text-sm font-bold ${filters.endDate ? 'text-primary' : 'text-gray-900'}`}>
+                                            <Text size="xs" weight="black" className="uppercase tracking-widest text-gray-400">To</Text>
+                                            <Flex align="center" justify="between" className="mt-1">
+                                                <Text size="sm" weight="bold" className={filters.endDate ? 'text-primary' : 'text-gray-900'}>
                                                     {formatDate(filters.endDate)}
-                                                </span>
+                                                </Text>
                                                 <Calendar className={`h-4 w-4 ${filters.endDate ? 'text-primary' : 'text-gray-400'}`} />
-                                            </div>
+                                            </Flex>
                                             <input
                                                 ref={endDateRef}
                                                 type="date"
@@ -438,12 +462,12 @@ const Members = () => {
                                                 value={filters.endDate}
                                                 onChange={(e) => setFilters(prev => ({ ...prev, endDate: e.target.value }))}
                                             />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                                        </Block>
+                                    </Grid>
+                                </Block>
+                            </Block>
 
-                            <div className="p-8 border-t border-gray-100 bg-gray-50/50 flex gap-4">
+                            <Flex gap={4} className="p-8 border-t border-gray-100 bg-gray-50/50">
                                 <button
                                     onClick={clearFilters}
                                     className="flex-grow py-4 rounded-2xl border-2 border-gray-200 text-gray-500 font-black text-sm flex items-center justify-center hover:bg-white transition-all"
@@ -457,8 +481,8 @@ const Members = () => {
                                 >
                                     Apply Filters
                                 </Button>
-                            </div>
-                        </motion.div>
+                            </Flex>
+                        </Block>
                     </>
                 )}
             </AnimatePresence>
@@ -469,24 +493,24 @@ const Members = () => {
                 onClose={() => setIsRemoveModalOpen(false)}
                 title="Remove from Organization"
             >
-                <div className="space-y-6">
-                    <div className="bg-rose-50 p-8 rounded-[2.5rem] flex items-start space-x-5 border border-rose-100">
-                        <div className="bg-rose-500 p-3 rounded-2xl flex-shrink-0 shadow-lg shadow-rose-200">
+                <Block className="space-y-6">
+                    <Flex align="start" gap={5} className="bg-rose-50 p-8 rounded-[2.5rem] border border-rose-100">
+                        <Block className="bg-rose-500 p-3 rounded-2xl flex-shrink-0 shadow-lg shadow-rose-200">
                             <AlertTriangle className="h-6 w-6 text-white" />
-                        </div>
-                        <div>
-                            <p className="font-black text-rose-900 text-lg">Confirm Removal</p>
-                            <p className="text-sm text-rose-700 mt-1 leading-relaxed font-medium">
-                                Are you sure you want to remove <span className="font-black">"{removingMember?.name}"</span> from the organization? They will lose all access immediately.
-                            </p>
-                        </div>
-                    </div>
+                        </Block>
+                        <Block>
+                            <Heading size="lg" weight="black" className="text-rose-900">Confirm Removal</Heading>
+                            <Text size="sm" color="text-rose-700" weight="medium" className="mt-1 leading-relaxed">
+                                Are you sure you want to remove <Text as="span" weight="black">"{removingMember?.name}"</Text> from the organization? They will lose all access immediately.
+                            </Text>
+                        </Block>
+                    </Flex>
 
-                    <p className="text-gray-500 text-sm px-4 font-bold">
+                    <Text size="sm" weight="bold" className="text-gray-500 px-4">
                         This action will revoke their membership and permissions. You can invite them back later if needed.
-                    </p>
+                    </Text>
 
-                    <div className="flex flex-col sm:flex-row gap-4 pt-4">
+                    <Flex direction="col" gap={4} className="sm:flex-row pt-4">
                         <Button
                             variant="outline"
                             onClick={() => setIsRemoveModalOpen(false)}
@@ -501,8 +525,8 @@ const Members = () => {
                         >
                             {isProcessing ? 'Removing...' : 'Confirm Removal'}
                         </Button>
-                    </div>
-                </div>
+                    </Flex>
+                </Block>
             </Modal>
 
             {/* Invite Modal */}
@@ -511,8 +535,8 @@ const Members = () => {
                 onClose={() => setIsInviteModalOpen(false)}
                 title="Invite New Member"
             >
-                <form onSubmit={handleInvite} className="space-y-8">
-                    <div className="space-y-6">
+                <Block as="form" onSubmit={handleInvite} className="space-y-8">
+                    <Block className="space-y-6">
                         <Input
                             label="Email Address"
                             type="email"
@@ -523,9 +547,9 @@ const Members = () => {
                             required
                         />
 
-                        <div className="space-y-3">
-                            <label className="text-sm font-black text-gray-900 uppercase tracking-widest px-1">Select Role</label>
-                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <Block className="space-y-3">
+                            <Heading as="h4" size="sm" weight="black" className="uppercase tracking-widest px-1 text-gray-900">Select Role</Heading>
+                            <Grid cols={1} gap={4} className="sm:grid-cols-3">
                                 {['Member', 'Admin', 'Viewer'].map((role) => (
                                     <button
                                         key={role}
@@ -539,13 +563,14 @@ const Members = () => {
                                         {role}
                                     </button>
                                 ))}
-                            </div>
-                        </div>
-                    </div>
+                            </Grid>
+                        </Block>
+                    </Block>
 
                     <AnimatePresence>
                         {feedback && (
-                            <motion.div
+                            <Block
+                                as={motion.div}
                                 initial={{ opacity: 0, y: -10 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: -10 }}
@@ -554,11 +579,11 @@ const Members = () => {
                             >
                                 {feedback.type === 'success' ? <Check className="h-4 w-4 mr-2" /> : <X className="h-4 w-4 mr-2" />}
                                 {feedback.message}
-                            </motion.div>
+                            </Block>
                         )}
                     </AnimatePresence>
 
-                    <div className="flex flex-col sm:flex-row gap-4 pt-4 border-t border-gray-100">
+                    <Flex direction="col" gap={4} className="sm:flex-row pt-4 border-t border-gray-100">
                         <Button
                             variant="outline"
                             type="button"
@@ -574,10 +599,10 @@ const Members = () => {
                         >
                             {isInviting ? 'Sending...' : 'Send Invitation'}
                         </Button>
-                    </div>
-                </form>
+                    </Flex>
+                </Block>
             </Modal>
-        </motion.div>
+        </Block>
     );
 };
 

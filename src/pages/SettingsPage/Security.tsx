@@ -2,9 +2,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Smartphone, MessageSquare, Mail, Trash2, ChevronRight, ShieldCheck, AlertTriangle, Lock, Eye, EyeOff, Check, X as CloseIcon, RefreshCw, Copy, Download } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useState, useMemo } from 'react';
-import { Modal } from '../../components/Modal';
-import { Button } from '../../components/Button';
-import { Input } from '../../components/Input';
+import { Modal, Button, Input } from '@ui';
+import {
+    Block,
+    Flex,
+    Heading,
+    Text,
+    Grid
+} from '@shared';
 
 const Security = () => {
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -110,27 +115,28 @@ const Security = () => {
     };
 
     return (
-        <motion.div
+        <Block
+            as={motion.div}
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             className="space-y-12"
         >
             {/* Change Password Section */}
             <section>
-                <div className="flex items-center justify-between mb-8">
-                    <div>
-                        <h2 className="text-2xl font-bold text-gray-900">Change Password</h2>
-                        <p className="text-gray-500 mt-1">Update your password to keep your account secure.</p>
-                    </div>
-                    <div className="bg-primary/10 p-3 rounded-2xl">
+                <Flex align="center" justify="between" className="mb-8">
+                    <Block>
+                        <Heading as="h2" weight="bold" color="text-gray-900">Change Password</Heading>
+                        <Text color="text-gray-500" className="mt-1">Update your password to keep your account secure.</Text>
+                    </Block>
+                    <Block className="bg-primary/10 p-3 rounded-2xl">
                         <Lock className="h-6 w-6 text-primary" />
-                    </div>
-                </div>
+                    </Block>
+                </Flex>
 
-                <form onSubmit={handleUpdatePassword} className="bg-white rounded-[2.5rem] p-8 border border-gray-100 shadow-sm space-y-8">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <div className="space-y-6">
-                            <div className="relative">
+                <Block as="form" onSubmit={handleUpdatePassword} className="bg-white rounded-[2.5rem] p-8 border border-gray-100 shadow-sm space-y-8">
+                    <Grid cols={1} gap={8} className="md:grid-cols-2">
+                        <Block className="space-y-6">
+                            <Block className="relative">
                                 <Input
                                     label="Current Password"
                                     type={showPasswords.current ? 'text' : 'password'}
@@ -146,9 +152,9 @@ const Security = () => {
                                 >
                                     {showPasswords.current ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                                 </button>
-                            </div>
+                            </Block>
 
-                            <div className="relative">
+                            <Block className="relative">
                                 <Input
                                     label="New Password"
                                     type={showPasswords.new ? 'text' : 'password'}
@@ -166,27 +172,29 @@ const Security = () => {
                                 </button>
 
                                 {passwordData.new && (
-                                    <motion.div
+                                    <Block
+                                        as={motion.div}
                                         initial={{ opacity: 0, y: 5 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         className="mt-3 space-y-2"
                                     >
-                                        <div className="flex justify-between items-center px-1">
-                                            <span className="text-xs font-bold text-gray-500">Strength: {strengthLabel()}</span>
-                                            <span className="text-xs font-bold text-gray-500">{passwordStrength}%</span>
-                                        </div>
-                                        <div className="h-1.5 w-full bg-gray-100 rounded-full overflow-hidden">
-                                            <motion.div
+                                        <Flex justify="between" align="center" className="px-1">
+                                            <Text size="xs" weight="bold" color="text-gray-500">Strength: {strengthLabel()}</Text>
+                                            <Text size="xs" weight="bold" color="text-gray-500">{passwordStrength}%</Text>
+                                        </Flex>
+                                        <Block className="h-1.5 w-full bg-gray-100 rounded-full overflow-hidden">
+                                            <Block
+                                                as={motion.div}
                                                 initial={{ width: 0 }}
                                                 animate={{ width: `${passwordStrength}%` }}
                                                 className={`h-full ${strengthColor()} transition-all duration-500`}
                                             />
-                                        </div>
-                                    </motion.div>
+                                        </Block>
+                                    </Block>
                                 )}
-                            </div>
+                            </Block>
 
-                            <div className="relative">
+                            <Block className="relative">
                                 <Input
                                     label="Confirm New Password"
                                     type={showPasswords.confirm ? 'text' : 'password'}
@@ -204,27 +212,28 @@ const Security = () => {
                                 </button>
 
                                 {passwordData.confirm && (
-                                    <motion.div
+                                    <Block
+                                        as={motion.div}
                                         initial={{ opacity: 0 }}
                                         animate={{ opacity: 1 }}
                                         className="mt-2 flex items-center px-1"
                                     >
                                         {passwordData.new === passwordData.confirm ? (
-                                            <span className="text-xs font-bold text-green-600 flex items-center">
+                                            <Text size="xs" weight="bold" className="text-green-600 flex items-center">
                                                 <Check className="h-3 w-3 mr-1" /> Passwords match
-                                            </span>
+                                            </Text>
                                         ) : (
-                                            <span className="text-xs font-bold text-red-500 flex items-center">
+                                            <Text size="xs" weight="bold" className="text-red-500 flex items-center">
                                                 <CloseIcon className="h-3 w-3 mr-1" /> Passwords do not match
-                                            </span>
+                                            </Text>
                                         )}
-                                    </motion.div>
+                                    </Block>
                                 )}
-                            </div>
-                        </div>
+                            </Block>
+                        </Block>
 
-                        <div className="bg-primary/5 rounded-3xl p-8 flex flex-col justify-center">
-                            <h4 className="font-bold text-gray-900 mb-4">Password Requirements:</h4>
+                        <Block className="bg-primary/5 rounded-3xl p-8 flex flex-col justify-center">
+                            <Heading as="h4" size="md" weight="bold" color="text-gray-900" className="mb-4">Password Requirements:</Heading>
                             <ul className="space-y-3">
                                 {[
                                     { label: 'At least 8 characters long', met: passwordData.new.length >= 8 },
@@ -233,19 +242,20 @@ const Security = () => {
                                     { label: 'Include at least one special character', met: /[^A-Za-z0-9]/.test(passwordData.new) },
                                 ].map((req, i) => (
                                     <li key={i} className={`flex items-center text-sm ${req.met ? 'text-green-600 font-bold' : 'text-gray-500'}`}>
-                                        <div className={`p-1 rounded-full mr-3 ${req.met ? 'bg-green-100' : 'bg-gray-200'}`}>
-                                            {req.met ? <Check className="h-3 w-3" /> : <div className="h-3 w-3" />}
-                                        </div>
+                                        <Block className={`p-1 rounded-full mr-3 ${req.met ? 'bg-green-100' : 'bg-gray-200'}`}>
+                                            {req.met ? <Check className="h-3 w-3" /> : <Block className="h-3 w-3" />}
+                                        </Block>
                                         {req.label}
                                     </li>
                                 ))}
                             </ul>
-                        </div>
-                    </div>
+                        </Block>
+                    </Grid>
 
                     <AnimatePresence>
                         {passwordFeedback && (
-                            <motion.div
+                            <Block
+                                as={motion.div}
                                 initial={{ opacity: 0, y: -10 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: -10 }}
@@ -253,11 +263,11 @@ const Security = () => {
                                     }`}
                             >
                                 {passwordFeedback.message}
-                            </motion.div>
+                            </Block>
                         )}
                     </AnimatePresence>
 
-                    <div className="flex justify-end pt-4 border-t border-gray-50">
+                    <Flex justify="end" className="pt-4 border-t border-gray-50">
                         <Button
                             type="submit"
                             disabled={isUpdatingPassword || passwordStrength < 100 || passwordData.new !== passwordData.confirm}
@@ -265,95 +275,95 @@ const Security = () => {
                         >
                             {isUpdatingPassword ? 'Updating...' : 'Update Password'}
                         </Button>
-                    </div>
-                </form>
+                    </Flex>
+                </Block>
             </section>
 
             {/* 2FA Section */}
             <section className="pt-12 border-t border-gray-100">
-                <div className="flex items-center justify-between mb-8">
-                    <div>
-                        <h2 className="text-2xl font-bold text-gray-900">Two-Factor Authentication</h2>
-                        <p className="text-gray-500 mt-1">Add an extra layer of security to your account.</p>
-                    </div>
-                    <div className="bg-green-50 p-3 rounded-2xl">
+                <Flex align="center" justify="between" className="mb-8">
+                    <Block>
+                        <Heading as="h2" weight="bold" color="text-gray-900">Two-Factor Authentication</Heading>
+                        <Text color="text-gray-500" className="mt-1">Add an extra layer of security to your account.</Text>
+                    </Block>
+                    <Block className="bg-green-50 p-3 rounded-2xl">
                         <ShieldCheck className="h-6 w-6 text-green-600" />
-                    </div>
-                </div>
+                    </Block>
+                </Flex>
 
-                <div className="space-y-4">
+                <Block className="space-y-4">
                     {methods.map((m) => (
-                        <div key={m.id} className="flex items-center justify-between p-6 rounded-3xl border border-gray-100 bg-gray-50/50 hover:bg-gray-50 transition-all group">
-                            <div className="flex items-center">
-                                <div className="bg-white p-3 rounded-2xl shadow-sm mr-5 group-hover:scale-110 transition-transform">
+                        <Flex key={m.id} align="center" justify="between" className="p-6 rounded-3xl border border-gray-100 bg-gray-50/50 hover:bg-gray-50 transition-all group">
+                            <Flex align="center">
+                                <Block className="bg-white p-3 rounded-2xl shadow-sm mr-5 group-hover:scale-110 transition-transform">
                                     <m.icon className="h-6 w-6 text-primary" />
-                                </div>
-                                <div>
-                                    <p className="text-sm font-bold text-gray-900">{m.name}</p>
-                                    <p className="text-xs text-gray-500 mt-0.5">{m.description}</p>
-                                </div>
-                            </div>
-                            <div className="flex items-center space-x-6">
-                                <span className={`text-xs font-bold px-3 py-1 rounded-full ${m.enabled ? 'bg-green-100 text-green-700' : 'bg-gray-200 text-gray-600'
+                                </Block>
+                                <Block>
+                                    <Text size="sm" weight="bold" color="text-gray-900">{m.name}</Text>
+                                    <Text size="xs" color="text-gray-500" className="mt-0.5">{m.description}</Text>
+                                </Block>
+                            </Flex>
+                            <Flex align="center" gap={6}>
+                                <Block as="span" className={`text-xs font-bold px-3 py-1 rounded-full ${m.enabled ? 'bg-green-100 text-green-700' : 'bg-gray-200 text-gray-600'
                                     }`}>
                                     {m.enabled ? 'Enabled' : 'Disabled'}
-                                </span>
+                                </Block>
                                 <Link
                                     to={`/settings/security/setup-2fa?method=${m.id}`}
                                     className="p-2 bg-white rounded-xl shadow-sm text-gray-400 hover:text-primary hover:shadow-md transition-all"
                                 >
                                     <ChevronRight className="h-5 w-5" />
                                 </Link>
-                            </div>
-                        </div>
+                            </Flex>
+                        </Flex>
                     ))}
-                </div>
+                </Block>
 
                 {/* Recovery Codes Section */}
-                <div className="mt-8 bg-gray-50/50 rounded-[2.5rem] p-8 border border-gray-100">
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-                        <div className="flex items-center">
-                            <div className="bg-primary/10 p-3 rounded-2xl mr-5">
+                <Block className="mt-8 bg-gray-50/50 rounded-[2.5rem] p-8 border border-gray-100">
+                    <Flex direction="col" justify="between" gap={6} className="sm:flex-row sm:items-center">
+                        <Flex align="center">
+                            <Block className="bg-primary/10 p-3 rounded-2xl mr-5">
                                 <RefreshCw className="h-6 w-6 text-primary" />
-                            </div>
-                            <div>
-                                <p className="font-bold text-gray-900">Recovery Codes</p>
-                                <p className="text-sm text-gray-500 mt-1">Recovery codes can be used to access your account if you lose your 2FA device.</p>
-                            </div>
-                        </div>
-                        <div className="flex items-center space-x-4">
+                            </Block>
+                            <Block>
+                                <Text weight="bold" color="text-gray-900">Recovery Codes</Text>
+                                <Text size="sm" color="text-gray-500" className="mt-1">Recovery codes can be used to access your account if you lose your 2FA device.</Text>
+                            </Block>
+                        </Flex>
+                        <Flex align="center" gap={4}>
                             <button
                                 onClick={() => setIsRegenerateModalOpen(true)}
                                 className="px-8 py-4 bg-white border border-gray-200 text-gray-700 font-bold rounded-2xl hover:bg-gray-50 transition-all"
                             >
                                 Regenerate New Codes
                             </button>
-                        </div>
-                    </div>
-                </div>
+                        </Flex>
+                    </Flex>
+                </Block>
             </section>
 
             {/* Danger Zone */}
             <section className="pt-12 border-t border-gray-100">
-                <div className="mb-8">
-                    <h2 className="text-2xl font-bold text-red-600">Danger Zone</h2>
-                    <p className="text-gray-500 mt-1">Irreversible actions for your account.</p>
-                </div>
+                <Block className="mb-8">
+                    <Heading as="h2" weight="bold" className="text-red-600">Danger Zone</Heading>
+                    <Text color="text-gray-500" className="mt-1">Irreversible actions for your account.</Text>
+                </Block>
 
-                <div className="bg-red-50/50 rounded-3xl p-8 border border-red-100">
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-                        <div>
-                            <p className="font-bold text-gray-900">Delete Account</p>
-                            <p className="text-sm text-gray-600 mt-1">Once you delete your account, there is no going back. Please be certain.</p>
-                        </div>
+                <Block className="bg-red-50/50 rounded-3xl p-8 border border-red-100">
+                    <Flex direction="col" justify="between" gap={6} className="sm:flex-row sm:items-center">
+                        <Block>
+                            <Text weight="bold" color="text-gray-900">Delete Account</Text>
+                            <Text size="sm" color="text-gray-600" className="mt-1">Once you delete your account, there is no going back. Please be certain.</Text>
+                        </Block>
                         <button
                             onClick={() => setIsDeleteModalOpen(true)}
                             className="flex items-center justify-center px-8 py-4 bg-white border-2 border-red-100 text-red-600 font-bold rounded-2xl hover:bg-red-600 hover:text-white hover:border-red-600 transition-all active:scale-95"
                         >
                             <Trash2 className="h-5 w-5 mr-2" /> Delete Account
                         </button>
-                    </div>
-                </div>
+                    </Flex>
+                </Block>
             </section>
 
             {/* New Recovery Codes Modal (Shown after regeneration) */}
@@ -362,22 +372,22 @@ const Security = () => {
                 onClose={() => setIsNewCodesModalOpen(false)}
                 title="Your New Recovery Codes"
             >
-                <div className="space-y-8">
-                    <div className="bg-green-50 p-4 rounded-2xl flex items-center space-x-3">
+                <Block className="space-y-8">
+                    <Block className="bg-green-50 p-4 rounded-2xl flex items-center space-x-3">
                         <Check className="h-5 w-5 text-green-600" />
-                        <p className="text-sm text-green-700 font-medium">Codes regenerated successfully!</p>
-                    </div>
-                    <p className="text-gray-500 text-sm">
+                        <Text size="sm" weight="medium" className="text-green-700">Codes regenerated successfully!</Text>
+                    </Block>
+                    <Text color="text-gray-500" size="sm">
                         Save these codes in a safe place. Each code can only be used once.
-                    </p>
-                    <div className="grid grid-cols-2 gap-4">
+                    </Text>
+                    <Grid cols={2} gap={4}>
                         {recoveryCodes.map((code, i) => (
-                            <div key={i} className="bg-gray-50 px-4 py-3 rounded-xl text-center font-mono font-bold text-gray-700 border border-gray-100">
+                            <Block key={i} className="bg-gray-50 px-4 py-3 rounded-xl text-center font-mono font-bold text-gray-700 border border-gray-100">
                                 {code}
-                            </div>
+                            </Block>
                         ))}
-                    </div>
-                    <div className="flex gap-4">
+                    </Grid>
+                    <Flex gap={4}>
                         <button
                             onClick={copyToClipboard}
                             className="flex-grow flex items-center justify-center px-6 py-4 bg-white rounded-2xl font-bold text-gray-700 hover:bg-gray-100 transition-all border border-gray-200"
@@ -392,11 +402,11 @@ const Security = () => {
                             <Download className="h-5 w-5 mr-2" />
                             Download
                         </button>
-                    </div>
+                    </Flex>
                     <Button onClick={() => setIsNewCodesModalOpen(false)} className="w-full py-4 rounded-2xl">
                         I have saved these codes
                     </Button>
-                </div>
+                </Block>
             </Modal>
 
             {/* Regenerate Codes Modal */}
@@ -405,19 +415,19 @@ const Security = () => {
                 onClose={() => setIsRegenerateModalOpen(false)}
                 title="Regenerate Recovery Codes?"
             >
-                <div className="space-y-6">
-                    <div className="bg-orange-50 p-6 rounded-3xl flex items-start space-x-4">
-                        <div className="bg-orange-100 p-2 rounded-xl flex-shrink-0">
+                <Block className="space-y-6">
+                    <Flex align="start" gap={4} className="bg-orange-50 p-6 rounded-3xl">
+                        <Block className="bg-orange-100 p-2 rounded-xl flex-shrink-0">
                             <AlertTriangle className="h-6 w-6 text-orange-600" />
-                        </div>
-                        <div>
-                            <p className="font-bold text-orange-900">Warning: Old codes will be invalidated</p>
-                            <p className="text-sm text-orange-700 mt-1 leading-relaxed">
+                        </Block>
+                        <Block>
+                            <Text weight="bold" className="text-orange-900">Warning: Old codes will be invalidated</Text>
+                            <Text size="sm" className="text-orange-700 mt-1 leading-relaxed">
                                 When you regenerate recovery codes, your existing codes will no longer work. Make sure to save the new codes immediately.
-                            </p>
-                        </div>
-                    </div>
-                    <div className="flex flex-col sm:flex-row gap-4 pt-4">
+                            </Text>
+                        </Block>
+                    </Flex>
+                    <Flex direction="col" gap={4} className="sm:flex-row pt-4">
                         <Button
                             variant="outline"
                             onClick={() => setIsRegenerateModalOpen(false)}
@@ -431,8 +441,8 @@ const Security = () => {
                         >
                             Regenerate Codes
                         </Button>
-                    </div>
-                </div>
+                    </Flex>
+                </Block>
             </Modal>
 
             {/* Delete Account Modal */}
@@ -441,24 +451,24 @@ const Security = () => {
                 onClose={() => setIsDeleteModalOpen(false)}
                 title="Delete Account"
             >
-                <div className="space-y-6">
-                    <div className="bg-red-50 p-6 rounded-3xl flex items-start space-x-4">
-                        <div className="bg-red-100 p-2 rounded-xl flex-shrink-0">
+                <Block className="space-y-6">
+                    <Flex align="start" gap={4} className="bg-red-50 p-6 rounded-3xl">
+                        <Block className="bg-red-100 p-2 rounded-xl flex-shrink-0">
                             <AlertTriangle className="h-6 w-6 text-red-600" />
-                        </div>
-                        <div>
-                            <p className="font-bold text-red-900">Warning: This action is permanent</p>
-                            <p className="text-sm text-red-700 mt-1 leading-relaxed">
+                        </Block>
+                        <Block>
+                            <Text weight="bold" className="text-red-900">Warning: This action is permanent</Text>
+                            <Text size="sm" className="text-red-700 mt-1 leading-relaxed">
                                 Deleting your account will permanently remove all your data, including transaction history, budgets, and settings. This cannot be undone.
-                            </p>
-                        </div>
-                    </div>
+                            </Text>
+                        </Block>
+                    </Flex>
 
-                    <p className="text-gray-600 text-sm px-2">
-                        Are you absolutely sure you want to delete your account? Please type <span className="font-bold text-gray-900">DELETE</span> to confirm.
-                    </p>
+                    <Text size="sm" color="text-gray-600" className="px-2">
+                        Are you absolutely sure you want to delete your account? Please type <Text as="span" weight="bold" color="text-gray-900">DELETE</Text> to confirm.
+                    </Text>
 
-                    <div className="flex flex-col sm:flex-row gap-4 pt-4">
+                    <Flex direction="col" gap={4} className="sm:flex-row pt-4">
                         <Button
                             variant="outline"
                             onClick={() => setIsDeleteModalOpen(false)}
@@ -472,10 +482,10 @@ const Security = () => {
                         >
                             Confirm Delete
                         </Button>
-                    </div>
-                </div>
+                    </Flex>
+                </Block>
             </Modal>
-        </motion.div>
+        </Block>
     );
 };
 

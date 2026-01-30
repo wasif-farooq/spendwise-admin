@@ -1,8 +1,8 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { MainLayout } from './components/MainLayout';
-import { AuthLayout } from './components/AuthLayout';
-import { DashboardLayout } from './components/DashboardLayout';
-import LandingPage from './pages/LandingPage';
+import { MainLayout } from './components/shared/layout/MainLayout';
+import { AuthLayout } from './components/shared/layout/AuthLayout';
+import { DashboardLayout } from './components/shared/layout/DashboardLayout';
+import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
@@ -37,7 +37,7 @@ function App() {
         <Routes>
           {/* Main Layout Routes (Public) */}
           <Route element={<MainLayout />}>
-            <Route path="/" element={<LandingPage />} />
+            <Route path="/" element={<HomePage />} />
           </Route>
 
           {/* Dashboard Layout Routes (Authenticated) */}

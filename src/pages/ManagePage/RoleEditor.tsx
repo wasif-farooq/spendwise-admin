@@ -1,9 +1,16 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { Shield, ShieldCheck, Check, X, Lock, Eye, PlusSquare, Pencil, Trash, ChevronLeft, Info, AlertCircle, Save } from 'lucide-react';
+import { Shield, ShieldCheck, Check, X, Lock, Eye, PlusSquare, ChevronLeft, Info, AlertCircle, Save } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Button } from '../../components/Button';
-import { Input } from '../../components/Input';
+import { Button, Input } from '@ui';
+import {
+    Block,
+    Flex,
+    Heading,
+    Text,
+    Grid,
+    Inline
+} from '@shared';
 
 const RoleEditor = () => {
     const navigate = useNavigate();
@@ -119,27 +126,28 @@ const RoleEditor = () => {
     };
 
     return (
-        <motion.div
+        <Block
+            as={motion.div}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="max-w-6xl mx-auto space-y-12 pb-20"
         >
-            <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-                <div className="flex items-center space-x-4">
+            <Flex as="header" direction="col" justify="between" gap={6} className="sm:flex-row sm:items-center">
+                <Flex align="center" gap={4}>
                     <button
                         onClick={() => navigate('/manage/roles')}
                         className="p-3 rounded-2xl bg-gray-100 text-gray-500 hover:bg-gray-200 transition-all"
                     >
                         <ChevronLeft className="h-6 w-6" />
                     </button>
-                    <div>
-                        <h2 className="text-3xl font-black text-gray-900 tracking-tight">
+                    <Block>
+                        <Heading as="h2" weight="black" className="text-3xl tracking-tight text-gray-900">
                             {isEditing ? 'Edit Role' : 'Create Custom Role'}
-                        </h2>
-                        <p className="text-gray-500 mt-1 font-medium">Define precise access levels and understand their impact.</p>
-                    </div>
-                </div>
-                <div className="flex items-center space-x-4">
+                        </Heading>
+                        <Text color="text-gray-500" weight="medium" className="mt-1">Define precise access levels and understand their impact.</Text>
+                    </Block>
+                </Flex>
+                <Flex align="center" gap={4}>
                     <Button
                         variant="outline"
                         onClick={() => navigate('/manage/roles')}
@@ -153,157 +161,160 @@ const RoleEditor = () => {
                         className="px-8 py-4 rounded-2xl shadow-xl shadow-primary/20 flex items-center"
                     >
                         {isProcessing ? (
-                            <span className="flex items-center">
+                            <Flex align="center">
                                 <div className="h-4 w-4 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2" />
                                 Saving...
-                            </span>
+                            </Flex>
                         ) : (
-                            <>
+                            <Flex align="center">
                                 <Save className="h-5 w-5 mr-2" />
                                 {isEditing ? 'Save Changes' : 'Create Role'}
-                            </>
+                            </Flex>
                         )}
                     </Button>
-                </div>
-            </header>
+                </Flex>
+            </Flex>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+            <Grid cols={1} gap={12} className="lg:grid-cols-3">
                 {/* Left Column: Role Info */}
-                <div className="lg:col-span-1 space-y-8">
-                    <div className="bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-xl shadow-gray-200/50 space-y-6">
-                        <div className="flex items-center space-x-3 mb-2">
-                            <div className="bg-primary/10 p-2 rounded-xl">
+                <Block className="lg:col-span-1 space-y-8">
+                    <Block className="bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-xl shadow-gray-200/50 space-y-6">
+                        <Flex align="center" gap={3} className="mb-2">
+                            <Block className="bg-primary/10 p-2 rounded-xl">
                                 <Info className="h-5 w-5 text-primary" />
-                            </div>
-                            <h3 className="text-xl font-black text-gray-900">Role Details</h3>
-                        </div>
+                            </Block>
+                            <Heading as="h3" weight="black" className="text-xl text-gray-900">Role Details</Heading>
+                        </Flex>
 
                         <Input
                             label="Role Name"
                             placeholder="e.g. Project Manager"
                             value={roleName}
-                            onChange={(e) => setRoleName(e.target.value)}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setRoleName(e.target.value)}
                             className="bg-gray-50 border-none h-14 rounded-2xl focus:ring-2 focus:ring-primary font-bold"
                             required
                         />
 
-                        <div className="space-y-2">
-                            <label className="text-sm font-black text-gray-900 uppercase tracking-widest px-1">Description</label>
+                        <Block className="space-y-2">
+                            <Text as="label" size="sm" weight="black" className="uppercase tracking-widest px-1 text-gray-900">Description</Text>
                             <textarea
                                 placeholder="Describe the purpose of this role..."
                                 value={roleDescription}
                                 onChange={(e) => setRoleDescription(e.target.value)}
                                 className="w-full bg-gray-50 border-none rounded-2xl p-4 focus:ring-2 focus:ring-primary font-medium min-h-[120px] resize-none"
                             />
-                        </div>
+                        </Block>
 
-                        <div className="bg-amber-50 p-6 rounded-3xl border border-amber-100 flex items-start space-x-4">
-                            <div className="bg-amber-100 p-2 rounded-xl">
+                        <Flex align="start" gap={4} className="bg-amber-50 p-6 rounded-3xl border border-amber-100">
+                            <Block className="bg-amber-100 p-2 rounded-xl">
                                 <AlertCircle className="h-5 w-5 text-amber-600" />
-                            </div>
-                            <div>
-                                <p className="text-xs font-black text-amber-900 uppercase tracking-widest">Security Note</p>
-                                <p className="text-[11px] text-amber-700 font-bold mt-1 leading-relaxed">
+                            </Block>
+                            <Block>
+                                <Text size="xs" weight="black" className="uppercase tracking-widest text-amber-900">Security Note</Text>
+                                <Text size="xs" weight="bold" color="text-amber-700" className="mt-1 leading-relaxed">
                                     Permissions are additive. Users with multiple roles will have the combined permissions of all assigned roles.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                                </Text>
+                            </Block>
+                        </Flex>
+                    </Block>
+                </Block>
 
                 {/* Right Column: Permission List */}
-                <div className="lg:col-span-2 space-y-8">
-                    <div className="flex items-center justify-between px-2">
-                        <h3 className="text-xl font-black text-gray-900 tracking-tight">Permissions & Effects</h3>
-                        <span className="text-xs font-black text-gray-400 uppercase tracking-widest">
+                <Block className="lg:col-span-2 space-y-8">
+                    <Flex align="center" justify="between" className="px-2">
+                        <Heading as="h3" weight="black" className="text-xl text-gray-900 tracking-tight">Permissions & Effects</Heading>
+                        <Text size="xs" weight="black" color="text-gray-400" className="uppercase tracking-widest">
                             {Object.values(selectedPermissions).flat().length} Active Permissions
-                        </span>
-                    </div>
+                        </Text>
+                    </Flex>
 
-                    <div className="space-y-6">
+                    <Block className="space-y-6">
                         {resources.map((resource) => (
-                            <motion.div
+                            <Block
                                 key={resource.id}
                                 className="bg-white rounded-[2.5rem] border border-gray-100 shadow-lg shadow-gray-200/30 overflow-hidden"
                             >
-                                <div className="p-8 bg-gray-50/50 border-b border-gray-100 flex items-center justify-between">
-                                    <div className="flex items-center space-x-4">
-                                        <div className="p-3 rounded-2xl bg-white shadow-sm text-primary">
+                                <Block className="p-8 bg-gray-50/50 border-b border-gray-100">
+                                    <Flex align="center" gap={4}>
+                                        <Block className="p-3 rounded-2xl bg-white shadow-sm text-primary">
                                             <resource.icon className="h-6 w-6" />
-                                        </div>
-                                        <div>
-                                            <h4 className="text-lg font-black text-gray-900">{resource.name}</h4>
-                                            <p className="text-xs text-gray-500 font-medium">{resource.description}</p>
-                                        </div>
-                                    </div>
-                                </div>
+                                        </Block>
+                                        <Block>
+                                            <Heading as="h4" weight="black" className="text-lg text-gray-900">{resource.name}</Heading>
+                                            <Text size="xs" color="text-gray-500" weight="medium">{resource.description}</Text>
+                                        </Block>
+                                    </Flex>
+                                </Block>
 
-                                <div className="divide-y divide-gray-50">
+                                <Block className="divide-y divide-gray-50">
                                     {resource.permissions.map((perm) => {
                                         const isSelected = selectedPermissions[resource.id]?.includes(perm.id);
                                         return (
-                                            <div
+                                            <Block
                                                 key={perm.id}
                                                 onClick={() => togglePermission(resource.id, perm.id)}
-                                                className={`p-8 flex items-start justify-between cursor-pointer transition-all hover:bg-gray-50/80 group ${isSelected ? 'bg-primary/5' : ''
+                                                className={`p-8 cursor-pointer transition-all hover:bg-gray-50/80 group ${isSelected ? 'bg-primary/5' : ''
                                                     }`}
                                             >
-                                                <div className="flex-grow max-w-2xl">
-                                                    <div className="flex items-center space-x-3 mb-1">
-                                                        <span className={`font-black text-sm transition-colors ${isSelected ? 'text-primary' : 'text-gray-900'}`}>
-                                                            {perm.name}
-                                                        </span>
-                                                        {isSelected && (
-                                                            <span className="px-2 py-0.5 bg-primary text-white text-[9px] font-black uppercase tracking-widest rounded-md">
-                                                                Active
-                                                            </span>
-                                                        )}
-                                                    </div>
-                                                    <p className="text-sm text-gray-500 font-medium leading-relaxed">
-                                                        {perm.description}
-                                                    </p>
-                                                    <div className="mt-3 flex items-center space-x-2">
-                                                        <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Effect:</span>
-                                                        <span className={`text-[11px] font-bold ${isSelected ? 'text-primary' : 'text-gray-600'}`}>
-                                                            {perm.effect}
-                                                        </span>
-                                                    </div>
-                                                </div>
+                                                <Flex justify="between" align="start">
+                                                    <Block className="flex-grow max-w-2xl">
+                                                        <Flex align="center" gap={3} className="mb-1">
+                                                            <Text weight="black" className={`text-sm transition-colors ${isSelected ? 'text-primary' : 'text-gray-900'}`}>
+                                                                {perm.name}
+                                                            </Text>
+                                                            {isSelected && (
+                                                                <Inline className="px-2 py-0.5 bg-primary text-white text-[9px] font-black uppercase tracking-widest rounded-md">
+                                                                    Active
+                                                                </Inline>
+                                                            )}
+                                                        </Flex>
+                                                        <Text size="sm" color="text-gray-500" weight="medium" className="leading-relaxed">
+                                                            {perm.description}
+                                                        </Text>
+                                                        <Flex align="center" gap={2} className="mt-3">
+                                                            <Text size="xs" weight="black" color="text-gray-400" className="uppercase tracking-widest">Effect:</Text>
+                                                            <Text size="xs" weight="bold" className={`${isSelected ? 'text-primary' : 'text-gray-600'}`}>
+                                                                {perm.effect}
+                                                            </Text>
+                                                        </Flex>
+                                                    </Block>
 
-                                                <div className={`w-14 h-8 rounded-full transition-all relative flex items-center px-1 ${isSelected ? 'bg-primary shadow-lg shadow-primary/20' : 'bg-gray-200'
-                                                    }`}>
-                                                    <motion.div
-                                                        animate={{ x: isSelected ? 24 : 0 }}
-                                                        className="w-6 h-6 bg-white rounded-full shadow-sm"
-                                                    />
-                                                </div>
-                                            </div>
+                                                    <Block className={`w-14 h-8 rounded-full transition-all relative flex items-center px-1 ${isSelected ? 'bg-primary shadow-lg shadow-primary/20' : 'bg-gray-200'
+                                                        }`}>
+                                                        <motion.div
+                                                            animate={{ x: isSelected ? 24 : 0 }}
+                                                            className="w-6 h-6 bg-white rounded-full shadow-sm"
+                                                        />
+                                                    </Block>
+                                                </Flex>
+                                            </Block>
                                         );
                                     })}
-                                </div>
-                            </motion.div>
+                                </Block>
+                            </Block>
                         ))}
-                    </div>
-                </div>
-            </div>
+                    </Block>
+                </Block>
+            </Grid>
 
             <AnimatePresence>
                 {feedback && (
-                    <motion.div
+                    <Block
+                        as={motion.div}
                         initial={{ opacity: 0, scale: 0.9, y: 20 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.9, y: 20 }}
                         className="fixed bottom-12 left-1/2 -translate-x-1/2 z-50"
                     >
-                        <div className={`px-8 py-4 rounded-3xl shadow-2xl flex items-center space-x-3 font-black text-white ${feedback.type === 'success' ? 'bg-emerald-500 shadow-emerald-200' : 'bg-rose-500 shadow-rose-200'
+                        <Flex align="center" gap={3} className={`px-8 py-4 rounded-3xl shadow-2xl font-black text-white ${feedback.type === 'success' ? 'bg-emerald-500 shadow-emerald-200' : 'bg-rose-500 shadow-rose-200'
                             }`}>
                             {feedback.type === 'success' ? <Check className="h-5 w-5" /> : <X className="h-5 w-5" />}
-                            <span>{feedback.message}</span>
-                        </div>
-                    </motion.div>
+                            <Text as="span">{feedback.message}</Text>
+                        </Flex>
+                    </Block>
                 )}
             </AnimatePresence>
-        </motion.div>
+        </Block>
     );
 };
 

@@ -1,9 +1,14 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { LayoutDashboard, Save, Building2, Info, Upload, Camera, User, ShieldCheck, Sparkles, AlertTriangle } from 'lucide-react';
 import { useState, useRef } from 'react';
-import { Input } from '../../components/Input';
-import { Button } from '../../components/Button';
-import { Modal } from '../../components/Modal';
+import { Input, Button, Modal } from '@ui';
+import {
+    Block,
+    Flex,
+    Heading,
+    Text,
+    Grid
+} from '@shared';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { setAccountType } from '../../store/uiSlice';
@@ -74,44 +79,48 @@ const ManageGeneral = () => {
     };
 
     return (
-        <motion.div
+        <Block
+            as={motion.div}
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             className="space-y-12"
         >
-            <header className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-                <div>
-                    <h2 className="text-3xl font-black text-gray-900 tracking-tight">General Settings</h2>
-                    <p className="text-gray-500 mt-1 font-medium">Manage your {accountType === 'personal' ? 'personal account' : "organization's"} core identity and settings.</p>
-                </div>
-                <div className="flex items-center space-x-4">
+            <Flex as="header" direction="col" justify="between" gap={6} className="md:flex-row md:items-center">
+                <Block>
+                    <Heading as="h2" weight="black" className="text-3xl tracking-tight text-gray-900">General Settings</Heading>
+                    <Text color="text-gray-500" weight="medium" className="mt-1">
+                        Manage your {accountType === 'personal' ? 'personal account' : "organization's"} core identity and settings.
+                    </Text>
+                </Block>
+                <Flex align="center" gap={4}>
                     <AnimatePresence>
                         {orgIcon && (
-                            <motion.div
+                            <Block
+                                as={motion.div}
                                 initial={{ opacity: 0, scale: 0.8 }}
                                 animate={{ opacity: 1, scale: 1 }}
                                 exit={{ opacity: 0, scale: 0.8 }}
                                 className="h-14 w-14 rounded-2xl overflow-hidden border-2 border-primary/20 shadow-lg shadow-primary/5"
                             >
                                 <img src={orgIcon} alt="Org Icon" className="w-full h-full object-cover" />
-                            </motion.div>
+                            </Block>
                         )}
                     </AnimatePresence>
-                    <div className="bg-primary/10 p-4 rounded-[2rem] hidden sm:block">
+                    <Block className="bg-primary/10 p-4 rounded-[2rem] hidden sm:block">
                         {accountType === 'personal' ? <User className="h-8 w-8 text-primary" /> : <Building2 className="h-8 w-8 text-primary" />}
-                    </div>
-                </div>
-            </header>
+                    </Block>
+                </Flex>
+            </Flex>
 
             {/* Account Type Selection */}
-            <section className="space-y-6">
-                <div className="flex items-center space-x-3">
-                    <div className="bg-primary/10 p-2 rounded-xl">
+            <Block as="section" className="space-y-6">
+                <Flex align="center" gap={3}>
+                    <Block className="bg-primary/10 p-2 rounded-xl">
                         <Sparkles className="h-4 w-4 text-primary" />
-                    </div>
-                    <h3 className="font-black text-gray-900 uppercase tracking-widest text-xs">Select Account Type</h3>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    </Block>
+                    <Heading as="h3" weight="black" className="uppercase tracking-widest text-xs text-gray-900">Select Account Type</Heading>
+                </Flex>
+                <Grid cols={1} gap={6} className="sm:grid-cols-2">
                     <button
                         onClick={() => handleTypeChange('personal')}
                         className={`relative p-8 rounded-[3rem] border-4 transition-all text-left group ${accountType === 'personal'
@@ -119,16 +128,16 @@ const ManageGeneral = () => {
                             : 'border-gray-100 bg-white hover:border-gray-200'
                             }`}
                     >
-                        <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 transition-transform group-hover:scale-110 ${accountType === 'personal' ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'bg-gray-100 text-gray-400'
+                        <Block className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 transition-transform group-hover:scale-110 ${accountType === 'personal' ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'bg-gray-100 text-gray-400'
                             }`}>
                             <User className="h-7 w-7" />
-                        </div>
-                        <h4 className="text-xl font-black text-gray-900 mb-2">Personal Account</h4>
-                        <p className="text-sm text-gray-500 font-medium leading-relaxed">Best for individuals managing personal finances and small budgets.</p>
+                        </Block>
+                        <Heading as="h4" className="text-xl font-black text-gray-900 mb-2">Personal Account</Heading>
+                        <Text size="sm" color="text-gray-500" weight="medium" className="leading-relaxed">Best for individuals managing personal finances and small budgets.</Text>
                         {accountType === 'personal' && (
-                            <div className="absolute top-6 right-6 bg-primary text-white p-1.5 rounded-full shadow-lg">
+                            <Block className="absolute top-6 right-6 bg-primary text-white p-1.5 rounded-full shadow-lg">
                                 <ShieldCheck className="h-4 w-4" />
-                            </div>
+                            </Block>
                         )}
                     </button>
 
@@ -139,46 +148,46 @@ const ManageGeneral = () => {
                             : 'border-gray-100 bg-white hover:border-gray-200'
                             }`}
                     >
-                        <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 transition-transform group-hover:scale-110 ${accountType === 'organization' ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'bg-gray-100 text-gray-400'
+                        <Block className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 transition-transform group-hover:scale-110 ${accountType === 'organization' ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'bg-gray-100 text-gray-400'
                             }`}>
                             <Building2 className="h-7 w-7" />
-                        </div>
-                        <h4 className="text-xl font-black text-gray-900 mb-2">Organization</h4>
-                        <p className="text-sm text-gray-500 font-medium leading-relaxed">Ideal for teams, families, or businesses requiring shared access and roles.</p>
+                        </Block>
+                        <Heading as="h4" className="text-xl font-black text-gray-900 mb-2">Organization</Heading>
+                        <Text size="sm" color="text-gray-500" weight="medium" className="leading-relaxed">Ideal for teams, families, or businesses requiring shared access and roles.</Text>
                         {accountType === 'organization' && (
-                            <div className="absolute top-6 right-6 bg-primary text-white p-1.5 rounded-full shadow-lg">
+                            <Block className="absolute top-6 right-6 bg-primary text-white p-1.5 rounded-full shadow-lg">
                                 <ShieldCheck className="h-4 w-4" />
-                            </div>
+                            </Block>
                         )}
                     </button>
-                </div>
-            </section>
+                </Grid>
+            </Block>
 
-            <div className="grid grid-cols-1 gap-8">
-                <section className="bg-gray-50/50 rounded-[3rem] p-8 sm:p-10 border border-gray-100 relative overflow-hidden group">
-                    <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
+            <Grid cols={1} gap={8}>
+                <Block as="section" className="bg-gray-50/50 rounded-[3rem] p-8 sm:p-10 border border-gray-100 relative overflow-hidden group">
+                    <Block className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
                         <LayoutDashboard className="h-32 w-32 text-primary" />
-                    </div>
+                    </Block>
 
-                    <form onSubmit={handleSave} className="relative z-10 space-y-10">
-                        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+                    <Block as="form" onSubmit={handleSave} className="relative z-10 space-y-10">
+                        <Grid cols={1} gap={12} className="lg:grid-cols-12">
                             {/* Left: Identity Form */}
-                            <div className="lg:col-span-7 space-y-10">
-                                <div className="space-y-8">
-                                    <div className="flex items-center space-x-3">
-                                        <div className="bg-white p-2.5 rounded-2xl shadow-sm border border-gray-100">
+                            <Block className="lg:col-span-7 space-y-10">
+                                <Block className="space-y-8">
+                                    <Flex align="center" gap={3}>
+                                        <Block className="bg-white p-2.5 rounded-2xl shadow-sm border border-gray-100">
                                             <Info className="h-5 w-5 text-primary" />
-                                        </div>
-                                        <div>
-                                            <h3 className="font-black text-gray-900 text-lg">
+                                        </Block>
+                                        <Block>
+                                            <Heading as="h3" weight="black" className="text-lg text-gray-900">
                                                 {accountType === 'personal' ? 'Personal Identity' : 'Organization Identity'}
-                                            </h3>
-                                            <p className="text-sm text-gray-500 font-medium">Define how you appear across the platform.</p>
-                                        </div>
-                                    </div>
+                                            </Heading>
+                                            <Text size="sm" color="text-gray-500" weight="medium">Define how you appear across the platform.</Text>
+                                        </Block>
+                                    </Flex>
 
-                                    <div className="space-y-6">
-                                        <div className="group/input">
+                                    <Block className="space-y-6">
+                                        <Block className="group/input">
                                             <Input
                                                 label={accountType === 'personal' ? 'Account Name' : 'Organization / Family Name'}
                                                 value={orgName}
@@ -187,31 +196,31 @@ const ManageGeneral = () => {
                                                 className="bg-white border-2 border-transparent h-20 rounded-[1.5rem] focus:border-primary focus:ring-0 text-2xl font-black px-8 shadow-sm transition-all group-hover/input:shadow-md"
                                                 required
                                             />
-                                        </div>
+                                        </Block>
 
-                                        <div className="bg-blue-50/50 border border-blue-100/50 p-6 rounded-[2rem] flex items-start space-x-4">
-                                            <div className="bg-blue-100 p-2 rounded-xl mt-0.5">
+                                        <Flex align="start" gap={4} className="bg-blue-50/50 border border-blue-100/50 p-6 rounded-[2rem]">
+                                            <Block className="bg-blue-100 p-2 rounded-xl mt-0.5">
                                                 <Sparkles className="h-4 w-4 text-blue-600" />
-                                            </div>
-                                            <p className="text-sm text-blue-800 leading-relaxed font-medium">
-                                                <strong>Pro Tip:</strong> This name will be visible to all members in your {accountType === 'personal' ? 'account' : 'organization'} and will appear on reports and invoices.
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
+                                            </Block>
+                                            <Text size="sm" weight="medium" className="text-blue-800 leading-relaxed">
+                                                <Text as="strong" weight="bold">Pro Tip:</Text> This name will be visible to all members in your {accountType === 'personal' ? 'account' : 'organization'} and will appear on reports and invoices.
+                                            </Text>
+                                        </Flex>
+                                    </Block>
+                                </Block>
 
-                                <div className="space-y-6">
-                                    <div className="flex items-center space-x-3">
-                                        <div className="bg-white p-2.5 rounded-2xl shadow-sm border border-gray-100">
+                                <Block className="space-y-6">
+                                    <Flex align="center" gap={3}>
+                                        <Block className="bg-white p-2.5 rounded-2xl shadow-sm border border-gray-100">
                                             <Camera className="h-5 w-5 text-primary" />
-                                        </div>
-                                        <h3 className="font-black text-gray-900 text-lg">
+                                        </Block>
+                                        <Heading as="h3" weight="black" className="text-lg text-gray-900">
                                             {accountType === 'personal' ? 'Profile Picture' : 'Organization Logo'}
-                                        </h3>
-                                    </div>
+                                        </Heading>
+                                    </Flex>
 
-                                    <div className="flex flex-col sm:flex-row items-center gap-8">
-                                        <div
+                                    <Flex direction="col" gap={8} className="sm:flex-row sm:items-center">
+                                        <Block
                                             onClick={() => fileInputRef.current?.click()}
                                             className={`relative h-40 w-40 rounded-[2.5rem] border-4 border-dashed transition-all cursor-pointer overflow-hidden flex flex-col items-center justify-center group/upload ${orgIcon
                                                 ? 'border-primary/20 bg-white shadow-xl shadow-primary/5'
@@ -229,28 +238,28 @@ const ManageGeneral = () => {
                                             {orgIcon ? (
                                                 <>
                                                     <img src={orgIcon} alt="Preview" className="w-full h-full object-cover" />
-                                                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/upload:opacity-100 transition-opacity flex items-center justify-center">
-                                                        <div className="bg-white/20 backdrop-blur-md p-3 rounded-2xl border border-white/30">
+                                                    <Block className="absolute inset-0 bg-black/40 opacity-0 group-hover/upload:opacity-100 transition-opacity flex items-center justify-center">
+                                                        <Block className="bg-white/20 backdrop-blur-md p-3 rounded-2xl border border-white/30">
                                                             <Upload className="h-6 w-6 text-white" />
-                                                        </div>
-                                                    </div>
+                                                        </Block>
+                                                    </Block>
                                                 </>
                                             ) : (
-                                                <div className="text-center p-4">
-                                                    <div className="bg-white p-4 rounded-2xl shadow-sm mb-3 inline-block group-hover/upload:scale-110 group-hover/upload:shadow-md transition-all">
+                                                <Block className="text-center p-4">
+                                                    <Block className="bg-white p-4 rounded-2xl shadow-sm mb-3 inline-block group-hover/upload:scale-110 group-hover/upload:shadow-md transition-all">
                                                         <Upload className="h-6 w-6 text-primary" />
-                                                    </div>
-                                                    <p className="text-xs font-black text-gray-900">Upload</p>
-                                                </div>
+                                                    </Block>
+                                                    <Text size="xs" weight="black" className="text-gray-900">Upload</Text>
+                                                </Block>
                                             )}
-                                        </div>
+                                        </Block>
 
-                                        <div className="flex-1 space-y-4 text-center sm:text-left">
-                                            <div className="space-y-1">
-                                                <p className="text-sm font-black text-gray-900">Recommended Dimensions</p>
-                                                <p className="text-xs text-gray-500 font-medium">Square image, at least 512x512px</p>
-                                            </div>
-                                            <div className="flex flex-wrap justify-center sm:justify-start gap-3">
+                                        <Block className="flex-1 space-y-4 text-center sm:text-left">
+                                            <Block className="space-y-1">
+                                                <Text size="sm" weight="black" className="text-gray-900">Recommended Dimensions</Text>
+                                                <Text size="xs" color="text-gray-500" weight="medium">Square image, at least 512x512px</Text>
+                                            </Block>
+                                            <Flex justify="center" gap={3} className="sm:justify-start flex-wrap">
                                                 <Button
                                                     type="button"
                                                     variant="outline"
@@ -269,95 +278,96 @@ const ManageGeneral = () => {
                                                         Remove
                                                     </Button>
                                                 )}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                                            </Flex>
+                                        </Block>
+                                    </Flex>
+                                </Block>
+                            </Block>
 
                             {/* Right: Live Preview */}
-                            <div className="lg:col-span-5">
-                                <div className="sticky top-8 space-y-6">
-                                    <div className="flex items-center justify-between">
-                                        <h3 className="font-black text-gray-400 uppercase tracking-widest text-[10px]">Live Preview</h3>
-                                        <div className="flex space-x-1">
-                                            <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-                                            <div className="w-2 h-2 rounded-full bg-gray-200" />
-                                            <div className="w-2 h-2 rounded-full bg-gray-200" />
-                                        </div>
-                                    </div>
+                            <Block className="lg:col-span-5">
+                                <Block className="sticky top-8 space-y-6">
+                                    <Flex align="center" justify="between">
+                                        <Heading as="h3" weight="black" className="uppercase tracking-widest text-[10px] text-gray-400">Live Preview</Heading>
+                                        <Flex gap={1}>
+                                            <Block className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+                                            <Block className="w-2 h-2 rounded-full bg-gray-200" />
+                                            <Block className="w-2 h-2 rounded-full bg-gray-200" />
+                                        </Flex>
+                                    </Flex>
 
-                                    <div className="bg-white rounded-[2.5rem] p-8 shadow-2xl shadow-primary/10 border border-gray-100 relative overflow-hidden">
-                                        <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -mr-16 -mt-16 blur-3xl" />
+                                    <Block className="bg-white rounded-[2.5rem] p-8 shadow-2xl shadow-primary/10 border border-gray-100 relative overflow-hidden">
+                                        <Block className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -mr-16 -mt-16 blur-3xl" />
 
-                                        <div className="relative space-y-8">
+                                        <Block className="relative space-y-8">
                                             {/* Sidebar Preview Mockup */}
-                                            <div className="space-y-4">
-                                                <p className="text-[10px] font-black text-gray-400 uppercase tracking-tight">Sidebar Appearance</p>
-                                                <div className="flex items-center space-x-4 p-4 bg-gray-50 rounded-2xl border border-gray-100">
-                                                    <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center overflow-hidden border border-primary/20">
+                                            <Block className="space-y-4">
+                                                <Text size="xs" weight="black" className="uppercase tracking-tight text-gray-400">Sidebar Appearance</Text>
+                                                <Flex align="center" gap={4} className="p-4 bg-gray-50 rounded-2xl border border-gray-100">
+                                                    <Block className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center overflow-hidden border border-primary/20">
                                                         {orgIcon ? (
                                                             <img src={orgIcon} alt="Preview" className="w-full h-full object-cover" />
                                                         ) : (
                                                             accountType === 'personal' ? <User className="h-6 w-6 text-primary" /> : <Building2 className="h-6 w-6 text-primary" />
                                                         )}
-                                                    </div>
-                                                    <div className="flex-1 min-w-0">
-                                                        <p className="text-sm font-black text-gray-900 truncate">{orgName || 'Your Name'}</p>
-                                                        <p className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">
+                                                    </Block>
+                                                    <Block className="flex-1 min-w-0">
+                                                        <Text size="sm" weight="black" className="truncate text-gray-900">{orgName || 'Your Name'}</Text>
+                                                        <Text size="xs" color="text-gray-500" weight="bold" className="uppercase tracking-wider">
                                                             {accountType === 'personal' ? 'Personal' : 'Organization'}
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                                        </Text>
+                                                    </Block>
+                                                </Flex>
+                                            </Block>
 
                                             {/* Header Preview Mockup */}
-                                            <div className="space-y-4">
-                                                <p className="text-[10px] font-black text-gray-400 uppercase tracking-tight">Header Appearance</p>
-                                                <div className="flex items-center justify-between p-4 bg-gray-50 rounded-2xl border border-gray-100">
-                                                    <div className="flex items-center space-x-3">
-                                                        <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center text-white font-black text-xs">
+                                            <Block className="space-y-4">
+                                                <Text size="xs" weight="black" className="uppercase tracking-tight text-gray-400">Header Appearance</Text>
+                                                <Flex align="center" justify="between" className="p-4 bg-gray-50 rounded-2xl border border-gray-100">
+                                                    <Flex align="center" gap={3}>
+                                                        <Block className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center text-white font-black text-xs">
                                                             {orgName ? orgName.charAt(0).toUpperCase() : 'S'}
-                                                        </div>
-                                                        <p className="text-xs font-black text-gray-900">SpendWise</p>
-                                                    </div>
-                                                    <div className="h-8 w-8 rounded-full bg-white shadow-sm border border-gray-100 overflow-hidden">
+                                                        </Block>
+                                                        <Text size="xs" weight="black" className="text-gray-900">SpendWise</Text>
+                                                    </Flex>
+                                                    <Block className="h-8 w-8 rounded-full bg-white shadow-sm border border-gray-100 overflow-hidden">
                                                         {orgIcon ? (
                                                             <img src={orgIcon} alt="Preview" className="w-full h-full object-cover" />
                                                         ) : (
-                                                            <div className="w-full h-full bg-primary/10 flex items-center justify-center">
+                                                            <Block className="w-full h-full bg-primary/10 flex items-center justify-center">
                                                                 <User className="h-4 w-4 text-primary" />
-                                                            </div>
+                                                            </Block>
                                                         )}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                                    </Block>
+                                                </Flex>
+                                            </Block>
+                                        </Block>
+                                    </Block>
 
-                                    <div className="p-6 bg-primary/5 rounded-[2rem] border border-primary/10">
-                                        <p className="text-[11px] text-primary font-bold leading-relaxed">
+                                    <Block className="p-6 bg-primary/5 rounded-[2rem] border border-primary/10">
+                                        <Text size="xs" color="text-primary" weight="bold" className="leading-relaxed">
                                             The preview shows how your identity will be displayed in the main navigation and user menus.
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                                        </Text>
+                                    </Block>
+                                </Block>
+                            </Block>
+                        </Grid>
 
-                        <div className="flex flex-col sm:flex-row items-center justify-between gap-6 pt-10 border-t border-gray-200/60">
-                            <div className="text-sm text-gray-400 font-medium">
+                        <Flex direction="col" gap={6} className="sm:flex-row sm:items-center sm:justify-between pt-10 border-t border-gray-200/60">
+                            <Text size="sm" color="text-gray-400" weight="medium">
                                 Last updated: Jan 29, 2026
-                            </div>
-                            <div className="flex items-center space-x-4 w-full sm:w-auto">
+                            </Text>
+                            <Flex align="center" gap={4} className="w-full sm:w-auto">
                                 {feedback && (
-                                    <motion.div
+                                    <Block
+                                        as={motion.div}
                                         initial={{ opacity: 0, scale: 0.9 }}
                                         animate={{ opacity: 1, scale: 1 }}
                                         className={`px-6 py-3 rounded-2xl text-sm font-bold ${feedback.type === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
                                             }`}
                                     >
                                         {feedback.message}
-                                    </motion.div>
+                                    </Block>
                                 )}
                                 <Button
                                     type="submit"
@@ -365,61 +375,61 @@ const ManageGeneral = () => {
                                     className="w-full sm:w-auto px-12 py-5 rounded-[1.5rem] shadow-xl shadow-primary/20 flex items-center justify-center text-lg font-black"
                                 >
                                     {isSaving ? 'Saving...' : (
-                                        <>
-                                            <Save className="h-5 w-5 mr-3" />
+                                        <Flex align="center" gap={3}>
+                                            <Save className="h-5 w-5" />
                                             Save Changes
-                                        </>
+                                        </Flex>
                                     )}
                                 </Button>
-                            </div>
-                        </div>
-                    </form>
-                </section>
+                            </Flex>
+                        </Flex>
+                    </Block>
+                </Block>
 
 
                 {/* Additional Settings Grid */}
-                <section className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div className="bg-white rounded-[3rem] p-10 border border-gray-100 shadow-sm hover:shadow-xl hover:shadow-primary/5 transition-all cursor-pointer group relative overflow-hidden">
-                        <div className="absolute top-0 right-0 p-10 opacity-[0.03] group-hover:scale-150 transition-transform duration-700">
+                <Grid cols={1} gap={8} as="section" className="md:grid-cols-2">
+                    <Block className="bg-white rounded-[3rem] p-10 border border-gray-100 shadow-sm hover:shadow-xl hover:shadow-primary/5 transition-all cursor-pointer group relative overflow-hidden">
+                        <Block className="absolute top-0 right-0 p-10 opacity-[0.03] group-hover:scale-150 transition-transform duration-700">
                             <Building2 className="h-32 w-32 text-primary" />
-                        </div>
-                        <div className="bg-blue-50 w-14 h-14 rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform shadow-sm">
+                        </Block>
+                        <Block className="bg-blue-50 w-14 h-14 rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform shadow-sm">
                             <Building2 className="h-7 w-7 text-blue-600" />
-                        </div>
-                        <h4 className="text-xl font-black text-gray-900 mb-3">
+                        </Block>
+                        <Heading as="h4" className="text-xl font-black text-gray-900 mb-3">
                             {accountType === 'personal' ? 'Account Profile' : 'Organization Profile'}
-                        </h4>
-                        <p className="text-sm text-gray-500 leading-relaxed font-medium">
+                        </Heading>
+                        <Text size="sm" color="text-gray-500" weight="medium" className="leading-relaxed">
                             {accountType === 'personal'
                                 ? "Complete your personal profile with contact details and preferences for a tailored experience."
                                 : "Complete your organization's profile with address, tax ID, and contact details for official documents."}
-                        </p>
-                        <div className="mt-8 flex items-center text-primary font-black text-sm group-hover:translate-x-2 transition-transform">
+                        </Text>
+                        <Flex align="center" gap={2} className="mt-8 text-primary font-black text-sm group-hover:translate-x-2 transition-transform">
                             Configure Profile
-                            <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
                             </svg>
-                        </div>
-                    </div>
+                        </Flex>
+                    </Block>
 
-                    <div className="bg-white rounded-[3rem] p-10 border border-gray-100 shadow-sm hover:shadow-xl hover:shadow-primary/5 transition-all cursor-pointer group relative overflow-hidden">
-                        <div className="absolute top-0 right-0 p-10 opacity-[0.03] group-hover:scale-150 transition-transform duration-700">
+                    <Block className="bg-white rounded-[3rem] p-10 border border-gray-100 shadow-sm hover:shadow-xl hover:shadow-primary/5 transition-all cursor-pointer group relative overflow-hidden">
+                        <Block className="absolute top-0 right-0 p-10 opacity-[0.03] group-hover:scale-150 transition-transform duration-700">
                             <Info className="h-32 w-32 text-primary" />
-                        </div>
-                        <div className="bg-purple-50 w-14 h-14 rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform shadow-sm">
+                        </Block>
+                        <Block className="bg-purple-50 w-14 h-14 rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform shadow-sm">
                             <Info className="h-7 w-7 text-purple-600" />
-                        </div>
-                        <h4 className="text-xl font-black text-gray-900 mb-3">Workspace URL</h4>
-                        <p className="text-sm text-gray-500 leading-relaxed font-medium">Customize your workspace URL for easier access and professional branding across your team.</p>
-                        <div className="mt-8 flex items-center text-primary font-black text-sm group-hover:translate-x-2 transition-transform">
+                        </Block>
+                        <Heading as="h4" className="text-xl font-black text-gray-900 mb-3">Workspace URL</Heading>
+                        <Text size="sm" color="text-gray-500" weight="medium" className="leading-relaxed">Customize your workspace URL for easier access and professional branding across your team.</Text>
+                        <Flex align="center" gap={2} className="mt-8 text-primary font-black text-sm group-hover:translate-x-2 transition-transform">
                             Manage URL
-                            <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
                             </svg>
-                        </div>
-                    </div>
-                </section>
-            </div>
+                        </Flex>
+                    </Block>
+                </Grid>
+            </Grid>
 
             {/* Conversion Modal (Upgrade) */}
             <Modal
@@ -427,21 +437,21 @@ const ManageGeneral = () => {
                 onClose={() => setIsConvertModalOpen(false)}
                 title="Convert to Organization"
             >
-                <div className="space-y-6">
-                    <div className="bg-amber-50 p-8 rounded-[2.5rem] flex items-start space-x-5 border border-amber-100">
-                        <div className="bg-amber-500 p-3 rounded-2xl flex-shrink-0 shadow-lg shadow-amber-200">
+                <Block className="space-y-6">
+                    <Flex align="start" gap={5} className="bg-amber-50 p-8 rounded-[2.5rem] border border-amber-100">
+                        <Block className="bg-amber-500 p-3 rounded-2xl flex-shrink-0 shadow-lg shadow-amber-200">
                             <AlertTriangle className="h-6 w-6 text-white" />
-                        </div>
-                        <div>
-                            <p className="font-black text-amber-900 text-lg">Upgrade to Organization</p>
-                            <p className="text-sm text-amber-700 mt-1 leading-relaxed font-medium">
+                        </Block>
+                        <Block>
+                            <Heading size="lg" weight="black" className="text-amber-900">Upgrade to Organization</Heading>
+                            <Text size="sm" color="text-amber-700" weight="medium" className="mt-1 leading-relaxed">
                                 Converting to an organization unlocks team management, custom roles, and shared billing features.
-                            </p>
-                        </div>
-                    </div>
+                            </Text>
+                        </Block>
+                    </Flex>
 
-                    <div className="space-y-4 px-4">
-                        <p className="text-gray-900 font-black text-sm uppercase tracking-widest">What changes?</p>
+                    <Block className="space-y-4 px-4">
+                        <Heading as="h4" size="sm" weight="black" className="uppercase tracking-widest text-gray-900">What changes?</Heading>
                         <ul className="space-y-3">
                             {[
                                 'Invite team members and assign roles',
@@ -450,14 +460,14 @@ const ManageGeneral = () => {
                                 'Centralized billing and reporting'
                             ].map((item, i) => (
                                 <li key={i} className="flex items-center text-sm text-gray-600 font-medium">
-                                    <div className="w-1.5 h-1.5 rounded-full bg-primary mr-3" />
+                                    <Block className="w-1.5 h-1.5 rounded-full bg-primary mr-3" />
                                     {item}
                                 </li>
                             ))}
                         </ul>
-                    </div>
+                    </Block>
 
-                    <div className="flex flex-col sm:flex-row gap-4 pt-4">
+                    <Flex direction="col" gap={4} className="sm:flex-row pt-4">
                         <Button
                             variant="outline"
                             onClick={() => setIsConvertModalOpen(false)}
@@ -471,8 +481,8 @@ const ManageGeneral = () => {
                         >
                             Confirm Conversion
                         </Button>
-                    </div>
-                </div>
+                    </Flex>
+                </Block>
             </Modal>
 
             {/* Downgrade Modal */}
@@ -481,41 +491,20 @@ const ManageGeneral = () => {
                 onClose={() => setIsDowngradeModalOpen(false)}
                 title="Downgrade to Personal"
             >
-                <div className="space-y-6">
-                    <div className="bg-rose-50 p-8 rounded-[2.5rem] flex items-start space-x-5 border border-rose-100">
-                        <div className="bg-rose-500 p-3 rounded-2xl flex-shrink-0 shadow-lg shadow-rose-200">
+                <Block className="space-y-6">
+                    <Flex align="start" gap={5} className="bg-rose-50 p-8 rounded-[2.5rem] border border-rose-100">
+                        <Block className="bg-rose-500 p-3 rounded-2xl flex-shrink-0 shadow-lg shadow-rose-200">
                             <AlertTriangle className="h-6 w-6 text-white" />
-                        </div>
-                        <div>
-                            <p className="font-black text-rose-900 text-lg">Switch to Personal Account</p>
-                            <p className="text-sm text-rose-700 mt-1 leading-relaxed font-medium">
+                        </Block>
+                        <Block>
+                            <Heading size="lg" weight="black" className="text-rose-900">Switch to Personal Account</Heading>
+                            <Text size="sm" color="text-rose-700" weight="medium" className="mt-1 leading-relaxed">
                                 Warning: Downgrading will disable all organization-level features.
-                            </p>
-                        </div>
-                    </div>
+                            </Text>
+                        </Block>
+                    </Flex>
 
-                    <div className="space-y-4 px-4">
-                        <p className="text-gray-900 font-black text-sm uppercase tracking-widest">What will you lose?</p>
-                        <ul className="space-y-3">
-                            {[
-                                'All team members will lose access immediately',
-                                'Custom roles and permissions will be deleted',
-                                'Shared workspace features will be disabled',
-                                'Organization-specific billing will be cancelled'
-                            ].map((item, i) => (
-                                <li key={i} className="flex items-center text-sm text-gray-600 font-medium">
-                                    <div className="w-1.5 h-1.5 rounded-full bg-rose-500 mr-3" />
-                                    {item}
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-
-                    <p className="text-gray-500 text-xs px-4 font-bold italic">
-                        This action is significant. Please ensure you have backed up any necessary organization data before proceeding.
-                    </p>
-
-                    <div className="flex flex-col sm:flex-row gap-4 pt-4">
+                    <Flex direction="col" gap={4} className="sm:flex-row pt-4">
                         <Button
                             variant="outline"
                             onClick={() => setIsDowngradeModalOpen(false)}
@@ -529,10 +518,10 @@ const ManageGeneral = () => {
                         >
                             Confirm Downgrade
                         </Button>
-                    </div>
-                </div>
+                    </Flex>
+                </Block>
             </Modal>
-        </motion.div>
+        </Block>
     );
 };
 

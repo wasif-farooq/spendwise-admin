@@ -3,8 +3,15 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { twoFactorSchema, type TwoFactorInput } from './schemas/authSchemas';
-import { Input } from '../../components/Input';
-import { Button } from '../../components/Button';
+import { Input, Button } from '@ui';
+import {
+    Block,
+    Flex,
+    Heading,
+    Text,
+    Container,
+    Grid
+} from '@shared';
 import { CreditCard, ArrowLeft, Smartphone, MessageSquare, Mail, ShieldCheck } from 'lucide-react';
 import { useState } from 'react';
 
@@ -44,33 +51,34 @@ export const TwoFactorForm = () => {
     ];
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-            <motion.div
+        <Container as="div" size="full" className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+            <Block
+                as={motion.div}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="max-w-md w-full space-y-8 bg-white p-8 rounded-3xl shadow-2xl border border-gray-100"
             >
-                <div className="text-center">
+                <Block className="text-center">
                     <Link to="/" className="inline-flex items-center mb-6 group">
-                        <div className="bg-primary/10 p-3 rounded-2xl group-hover:scale-110 transition-transform">
+                        <Flex className="bg-primary/10 p-3 rounded-2xl group-hover:scale-110 transition-transform">
                             <CreditCard className="h-8 w-8 text-primary" />
-                        </div>
-                        <span className="ml-3 text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-blue-600">
-                            ExpenseFlow
-                        </span>
+                        </Flex>
+                        <Heading as="span" size="2xl" weight="bold" className="ml-3 bg-clip-text text-transparent bg-gradient-to-r from-primary to-blue-600">
+                            SpendWise
+                        </Heading>
                     </Link>
-                    <div className="flex justify-center mb-4">
-                        <div className="bg-green-50 p-3 rounded-full">
+                    <Flex justify="center" className="mb-4">
+                        <Block className="bg-green-50 p-3 rounded-full">
                             <ShieldCheck className="h-8 w-8 text-green-600" />
-                        </div>
-                    </div>
-                    <h2 className="text-3xl font-extrabold text-gray-900 tracking-tight">Security Check</h2>
-                    <p className="mt-3 text-gray-500 text-sm leading-relaxed">
+                        </Block>
+                    </Flex>
+                    <Heading as="h2" size="3xl" weight="extrabold" color="text-gray-900" className="tracking-tight">Security Check</Heading>
+                    <Text size="sm" color="text-gray-500" className="mt-3 leading-relaxed">
                         Choose your preferred method to receive a 6-digit verification code.
-                    </p>
-                </div>
+                    </Text>
+                </Block>
 
-                <div className="grid grid-cols-3 gap-3 mt-8">
+                <Grid cols={3} gap={3} className="mt-8">
                     {methods.map((m) => {
                         const Icon = m.icon;
                         const isActive = method === m.id;
@@ -85,32 +93,33 @@ export const TwoFactorForm = () => {
                                     }`}
                             >
                                 <Icon className={`h-6 w-6 mb-2 ${isActive ? 'text-primary' : 'text-gray-400'}`} />
-                                <span className={`text-xs font-bold ${isActive ? 'text-primary' : 'text-gray-500'}`}>
+                                <Text size="xs" weight="bold" className={isActive ? 'text-primary' : 'text-gray-500'}>
                                     {m.label}
-                                </span>
+                                </Text>
                             </button>
                         );
                     })}
-                </div>
+                </Grid>
 
                 <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
                     <AnimatePresence mode="wait">
-                        <motion.div
+                        <Block
+                            as={motion.div}
                             key={method}
                             initial={{ opacity: 0, x: 10 }}
                             animate={{ opacity: 1, x: 0 }}
                             exit={{ opacity: 0, x: -10 }}
                             className="text-center"
                         >
-                            <p className="text-sm font-medium text-gray-600 mb-4">
+                            <Text size="sm" weight="medium" color="text-gray-600" className="mb-4">
                                 {method === 'authenticator' && 'Enter the code from your Authenticator app'}
                                 {method === 'whatsapp' && 'We\'ve sent a code to your WhatsApp'}
                                 {method === 'email' && 'We\'ve sent a code to your email'}
-                            </p>
-                        </motion.div>
+                            </Text>
+                        </Block>
                     </AnimatePresence>
 
-                    <div className="space-y-4">
+                    <Block className="space-y-4">
                         <Input
                             label="Verification Code"
                             type="text"
@@ -121,13 +130,13 @@ export const TwoFactorForm = () => {
                             error={errors.code?.message}
                             className="text-center text-3xl tracking-[0.5em] font-bold bg-gray-50 border-none focus:ring-2 focus:ring-primary h-16"
                         />
-                    </div>
+                    </Block>
 
                     <Button type="submit" className="w-full py-6 text-lg font-bold shadow-lg shadow-primary/20" disabled={isSubmitting}>
                         {isSubmitting ? 'Verifying...' : 'Verify & Continue'}
                     </Button>
 
-                    <div className="flex flex-col space-y-4 text-center">
+                    <Flex direction="col" gap={4} className="text-center">
                         <button
                             type="button"
                             onClick={handleResendCode}
@@ -143,9 +152,9 @@ export const TwoFactorForm = () => {
                             <ArrowLeft className="h-4 w-4 mr-2" />
                             Return to sign in
                         </Link>
-                    </div>
+                    </Flex>
                 </form>
-            </motion.div>
-        </div>
+            </Block>
+        </Container>
     );
 };

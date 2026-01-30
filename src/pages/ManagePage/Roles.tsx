@@ -2,9 +2,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Shield, ShieldCheck, Plus, Trash2, Edit2, Lock, AlertTriangle, ChevronLeft, ChevronRight, Users, Layout, Zap, CreditCard, Eye, Filter, RotateCcw, X, Sparkles } from 'lucide-react';
 import { useState, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button } from '../../components/Button';
-import { Input } from '../../components/Input';
-import { Modal } from '../../components/Modal';
+import { Button, Input, Modal } from '@ui';
+import {
+    Block,
+    Flex,
+    Heading,
+    Text,
+    Grid
+} from '@shared';
 
 const Roles = () => {
     const navigate = useNavigate();
@@ -143,31 +148,32 @@ const Roles = () => {
     const activeFilterCount = filters.types.length + (filters.minPermissions > 0 ? 1 : 0);
 
     return (
-        <motion.div
+        <Block
+            as={motion.div}
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             className="space-y-12"
         >
-            <header className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-                <div>
-                    <h2 className="text-3xl font-black text-gray-900 tracking-tight">Roles & Permissions</h2>
-                    <p className="text-gray-500 mt-1 font-medium">Define granular access for your team members.</p>
-                </div>
-                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
-                    <div className="flex items-center gap-2">
-                        <div className="relative group flex-grow sm:flex-grow-0">
+            <Flex as="header" direction="col" justify="between" gap={6} className="lg:flex-row lg:items-center">
+                <Block>
+                    <Heading as="h2" weight="black" className="text-3xl tracking-tight text-gray-900">Roles & Permissions</Heading>
+                    <Text color="text-gray-500" weight="medium" className="mt-1">Define granular access for your team members.</Text>
+                </Block>
+                <Flex direction="col" gap={4} className="sm:flex-row sm:items-center">
+                    <Flex align="center" gap={2}>
+                        <Block className="relative group flex-grow sm:flex-grow-0">
                             <Input
                                 placeholder="Search roles..."
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                                 className="bg-gray-50 border-none h-14 rounded-2xl focus:ring-2 focus:ring-primary pl-12 w-full sm:w-64 font-bold"
                             />
-                            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-primary transition-colors">
+                            <Block className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-primary transition-colors">
                                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                                 </svg>
-                            </div>
-                        </div>
+                            </Block>
+                        </Block>
                         <button
                             onClick={() => setIsFilterDrawerOpen(true)}
                             className={`p-4 rounded-2xl border transition-all relative ${activeFilterCount > 0
@@ -177,12 +183,16 @@ const Roles = () => {
                         >
                             <Filter className="h-6 w-6" />
                             {activeFilterCount > 0 && (
-                                <span className="absolute -top-1 -right-1 w-5 h-5 bg-primary text-white text-[10px] font-black rounded-full flex items-center justify-center border-2 border-white">
+                                <Text
+                                    as="span"
+                                    weight="black"
+                                    className="absolute -top-1 -right-1 w-5 h-5 bg-primary text-white text-[10px] rounded-full flex items-center justify-center border-2 border-white"
+                                >
                                     {activeFilterCount}
-                                </span>
+                                </Text>
                             )}
                         </button>
-                    </div>
+                    </Flex>
                     <Button
                         onClick={() => navigate('/manage/roles/new')}
                         className="px-8 py-4 rounded-2xl shadow-xl shadow-primary/20 flex items-center justify-center font-black"
@@ -190,28 +200,29 @@ const Roles = () => {
                         <Plus className="h-5 w-5 mr-2" />
                         Create Custom Role
                     </Button>
-                </div>
-            </header>
+                </Flex>
+            </Flex>
 
-            <div className="space-y-10">
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+            <Block className="space-y-10">
+                <Grid cols={1} gap={8} className="md:grid-cols-2 xl:grid-cols-3">
                     {filteredRoles.length > 0 ? (
                         paginatedRoles.map((role) => (
-                            <motion.div
+                            <Block
+                                as={motion.div}
                                 key={role.id}
                                 layout
                                 whileHover={{ y: -8 }}
                                 className="bg-white rounded-[2.5rem] border border-gray-100 shadow-xl shadow-gray-200/50 overflow-hidden group flex flex-col"
                             >
                                 {/* Card Header */}
-                                <div className="p-8 pb-4 relative overflow-hidden">
-                                    <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${role.color} opacity-[0.03] rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-700`} />
+                                <Block className="p-8 pb-4 relative overflow-hidden">
+                                    <Block className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${role.color} opacity-[0.03] rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-700`} />
 
-                                    <div className="flex items-start justify-between relative z-10">
-                                        <div className={`p-4 rounded-2xl bg-gradient-to-br ${role.color} text-white shadow-lg shadow-black/5`}>
+                                    <Flex align="start" justify="between" className="relative z-10">
+                                        <Block className={`p-4 rounded-2xl bg-gradient-to-br ${role.color} text-white shadow-lg shadow-black/5`}>
                                             <role.icon className="h-7 w-7" />
-                                        </div>
-                                        <div className="flex items-center space-x-2">
+                                        </Block>
+                                        <Flex align="center" gap={2}>
                                             <button
                                                 onClick={() => navigate(`/manage/roles/${role.id}/edit`)}
                                                 disabled={role.isDefault}
@@ -232,89 +243,93 @@ const Roles = () => {
                                             >
                                                 <Trash2 className="h-4 w-4" />
                                             </button>
-                                        </div>
-                                    </div>
+                                        </Flex>
+                                    </Flex>
 
-                                    <div className="mt-6 relative z-10">
-                                        <div className="flex items-center space-x-2">
-                                            <h3 className="text-xl font-black text-gray-900 tracking-tight">{role.name}</h3>
+                                    <Block className="mt-6 relative z-10">
+                                        <Flex align="center" gap={2}>
+                                            <Heading as="h3" size="sm" weight="black" className="text-xl tracking-tight text-gray-900">{role.name}</Heading>
                                             {role.isDefault && (
-                                                <span className="px-2 py-0.5 bg-gray-900 text-white text-[9px] font-black uppercase tracking-widest rounded-md flex items-center">
+                                                <Text
+                                                    as="span"
+                                                    weight="black"
+                                                    className="px-2 py-0.5 bg-gray-900 text-white text-[9px] uppercase tracking-widest rounded-md flex items-center"
+                                                >
                                                     <Lock className="h-2.5 w-2.5 mr-1" />
                                                     System
-                                                </span>
+                                                </Text>
                                             )}
-                                        </div>
-                                        <p className="text-gray-500 font-medium text-sm mt-1 line-clamp-2 min-h-[40px]">
+                                        </Flex>
+                                        <Text color="text-gray-500" weight="medium" size="sm" className="mt-1 line-clamp-2 min-h-[40px]">
                                             {role.description}
-                                        </p>
-                                    </div>
-                                </div>
+                                        </Text>
+                                    </Block>
+                                </Block>
 
                                 {/* Permission Summary */}
-                                <div className="px-8 py-6 flex-grow">
-                                    <div className="space-y-4">
-                                        <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Permission Summary</p>
-                                        <div className="flex flex-wrap gap-2">
+                                <Block className="px-8 py-6 flex-grow">
+                                    <Block className="space-y-4">
+                                        <Text size="xs" weight="black" className="uppercase tracking-widest text-gray-400">Permission Summary</Text>
+                                        <Flex gap={2} className="flex-wrap">
                                             {Object.entries(role.permissions).map(([resId, perms]: [string, any]) => {
                                                 const Icon = getResourceIcon(resId);
                                                 return (
-                                                    <div key={resId} className="flex items-center bg-gray-50 px-3 py-1.5 rounded-xl border border-gray-100 group/perm hover:bg-white hover:border-primary/20 transition-colors">
+                                                    <Flex key={resId} align="center" className="bg-gray-50 px-3 py-1.5 rounded-xl border border-gray-100 group/perm hover:bg-white hover:border-primary/20 transition-colors">
                                                         <Icon className="h-3 w-3 text-gray-400 group-hover/perm:text-primary transition-colors mr-2" />
-                                                        <span className="text-[10px] font-bold text-gray-600 capitalize">{resId}</span>
-                                                        <span className="ml-1.5 text-[10px] font-black text-primary">
+                                                        <Text size="xs" weight="bold" className="text-gray-600 capitalize">{resId}</Text>
+                                                        <Text as="span" size="xs" weight="black" className="ml-1.5 text-primary">
                                                             {perms.length}
-                                                        </span>
-                                                    </div>
+                                                        </Text>
+                                                    </Flex>
                                                 );
                                             })}
-                                        </div>
-                                    </div>
-                                </div>
+                                        </Flex>
+                                    </Block>
+                                </Block>
 
                                 {/* Card Footer */}
-                                <div className="px-8 py-6 bg-gray-50/50 border-t border-gray-100 flex items-center justify-between">
-                                    <div className="flex -space-x-2">
+                                <Flex align="center" justify="between" className="px-8 py-6 bg-gray-50/50 border-t border-gray-100">
+                                    <Flex align="center" className="-space-x-2">
                                         {[...Array(3)].map((_, i) => (
-                                            <div key={i} className="w-8 h-8 rounded-full border-2 border-white bg-gray-200 flex items-center justify-center overflow-hidden">
+                                            <Block key={i} className="w-8 h-8 rounded-full border-2 border-white bg-gray-200 flex items-center justify-center overflow-hidden">
                                                 <img src={`https://i.pravatar.cc/150?u=${role.id + i}`} alt="User" className="w-full h-full object-cover" />
-                                            </div>
+                                            </Block>
                                         ))}
-                                        <div className="w-8 h-8 rounded-full border-2 border-white bg-gray-100 flex items-center justify-center text-[10px] font-black text-gray-500">
+                                        <Block className="w-8 h-8 rounded-full border-2 border-white bg-gray-100 flex items-center justify-center text-[10px] font-black text-gray-500">
                                             +12
-                                        </div>
-                                    </div>
-                                    <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                                        </Block>
+                                    </Flex>
+                                    <Text size="xs" weight="black" className="uppercase tracking-widest text-gray-400">
                                         {Object.values(role.permissions).flat().length} Total Rules
-                                    </span>
-                                </div>
-                            </motion.div>
+                                    </Text>
+                                </Flex>
+                            </Block>
                         ))
                     ) : (
-                        <div className="col-span-full py-20 bg-white rounded-[2.5rem] border border-gray-100 shadow-sm flex flex-col items-center justify-center space-y-4">
-                            <div className="p-4 bg-gray-50 rounded-3xl">
+                        <Block className="col-span-full py-20 bg-white rounded-[2.5rem] border border-gray-100 shadow-sm flex flex-col items-center justify-center space-y-4">
+                            <Block className="p-4 bg-gray-50 rounded-3xl">
                                 <Shield className="h-8 w-8 text-gray-300" />
-                            </div>
-                            <div className="text-center">
-                                <p className="text-lg font-black text-gray-900">No roles found</p>
-                                <p className="text-sm text-gray-500 font-medium">Try adjusting your search or filters.</p>
-                            </div>
+                            </Block>
+                            <Block className="text-center">
+                                <Heading weight="black" className="text-lg text-gray-900">No roles found</Heading>
+                                <Text size="sm" color="text-gray-500" weight="medium">Try adjusting your search or filters.</Text>
+                            </Block>
                             <button
                                 onClick={clearFilters}
                                 className="text-primary font-black text-sm hover:underline"
                             >
                                 Clear all filters
                             </button>
-                        </div>
+                        </Block>
                     )}
-                </div>
+                </Grid>
 
                 {/* Pagination UI */}
-                <div className="px-8 py-6 flex items-center justify-between bg-white rounded-[2.5rem] border border-gray-100 shadow-sm">
-                    <p className="text-sm text-gray-500 font-medium">
-                        Showing <span className="font-bold text-gray-900">{filteredRoles.length > 0 ? (currentPage - 1) * itemsPerPage + 1 : 0}</span> to <span className="font-bold text-gray-900">{Math.min(currentPage * itemsPerPage, filteredRoles.length)}</span> of <span className="font-bold text-gray-900">{filteredRoles.length}</span> roles
-                    </p>
-                    <div className="flex items-center space-x-2">
+                <Flex align="center" justify="between" className="px-8 py-6 bg-white rounded-[2.5rem] border border-gray-100 shadow-sm">
+                    <Text size="sm" color="text-gray-500" weight="medium">
+                        Showing <Text as="span" weight="bold" className="text-gray-900">{filteredRoles.length > 0 ? (currentPage - 1) * itemsPerPage + 1 : 0}</Text> to <Text as="span" weight="bold" className="text-gray-900">{Math.min(currentPage * itemsPerPage, filteredRoles.length)}</Text> of <Text as="span" weight="bold" className="text-gray-900">{filteredRoles.length}</Text> roles
+                    </Text>
+                    <Flex align="center" gap={2}>
                         <button
                             onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                             disabled={currentPage === 1}
@@ -341,48 +356,50 @@ const Roles = () => {
                         >
                             <ChevronRight className="h-5 w-5" />
                         </button>
-                    </div>
-                </div>
-            </div>
+                    </Flex>
+                </Flex>
+            </Block>
 
             {/* Filter Drawer */}
             <AnimatePresence>
                 {isFilterDrawerOpen && (
                     <>
-                        <motion.div
+                        <Block
+                            as={motion.div}
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                             onClick={() => setIsFilterDrawerOpen(false)}
                             className="fixed inset-0 bg-gray-900/40 backdrop-blur-sm z-[60]"
                         />
-                        <motion.div
+                        <Block
+                            as={motion.div}
                             initial={{ x: '100%' }}
                             animate={{ x: 0 }}
                             exit={{ x: '100%' }}
                             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
                             className="fixed top-0 right-0 h-full w-full max-w-md bg-white shadow-2xl z-[70] overflow-hidden flex flex-col"
                         >
-                            <div className="p-8 border-b border-gray-100 flex items-center justify-between">
-                                <div className="flex items-center space-x-3">
-                                    <div className="bg-primary/10 p-2 rounded-xl">
+                            <Flex align="center" justify="between" className="p-8 border-b border-gray-100">
+                                <Flex align="center" gap={3}>
+                                    <Block className="bg-primary/10 p-2 rounded-xl">
                                         <Filter className="h-5 w-5 text-primary" />
-                                    </div>
-                                    <h3 className="text-xl font-black text-gray-900">Advanced Filters</h3>
-                                </div>
+                                    </Block>
+                                    <Heading as="h3" weight="black" className="text-xl text-gray-900">Advanced Filters</Heading>
+                                </Flex>
                                 <button
                                     onClick={() => setIsFilterDrawerOpen(false)}
                                     className="p-2 rounded-xl hover:bg-gray-100 text-gray-400 transition-colors"
                                 >
                                     <X className="h-6 w-6" />
                                 </button>
-                            </div>
+                            </Flex>
 
-                            <div className="flex-grow overflow-y-auto p-8 space-y-10">
+                            <Block className="flex-grow overflow-y-auto p-8 space-y-10">
                                 {/* Role Type Filter */}
-                                <div className="space-y-4">
-                                    <p className="text-xs font-black text-gray-400 uppercase tracking-widest">Role Type</p>
-                                    <div className="flex flex-wrap gap-3">
+                                <Block className="space-y-4">
+                                    <Text size="xs" weight="black" className="uppercase tracking-widest text-gray-400">Role Type</Text>
+                                    <Flex gap={3} className="flex-wrap">
                                         {['System', 'Custom'].map(type => (
                                             <button
                                                 key={type}
@@ -395,13 +412,13 @@ const Roles = () => {
                                                 {type}
                                             </button>
                                         ))}
-                                    </div>
-                                </div>
+                                    </Flex>
+                                </Block>
 
                                 {/* Permission Count Filter */}
-                                <div className="space-y-4">
-                                    <p className="text-xs font-black text-gray-400 uppercase tracking-widest">Min. Permissions</p>
-                                    <div className="space-y-6">
+                                <Block className="space-y-4">
+                                    <Text size="xs" weight="black" className="uppercase tracking-widest text-gray-400">Min. Permissions</Text>
+                                    <Block className="space-y-6">
                                         <input
                                             type="range"
                                             min="0"
@@ -411,31 +428,31 @@ const Roles = () => {
                                             onChange={(e) => setFilters(prev => ({ ...prev, minPermissions: parseInt(e.target.value) }))}
                                             className="w-full h-2 bg-gray-100 rounded-lg appearance-none cursor-pointer accent-primary"
                                         />
-                                        <div className="flex items-center justify-between">
-                                            <span className="text-xs font-bold text-gray-400">0 Rules</span>
-                                            <div className="bg-primary/10 px-4 py-2 rounded-xl border border-primary/20">
-                                                <span className="text-sm font-black text-primary">{filters.minPermissions} Rules</span>
-                                            </div>
-                                            <span className="text-xs font-bold text-gray-400">20 Rules</span>
-                                        </div>
-                                    </div>
-                                </div>
+                                        <Flex align="center" justify="between">
+                                            <Text size="xs" weight="bold" className="text-gray-400">0 Rules</Text>
+                                            <Block className="bg-primary/10 px-4 py-2 rounded-xl border border-primary/20">
+                                                <Text size="sm" weight="black" className="text-primary">{filters.minPermissions} Rules</Text>
+                                            </Block>
+                                            <Text size="xs" weight="bold" className="text-gray-400">20 Rules</Text>
+                                        </Flex>
+                                    </Block>
+                                </Block>
 
                                 {/* Pro Tip */}
-                                <div className="bg-primary/5 p-6 rounded-[2rem] border border-primary/10 flex items-start space-x-4">
-                                    <div className="bg-primary p-2 rounded-xl shadow-lg shadow-primary/20">
+                                <Flex gap={4} className="bg-primary/5 p-6 rounded-[2rem] border border-primary/10">
+                                    <Block className="bg-primary p-2 rounded-xl shadow-lg shadow-primary/20 flex-shrink-0">
                                         <Sparkles className="h-4 w-4 text-white" />
-                                    </div>
-                                    <div>
-                                        <p className="text-xs font-black text-primary uppercase tracking-widest">Pro Tip</p>
-                                        <p className="text-[11px] text-gray-500 font-bold mt-1 leading-relaxed">
+                                    </Block>
+                                    <Block>
+                                        <Text size="xs" weight="black" className="text-primary uppercase tracking-widest">Pro Tip</Text>
+                                        <Text size="xs" weight="bold" className="text-gray-500 mt-1 leading-relaxed">
                                             Use filters to quickly identify roles with excessive permissions or to find custom roles created by your team.
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
+                                        </Text>
+                                    </Block>
+                                </Flex>
+                            </Block>
 
-                            <div className="p-8 border-t border-gray-100 bg-gray-50/50 flex gap-4">
+                            <Flex gap={4} className="p-8 border-t border-gray-100 bg-gray-50/50">
                                 <button
                                     onClick={clearFilters}
                                     className="flex-grow py-4 rounded-2xl border-2 border-gray-200 text-gray-500 font-black text-sm flex items-center justify-center hover:bg-white transition-all"
@@ -449,8 +466,8 @@ const Roles = () => {
                                 >
                                     Apply Filters
                                 </Button>
-                            </div>
-                        </motion.div>
+                            </Flex>
+                        </Block>
                     </>
                 )}
             </AnimatePresence>
@@ -461,24 +478,24 @@ const Roles = () => {
                 onClose={() => setIsDeleteModalOpen(false)}
                 title="Delete Role"
             >
-                <div className="space-y-6">
-                    <div className="bg-rose-50 p-8 rounded-[2.5rem] flex items-start space-x-5 border border-rose-100">
-                        <div className="bg-rose-500 p-3 rounded-2xl flex-shrink-0 shadow-lg shadow-rose-200">
+                <Block className="space-y-6">
+                    <Flex align="start" gap={5} className="bg-rose-50 p-8 rounded-[2.5rem] border border-rose-100">
+                        <Block className="bg-rose-500 p-3 rounded-2xl flex-shrink-0 shadow-lg shadow-rose-200">
                             <AlertTriangle className="h-6 w-6 text-white" />
-                        </div>
-                        <div>
-                            <p className="font-black text-rose-900 text-lg">Permanent Deletion</p>
-                            <p className="text-sm text-rose-700 mt-1 leading-relaxed font-medium">
-                                Deleting the <span className="font-black">"{deletingRole?.name}"</span> role will remove it from all assigned members. They will lose access to the associated permissions.
-                            </p>
-                        </div>
-                    </div>
+                        </Block>
+                        <Block>
+                            <Heading size="lg" weight="black" className="text-rose-900">Permanent Deletion</Heading>
+                            <Text size="sm" color="text-rose-700" weight="medium" className="mt-1 leading-relaxed">
+                                Deleting the <Text as="span" weight="black">"{deletingRole?.name}"</Text> role will remove it from all assigned members. They will lose access to the associated permissions.
+                            </Text>
+                        </Block>
+                    </Flex>
 
-                    <p className="text-gray-500 text-sm px-4 font-bold">
+                    <Text size="sm" weight="bold" className="text-gray-500 px-4">
                         Are you sure you want to delete this role? This cannot be undone.
-                    </p>
+                    </Text>
 
-                    <div className="flex flex-col sm:flex-row gap-4 pt-4">
+                    <Flex direction="col" gap={4} className="sm:flex-row pt-4">
                         <Button
                             variant="outline"
                             onClick={() => setIsDeleteModalOpen(false)}
@@ -493,10 +510,10 @@ const Roles = () => {
                         >
                             {isProcessing ? 'Deleting...' : 'Confirm Delete'}
                         </Button>
-                    </div>
-                </div>
+                    </Flex>
+                </Block>
             </Modal>
-        </motion.div>
+        </Block>
     );
 };
 
