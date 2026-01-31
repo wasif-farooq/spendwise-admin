@@ -49,6 +49,11 @@ class MockAdapter {
             return this.handleCheckFeatureAccess(config);
         }
 
+        if (config.url?.endsWith('/feature-flags') && config.method?.toUpperCase() === 'GET') {
+            return this.handleGetFeatureFlags(config);
+        }
+
+
         const mockData = this.findMockData(config.url || '');
 
         if (!mockData) {
@@ -423,6 +428,41 @@ class MockAdapter {
                 hasAccess,
                 reason,
             },
+            status: 200,
+            statusText: 'OK',
+            headers: {},
+            config: config as any,
+        };
+    }
+
+    private async handleGetFeatureFlags(config: AxiosRequestConfig): Promise<AxiosResponse> {
+        // Return simple map of feature flags
+        const responseData = {
+            // UI Features
+            darkMode: true,
+            newSidebar: true,
+            animations: true,
+
+            // App Features
+            aiAdvisor: true,
+            accounts: true,
+            analytics: true,
+            transactions: true,
+            exchangeRates: true,
+            settings: true,
+            teamManagement: true,
+
+            pdfExport: true,
+            bulkEdit: false,
+
+            // Beta
+            newDashboard: false,
+            buttonColorExperiment: false,
+            newOnboarding: true
+        };
+
+        return {
+            data: responseData,
             status: 200,
             statusText: 'OK',
             headers: {},

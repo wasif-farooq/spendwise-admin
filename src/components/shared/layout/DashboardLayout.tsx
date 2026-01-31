@@ -23,6 +23,7 @@ import { Block, Flex, Text } from '@shared';
 import type { RootState } from '@/store/store';
 import { UpgradeButton, PlanBadge, UpgradeModal } from '@/views/Subscription';
 import { useAppDispatch, useAppSelector } from '@/store/redux';
+import { useFeatureFlag } from '@/hooks/useFeatureFlags';
 import {
     selectHasAIAdvisorAccess,
     selectHasExchangeRatesAccess,
@@ -44,6 +45,15 @@ export const DashboardLayout = () => {
     const currentPlan = useAppSelector(selectSubscriptionPlan);
     const dispatch = useAppDispatch();
 
+    // Feature Flags
+    const isAIAdvisorEnabled = useFeatureFlag('aiAdvisor');
+    const isAccountsEnabled = useFeatureFlag('accounts');
+    const isAnalyticsEnabled = useFeatureFlag('analytics');
+    const isExchangeRatesFlagEnabled = useFeatureFlag('exchangeRates');
+    const isSettingsEnabled = useFeatureFlag('settings');
+    const isTeamManagementEnabled = useFeatureFlag('teamManagement');
+    const isTransactionsEnabled = useFeatureFlag('transactions');
+
     useEffect(() => {
         // Fetch subscription data on layout mount
         dispatch(fetchSubscriptionThunk());
@@ -52,18 +62,23 @@ export const DashboardLayout = () => {
 
     const navItems = [
         { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
-        { name: 'Analytics', path: '/analytics', icon: PieChart },
-        { name: 'AI Advisor', path: '/ai-advisor', icon: Sparkles },
-        { name: 'Accounts', path: '/accounts', icon: Wallet },
-        ...(hasExchangeRates ? [
+        ...(isAnalyticsEnabled ? [{ name: 'Analytics', path: '/analytics', icon: PieChart }] : []),
+        ...(isAIAdvisorEnabled ? [{ name: 'AI Advisor', path: '/ai-advisor', icon: Sparkles }] : []),
+        ...(isAccountsEnabled ? [{ name: 'Accounts', path: '/accounts', icon: Wallet }] : []),
+        ...(hasExchangeRates && isExchangeRatesFlagEnabled ? [
             { name: 'Exchange Rates', path: '/exchange-rates', icon: Globe },
         ] : []),
-        { name: 'Manage', path: '/manage/general', icon: LayoutDashboard },
-        ...(accountType === 'organization' ? [
-            { name: 'Members', path: '/manage/members', icon: User },
-            { name: 'Roles', path: '/manage/roles', icon: Settings },
+
+        // Manage Section - Only show if Team Management is enabled
+        ...(isTeamManagementEnabled ? [
+            { name: 'Manage', path: '/manage/general', icon: LayoutDashboard },
+            ...(accountType === 'organization' ? [
+                { name: 'Members', path: '/manage/members', icon: User },
+                { name: 'Roles', path: '/manage/roles', icon: Settings },
+            ] : []),
         ] : []),
-        { name: 'Settings', path: '/settings/preferences', icon: Settings },
+
+        ...(isSettingsEnabled ? [{ name: 'Settings', path: '/settings/preferences', icon: Settings }] : []),
     ];
 
     const handleLogout = () => {
@@ -185,14 +200,17 @@ export const DashboardLayout = () => {
                     />
                 )}
 
-                <Button
-                    size="sm"
-                    onClick={() => setIsTransactionModalOpen(true)}
-                    className="hidden md:flex items-center gap-2 rounded-xl px-4 py-2 shadow-lg shadow-primary/10"
-                >
-                    <Plus size={18} />
-                    <span>New Transaction</span>
-                </Button>
+                {/* New Transaction Button */}
+                {isTransactionsEnabled && (
+                    <Button
+                        size="sm"
+                        onClick={() => setIsTransactionModalOpen(true)}
+                        className="hidden md:flex items-center gap-2 rounded-xl px-4 py-2 shadow-lg shadow-primary/10"
+                    >
+                        <Plus size={18} />
+                        <span>New Transaction</span>
+                    </Button>
+                )}
 
                 <Flex align="center" gap={4}>
                     <Block className="text-right hidden sm:block">

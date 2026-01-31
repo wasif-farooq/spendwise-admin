@@ -34,6 +34,7 @@ import AIAdvisorPage from './pages/AIAdvisorPage';
 
 
 import { LayoutProvider } from './context/LayoutContext';
+import { FeatureFlagProvider } from './context/FeatureFlagContext';
 import { Toaster } from 'sonner';
 
 function App() {
@@ -41,59 +42,61 @@ function App() {
     <>
       <Toaster position="top-center" richColors />
       <LayoutProvider>
-        <Router>
-          <Routes>
-            {/* Main Layout Routes (Public) */}
-            <Route element={<MainLayout />}>
-              <Route path="/" element={<HomePage />} />
-            </Route>
-
-            {/* Dashboard Layout Routes (Authenticated) */}
-            <Route element={<DashboardLayout />}>
-              <Route path="/dashboard" element={<DashboardPage />} />
-              <Route path="/analytics" element={<AnalyticsPage />} />
-              <Route path="/ai-advisor" element={<AIAdvisorPage />} />
-
-              <Route path="/exchange-rates" element={<ExchangeRatesPage />} />
-              <Route path="/accounts" element={<AccountsPage />} />
-              <Route path="/accounts/:id/transactions" element={<TransactionsPage />} />
-
-              {/* Manage Nested Routes */}
-              <Route path="manage" element={<ManagePage />}>
-                <Route index element={<Navigate to="general" replace />} />
-                <Route path="general" element={<ManageGeneral />} />
-                <Route path="members" element={<ManageMembers />} />
-                <Route path="members/invite" element={<InviteMemberPage />} />
-                <Route path="members/:id/edit" element={<EditMemberPage />} />
-                <Route path="roles" element={<ManageRoles />} />
-                <Route path="roles/new" element={<RoleEditor />} />
-                <Route path="roles/:id/edit" element={<RoleEditor />} />
-                <Route path="billing" element={<ManageBilling />} />
+        <FeatureFlagProvider>
+          <Router>
+            <Routes>
+              {/* Main Layout Routes (Public) */}
+              <Route element={<MainLayout />}>
+                <Route path="/" element={<HomePage />} />
               </Route>
 
-              {/* Settings Nested Routes */}
-              <Route path="/settings" element={<SettingsPage />}>
-                <Route index element={<Navigate to="profile" replace />} />
-                <Route path="profile" element={<Profile />} />
-                <Route path="preferences" element={<Preferences />} />
-                <Route path="security" element={<Security />} />
-                <Route path="security/setup-2fa" element={<Setup2FAPage />} />
-                <Route path="subscription" element={<SettingsSubscription />} />
-              </Route>
-            </Route>
+              {/* Dashboard Layout Routes (Authenticated) */}
+              <Route element={<DashboardLayout />}>
+                <Route path="/dashboard" element={<DashboardPage />} />
+                <Route path="/analytics" element={<AnalyticsPage />} />
+                <Route path="/ai-advisor" element={<AIAdvisorPage />} />
 
-            {/* Auth Layout Routes (Auth Flows) */}
-            <Route element={<AuthLayout />}>
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/register" element={<RegisterPage />} />
-              <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-              <Route path="/reset-password" element={<ResetPasswordPage />} />
-              <Route path="/verify-2fa" element={<TwoFactorPage />} />
-              <Route path="/check-email" element={<CheckEmailPage />} />
-              <Route path="/confirm-email" element={<ConfirmEmailPage />} />
-            </Route>
-          </Routes>
-        </Router>
+                <Route path="/exchange-rates" element={<ExchangeRatesPage />} />
+                <Route path="/accounts" element={<AccountsPage />} />
+                <Route path="/accounts/:id/transactions" element={<TransactionsPage />} />
+
+                {/* Manage Nested Routes */}
+                <Route path="manage" element={<ManagePage />}>
+                  <Route index element={<Navigate to="general" replace />} />
+                  <Route path="general" element={<ManageGeneral />} />
+                  <Route path="members" element={<ManageMembers />} />
+                  <Route path="members/invite" element={<InviteMemberPage />} />
+                  <Route path="members/:id/edit" element={<EditMemberPage />} />
+                  <Route path="roles" element={<ManageRoles />} />
+                  <Route path="roles/new" element={<RoleEditor />} />
+                  <Route path="roles/:id/edit" element={<RoleEditor />} />
+                  <Route path="billing" element={<ManageBilling />} />
+                </Route>
+
+                {/* Settings Nested Routes */}
+                <Route path="/settings" element={<SettingsPage />}>
+                  <Route index element={<Navigate to="profile" replace />} />
+                  <Route path="profile" element={<Profile />} />
+                  <Route path="preferences" element={<Preferences />} />
+                  <Route path="security" element={<Security />} />
+                  <Route path="security/setup-2fa" element={<Setup2FAPage />} />
+                  <Route path="subscription" element={<SettingsSubscription />} />
+                </Route>
+              </Route>
+
+              {/* Auth Layout Routes (Auth Flows) */}
+              <Route element={<AuthLayout />}>
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/register" element={<RegisterPage />} />
+                <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+                <Route path="/reset-password" element={<ResetPasswordPage />} />
+                <Route path="/verify-2fa" element={<TwoFactorPage />} />
+                <Route path="/check-email" element={<CheckEmailPage />} />
+                <Route path="/confirm-email" element={<ConfirmEmailPage />} />
+              </Route>
+            </Routes>
+          </Router>
+        </FeatureFlagProvider>
       </LayoutProvider>
     </>
   );
