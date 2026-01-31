@@ -156,6 +156,13 @@ const subscriptionSlice = createSlice({
             .addCase(fetchFeatureUsageThunk.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload as string;
+                // FAIL SAFE: If fetch fails, assume max usage to lock features
+                state.featureUsage = {
+                    members: 9999,
+                    accounts: 9999,
+                    organizations: 9999,
+                    customRoles: 9999
+                };
             });
     },
 });

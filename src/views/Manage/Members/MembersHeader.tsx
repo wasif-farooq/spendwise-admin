@@ -2,7 +2,8 @@ import { UserPlus, Filter } from 'lucide-react';
 import { Block, Flex, Heading, Text } from '@shared';
 import { Button, Input } from '@ui';
 import { useFeatureAccess } from '@/hooks/useFeatureAccess';
-import { LimitBanner } from '@/views/Subscription';
+import { LimitBanner, UpgradeModal } from '@/views/Subscription';
+import { useState } from 'react';
 
 interface MembersHeaderProps {
     searchQuery: string;
@@ -23,6 +24,16 @@ export const MembersHeader = ({
 }: MembersHeaderProps) => {
     const memberAccess = useFeatureAccess('members');
     const canAddMember = memberAccess.hasAccess;
+    const [isUpgradeModalOpen, setIsUpgradeModalOpen] = useState(false);
+
+    const handleInviteClick = () => {
+        console.log('DEBUG: Invite Clicked', { canAddMember, current: memberAccess.current, limit: memberAccess.limit });
+        if (canAddMember) {
+            onOpenInvite();
+        } else {
+            setIsUpgradeModalOpen(true);
+        }
+    };
 
     return (
         <Flex as="header" direction="col" gap={6}>
@@ -62,8 +73,8 @@ export const MembersHeader = ({
                             variant="ghost"
                             onClick={onOpenFilter}
                             className={`p - 4 rounded - 2xl border transition - all relative h - auto ${activeFilterCount > 0
-                                    ? 'bg-primary/5 border-primary text-primary shadow-lg shadow-primary/10 hover:bg-primary/10'
-                                    : 'bg-gray-50 border-transparent text-gray-500 hover:bg-gray-100'
+                                ? 'bg-primary/5 border-primary text-primary shadow-lg shadow-primary/10 hover:bg-primary/10'
+                                : 'bg-gray-50 border-transparent text-gray-500 hover:bg-gray-100'
                                 } `}
                         >
                             <Filter className="h-6 w-6" />
@@ -79,16 +90,21 @@ export const MembersHeader = ({
                         </Button>
                     </Flex>
                     <Button
-                        onClick={onOpenInvite}
-                        disabled={!canAddMember}
-                        className="px-8 py-4 rounded-2xl shadow-xl shadow-primary/20 flex items-center justify-center font-black disabled:opacity-50 disabled:cursor-not-allowed"
-                        title={!canAddMember ? memberAccess.reason : 'Invite a new member'}
+                        onClick={handleInviteClick}
+                        className="px-8 py-4 rounded-2xl shadow-xl shadow-primary/20 flex items-center justify-center font-black"
+                        title={canAddMember ? "Invite a new member" : "Upgrade to invite more members"}
                     >
                         <UserPlus className="h-5 w-5 mr-2" />
                         Invite Member
                     </Button>
                 </Flex>
             </Flex>
+
+            <UpgradeModal
+                isOpen={isUpgradeModalOpen}
+                onClose={() => setIsUpgradeModalOpen(false)}
+                triggerFeature="team members"
+            />
         </Flex>
     );
 };

@@ -5,6 +5,7 @@ import mockSubscriptionData from '../services/subscription/subscriptionMockData.
 class MockAdapter {
     private mockDataRegistry: Map<string, any> = new Map();
     private delay = 300; // Simulate network delay
+    private currentUserId = 'user-002'; // DEBUG: Default to user-002 for testing
 
     registerMockData(endpoint: string, data: any) {
         this.mockDataRegistry.set(endpoint, data);
@@ -96,7 +97,7 @@ class MockAdapter {
         );
 
         if (!user) {
-            // Invalid credentials - throw error to be caught by error handler
+            // ... (error handling)
             const error: any = new Error('Invalid credentials');
             error.response = {
                 data: null,
@@ -109,6 +110,11 @@ class MockAdapter {
             throw error;
         }
 
+        // Set current user ID
+        this.currentUserId = user.id;
+        console.log(`[MockAdapter] Logged in as ${user.name} (${user.id})`);
+
+        // ... (rest of handleLogin)
         // Check if user has 2FA enabled
         if (user.twoFactorEnabled) {
             // Return 2FA required response
@@ -223,45 +229,7 @@ class MockAdapter {
         };
     }
 
-    private async handleGetUserSubscription(config: AxiosRequestConfig): Promise<AxiosResponse> {
-        // Get user ID from auth token (in real app, would decode JWT)
-        // For mock, we'll use user-001 as default
-        const userId = 'user-001';
-        const userSubscription = mockSubscriptionData.userSubscriptions.find(
-            (sub: any) => sub.userId === userId
-        );
-
-        if (!userSubscription) {
-            const error: any = new Error('Subscription not found');
-            error.response = {
-                data: { message: 'Subscription not found' },
-                status: 404,
-                statusText: 'Not Found',
-                headers: {},
-                config: config as any,
-            };
-            error.config = config;
-            throw error;
-        }
-
-        return {
-            data: {
-                subscription: {
-                    plan: userSubscription.plan,
-                    status: userSubscription.status,
-                    startDate: userSubscription.startDate,
-                    expiresAt: userSubscription.expiresAt,
-                    cancelledAt: userSubscription.cancelledAt,
-                    trialEndsAt: userSubscription.trialEndsAt,
-                },
-                featureUsage: userSubscription.featureUsage,
-            },
-            status: 200,
-            statusText: 'OK',
-            headers: {},
-            config: config as any,
-        };
-    }
+    // handleGetUserSubscription is already present
 
     private async handleUpgradePlan(config: AxiosRequestConfig): Promise<AxiosResponse> {
         const { planId } = config.data || {};
@@ -311,20 +279,89 @@ class MockAdapter {
         };
     }
 
-    private async handleGetFeatureUsage(config: AxiosRequestConfig): Promise<AxiosResponse> {
-        const userId = 'user-001';
+    // handleGetFeatureUsage is already present
+
+    private async handleGetUserSubscription(config: AxiosRequestConfig): Promise<AxiosResponse> {
+        const userId = this.currentUserId;
+        console.log(`[MockAdapter] Getting subscription for user: ${userId}`);
+
         const userSubscription = mockSubscriptionData.userSubscriptions.find(
             (sub: any) => sub.userId === userId
         );
 
+        if (!userSubscription) {
+            console.error(`[MockAdapter] Subscription NOT FOUND for user ${userId}`);
+            // ...
+            const error: any = new Error('Subscription not found');
+            error.response = {
+                data: { message: 'Subscription not found' },
+                status: 404,
+                statusText: 'Not Found',
+                headers: {},
+                config: config as any,
+            };
+            error.config = config;
+            throw error;
+        }
+
+        console.log(`[MockAdapter] Found subscription:`, userSubscription);
+
         return {
             data: {
-                usage: userSubscription?.featureUsage || {
-                    members: 0,
-                    accounts: 0,
-                    organizations: 0,
-                    customRoles: 0,
+                subscription: {
+                    plan: userSubscription.plan,
+                    status: userSubscription.status,
+                    startDate: userSubscription.startDate,
+                    expiresAt: userSubscription.expiresAt,
+                    cancelledAt: userSubscription.cancelledAt,
+                    trialEndsAt: userSubscription.trialEndsAt,
                 },
+                featureUsage: userSubscription.featureUsage,
+            },
+            status: 200,
+            statusText: 'OK',
+            headers: {},
+            config: config as any,
+        };
+    }
+
+    // ... (handleUpgradePlan)
+    // ... (handleCancelSubscription)
+
+    private async handleGetFeatureUsage(config: AxiosRequestConfig): Promise<AxiosResponse> {
+        const userId = this.currentUserId;
+        console.log(`[MockAdapter] Getting feature usage for user: ${userId}`);
+
+        const userSubscription = mockSubscriptionData.userSubscriptions.find(
+            (sub: any) => sub.userId === userId
+        );
+
+        if (!userSubscription) {
+            console.error(`[MockAdapter] User subscription not found for ${userId} in usage check`);
+        } else {
+            console.log(`[MockAdapter] Found subscription for ${userId} in usage check`, userSubscription);
+        }
+
+        // FAIL SAFE: If user not found, assume MAX usage to prevent leaks
+        const defaultUsage = userSubscription ? {
+            members: 0,
+            accounts: 0,
+            organizations: 0,
+            customRoles: 0,
+        } : {
+            members: 9999,
+            accounts: 9999,
+            organizations: 9999,
+            customRoles: 9999,
+        };
+
+        const usage = userSubscription?.featureUsage || defaultUsage;
+
+        console.log(`[MockAdapter] Returning usage:`, usage);
+
+        return {
+            data: {
+                usage,
             },
             status: 200,
             statusText: 'OK',
@@ -335,7 +372,8 @@ class MockAdapter {
 
     private async handleCheckFeatureAccess(config: AxiosRequestConfig): Promise<AxiosResponse> {
         const feature = config.url?.split('/').pop();
-        const userId = 'user-001';
+        const userId = this.currentUserId;
+        // ...
         const userSubscription = mockSubscriptionData.userSubscriptions.find(
             (sub: any) => sub.userId === userId
         );

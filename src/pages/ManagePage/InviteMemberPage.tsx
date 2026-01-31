@@ -9,6 +9,8 @@ import { MemberDetailsForm } from '@/views/Manage/InviteMember/MemberDetailsForm
 import { AccountAccessForm } from '@/views/Manage/InviteMember/AccountAccessForm';
 import { InviteSummaryModal } from '@/views/Manage/InviteMember/InviteSummaryModal';
 import type { InvitationData } from '@/views/Manage/InviteMember/types';
+import { useFeatureAccess } from '@/hooks/useFeatureAccess';
+import { FeatureLockedView } from '@/views/Subscription';
 
 
 const InviteMemberPage = () => {
@@ -17,6 +19,28 @@ const InviteMemberPage = () => {
     const [selectedRoles, setSelectedRoles] = useState<string[]>(['member']);
     const [accountConfigs, setAccountConfigs] = useState<InvitationData['accountPermissions']>({});
     const [overriddenAccounts, setOverriddenAccounts] = useState<string[]>([]);
+
+    const memberAccess = useFeatureAccess('members');
+    const canAddMember = memberAccess.hasAccess;
+
+    if (!canAddMember) {
+        return (
+            <Block className="min-h-screen bg-gray-50 p-8">
+                <Block className="mx-auto max-w-4xl">
+                    <FeatureLockedView
+                        featureName="Team Members"
+                        featureDescription={memberAccess.reason || "You have reached the limit for team members on your current plan."}
+                        benefits={[
+                            'Invite more team members',
+                            'Collaborate in real-time',
+                            'Manage user permissions',
+                            'Assign roles and access levels'
+                        ]}
+                    />
+                </Block>
+            </Block>
+        );
+    }
 
     // UI State
     const [showConfirmation, setShowConfirmation] = useState(false);

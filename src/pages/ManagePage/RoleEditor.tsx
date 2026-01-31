@@ -13,11 +13,35 @@ import {
     Inline,
     AnimatedBlock
 } from '@shared';
+import { useFeatureAccess } from '@/hooks/useFeatureAccess';
+import { FeatureLockedView } from '@/views/Subscription';
 
 const RoleEditor = () => {
     const navigate = useNavigate();
     const { id } = useParams();
     const isEditing = !!id;
+
+    const roleAccess = useFeatureAccess('customRoles');
+    const canAddRole = roleAccess.hasAccess;
+
+    if (!isEditing && !canAddRole) {
+        return (
+            <Block className="min-h-screen bg-gray-50 p-8">
+                <Block className="mx-auto max-w-4xl">
+                    <FeatureLockedView
+                        featureName="Custom Roles"
+                        featureDescription={roleAccess.reason || "You have reached the limit for custom roles on your current plan."}
+                        benefits={[
+                            'Create granular permission sets',
+                            'Define specific access levels',
+                            'Secure your organization data',
+                            'Customize user capabilities'
+                        ]}
+                    />
+                </Block>
+            </Block>
+        );
+    }
 
     const [roleName, setRoleName] = useState('');
     const [roleDescription, setRoleDescription] = useState('');

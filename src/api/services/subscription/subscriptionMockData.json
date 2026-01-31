@@ -240,15 +240,15 @@
             "cancelledAt": null,
             "trialEndsAt": null,
             "featureUsage": {
-                "members": 1,
+                "members": 8,
                 "accounts": 1,
                 "organizations": 2,
-                "customRoles": 0
+                "customRoles": 4
             }
         },
         {
             "userId": "user-002",
-            "plan": "pro",
+            "plan": "free",
             "status": "active",
             "startDate": "2024-01-15T00:00:00Z",
             "expiresAt": "2025-01-15T00:00:00Z",

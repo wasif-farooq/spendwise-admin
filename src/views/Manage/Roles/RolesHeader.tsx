@@ -2,7 +2,8 @@ import { Plus, Filter } from 'lucide-react';
 import { Block, Flex, Heading, Text } from '@shared';
 import { Button, Input } from '@ui';
 import { useFeatureAccess } from '@/hooks/useFeatureAccess';
-import { LimitBanner } from '@/views/Subscription';
+import { LimitBanner, UpgradeModal } from '@/views/Subscription';
+import { useState } from 'react';
 
 interface RolesHeaderProps {
     searchQuery: string;
@@ -23,6 +24,15 @@ export const RolesHeader = ({
 }: RolesHeaderProps) => {
     const roleAccess = useFeatureAccess('customRoles');
     const canAddRole = roleAccess.hasAccess;
+    const [isUpgradeModalOpen, setIsUpgradeModalOpen] = useState(false);
+
+    const handleCreateClick = () => {
+        if (canAddRole) {
+            onCreateRole();
+        } else {
+            setIsUpgradeModalOpen(true);
+        }
+    };
 
     return (
         <Flex as="header" direction="col" gap={6}>
@@ -79,16 +89,21 @@ export const RolesHeader = ({
                         </Block>
                     </Flex>
                     <Button
-                        onClick={onCreateRole}
-                        disabled={!canAddRole}
-                        className="px-8 py-4 rounded-2xl shadow-xl shadow-primary/20 flex items-center justify-center font-black disabled:opacity-50 disabled:cursor-not-allowed"
-                        title={!canAddRole ? roleAccess.reason : 'Create a new custom role'}
+                        onClick={handleCreateClick}
+                        className="px-8 py-4 rounded-2xl shadow-xl shadow-primary/20 flex items-center justify-center font-black"
+                        title={canAddRole ? "Create a new custom role" : "Upgrade to create more roles"}
                     >
                         <Plus className="h-5 w-5 mr-2" />
                         Create Custom Role
                     </Button>
                 </Flex>
             </Flex>
+
+            <UpgradeModal
+                isOpen={isUpgradeModalOpen}
+                onClose={() => setIsUpgradeModalOpen(false)}
+                triggerFeature="custom roles"
+            />
         </Flex>
     );
 };

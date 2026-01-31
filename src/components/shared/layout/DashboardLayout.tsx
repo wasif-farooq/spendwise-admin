@@ -22,8 +22,14 @@ import TransactionModal from '@/components/features/transactions/TransactionModa
 import { Block, Flex, Text } from '@shared';
 import type { RootState } from '@/store/store';
 import { UpgradeButton, PlanBadge, UpgradeModal } from '@/views/Subscription';
-import { useAppSelector } from '@/store/redux';
-import { selectHasAIAdvisorAccess, selectHasExchangeRatesAccess } from '@/store/slices/subscriptionSlice';
+import { useAppDispatch, useAppSelector } from '@/store/redux';
+import {
+    selectHasAIAdvisorAccess,
+    selectHasExchangeRatesAccess,
+    fetchSubscriptionThunk,
+    fetchFeatureUsageThunk
+} from '@/store/slices/subscriptionSlice';
+import { useEffect } from 'react';
 
 export const DashboardLayout = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -34,6 +40,13 @@ export const DashboardLayout = () => {
     const accountType = useSelector((state: RootState) => state.ui.accountType);
     const hasAIAdvisor = useAppSelector(selectHasAIAdvisorAccess);
     const hasExchangeRates = useAppSelector(selectHasExchangeRatesAccess);
+    const dispatch = useAppDispatch();
+
+    useEffect(() => {
+        // Fetch subscription data on layout mount
+        dispatch(fetchSubscriptionThunk());
+        dispatch(fetchFeatureUsageThunk());
+    }, [dispatch]);
 
     const navItems = [
         { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
