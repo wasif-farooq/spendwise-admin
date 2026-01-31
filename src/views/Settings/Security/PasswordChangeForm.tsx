@@ -1,25 +1,27 @@
-import { useState, useMemo } from 'react';
+import { useMemo } from 'react';
+import { useForm } from '@/hooks/useForm';
+import { useToggle } from '@/hooks/useToggle';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Lock, Eye, EyeOff, Check, X as CloseIcon } from 'lucide-react';
 import { Block, Flex, Heading, Text, Grid } from '@shared';
 import { Button, Input } from '@ui';
 
 export const PasswordChangeForm = () => {
-    const [passwordData, setPasswordData] = useState({
+    const { values, handleChange, setFieldValue } = useForm({
         current: '',
         new: '',
         confirm: ''
     });
-    const [showPasswords, setShowPasswords] = useState({
-        current: false,
-        new: false,
-        confirm: false
-    });
-    const [isUpdatingPassword, setIsUpdatingPassword] = useState(false);
-    const [passwordFeedback, setPasswordFeedback] = useState<{ type: 'success' | 'error', message: string } | null>(null);
+
+    const showCurrent = useToggle(false);
+    const showNew = useToggle(false);
+    const showConfirm = useToggle(false);
+
+    const isUpdatingPassword = useToggle(false);
+    const { values: feedback, setValues: setFeedback } = useForm<{ type: 'success' | 'error', message: string } | null>(null);
 
     const passwordStrength = useMemo(() => {
-        const p = passwordData.new;
+        const p = values.new;
         if (!p) return 0;
         let score = 0;
         if (p.length >= 8) score += 25;
@@ -27,7 +29,7 @@ export const PasswordChangeForm = () => {
         if (/[0-9]/.test(p)) score += 25;
         if (/[^A-Za-z0-9]/.test(p)) score += 25;
         return score;
-    }, [passwordData.new]);
+    }, [values.new]);
 
     const strengthColor = () => {
         if (passwordStrength <= 25) return 'bg-red-500';
@@ -45,24 +47,22 @@ export const PasswordChangeForm = () => {
 
     const handleUpdatePassword = (e: React.FormEvent) => {
         e.preventDefault();
-        if (passwordData.new !== passwordData.confirm) {
-            setPasswordFeedback({ type: 'error', message: 'New passwords do not match' });
+        if (values.new !== values.confirm) {
+            setFeedback({ type: 'error', message: 'New passwords do not match' });
             return;
         }
 
-        setIsUpdatingPassword(true);
-        setPasswordFeedback(null);
+        isUpdatingPassword.setTrue();
+        setFeedback(null);
 
         // Simulate API call
         setTimeout(() => {
-            setIsUpdatingPassword(false);
-            setPasswordFeedback({ type: 'success', message: 'Password updated successfully!' });
-            setPasswordData({ current: '', new: '', confirm: '' });
+            isUpdatingPassword.setFalse();
+            setFeedback({ type: 'success', message: 'Password updated successfully!' });
+            setFieldValue('current', '');
+            setFieldValue('new', '');
+            setFieldValue('confirm', '');
         }, 1500);
-    };
-
-    const toggleVisibility = (field: keyof typeof showPasswords) => {
-        setShowPasswords(prev => ({ ...prev, [field]: !prev[field] }));
     };
 
     return (
@@ -83,41 +83,43 @@ export const PasswordChangeForm = () => {
                         <Block className="relative">
                             <Input
                                 label="Current Password"
-                                type={showPasswords.current ? 'text' : 'password'}
-                                value={passwordData.current}
-                                onChange={(e) => setPasswordData({ ...passwordData, current: e.target.value })}
+                                type={showCurrent.value ? 'text' : 'password'}
+                                name="current"
+                                value={values.current}
+                                onChange={handleChange}
                                 className="bg-gray-50 border-none h-14 rounded-2xl focus:ring-2 focus:ring-primary pr-12"
                                 required
                             />
                             <Block
                                 as="button"
                                 type="button"
-                                onClick={() => toggleVisibility('current')}
+                                onClick={showCurrent.toggle}
                                 className="absolute right-4 top-[3.2rem] text-gray-400 hover:text-gray-600 transition-colors"
                             >
-                                {showPasswords.current ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                                {showCurrent.value ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                             </Block>
                         </Block>
 
                         <Block className="relative">
                             <Input
                                 label="New Password"
-                                type={showPasswords.new ? 'text' : 'password'}
-                                value={passwordData.new}
-                                onChange={(e) => setPasswordData({ ...passwordData, new: e.target.value })}
+                                type={showNew.value ? 'text' : 'password'}
+                                name="new"
+                                value={values.new}
+                                onChange={handleChange}
                                 className="bg-gray-50 border-none h-14 rounded-2xl focus:ring-2 focus:ring-primary pr-12"
                                 required
                             />
                             <Block
                                 as="button"
                                 type="button"
-                                onClick={() => toggleVisibility('new')}
+                                onClick={showNew.toggle}
                                 className="absolute right-4 top-[3.2rem] text-gray-400 hover:text-gray-600 transition-colors"
                             >
-                                {showPasswords.new ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                                {showNew.value ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                             </Block>
 
-                            {passwordData.new && (
+                            {values.new && (
                                 <Block
                                     as={motion.div}
                                     initial={{ opacity: 0, y: 5 }}
@@ -143,29 +145,30 @@ export const PasswordChangeForm = () => {
                         <Block className="relative">
                             <Input
                                 label="Confirm New Password"
-                                type={showPasswords.confirm ? 'text' : 'password'}
-                                value={passwordData.confirm}
-                                onChange={(e) => setPasswordData({ ...passwordData, confirm: e.target.value })}
+                                type={showConfirm.value ? 'text' : 'password'}
+                                name="confirm"
+                                value={values.confirm}
+                                onChange={handleChange}
                                 className="bg-gray-50 border-none h-14 rounded-2xl focus:ring-2 focus:ring-primary pr-12"
                                 required
                             />
                             <Block
                                 as="button"
                                 type="button"
-                                onClick={() => toggleVisibility('confirm')}
+                                onClick={showConfirm.toggle}
                                 className="absolute right-4 top-[3.2rem] text-gray-400 hover:text-gray-600 transition-colors"
                             >
-                                {showPasswords.confirm ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                                {showConfirm.value ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                             </Block>
 
-                            {passwordData.confirm && (
+                            {values.confirm && (
                                 <Block
                                     as={motion.div}
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 1 }}
                                     className="mt-2 flex items-center px-1"
                                 >
-                                    {passwordData.new === passwordData.confirm ? (
+                                    {values.new === values.confirm ? (
                                         <Text size="xs" weight="bold" className="text-green-600 flex items-center">
                                             <Check className="h-3 w-3 mr-1" /> Passwords match
                                         </Text>
@@ -183,10 +186,10 @@ export const PasswordChangeForm = () => {
                         <Heading as="h4" size="md" weight="bold" color="text-gray-900" className="mb-4">Password Requirements:</Heading>
                         <Block as="ul" className="space-y-3">
                             {[
-                                { label: 'At least 8 characters long', met: passwordData.new.length >= 8 },
-                                { label: 'Include at least one uppercase letter', met: /[A-Z]/.test(passwordData.new) },
-                                { label: 'Include at least one number', met: /[0-9]/.test(passwordData.new) },
-                                { label: 'Include at least one special character', met: /[^A-Za-z0-9]/.test(passwordData.new) },
+                                { label: 'At least 8 characters long', met: values.new.length >= 8 },
+                                { label: 'Include at least one uppercase letter', met: /[A-Z]/.test(values.new) },
+                                { label: 'Include at least one number', met: /[0-9]/.test(values.new) },
+                                { label: 'Include at least one special character', met: /[^A-Za-z0-9]/.test(values.new) },
                             ].map((req, i) => (
                                 <Block as="li" key={i} className={`flex items-center text-sm ${req.met ? 'text-green-600 font-bold' : 'text-gray-500'}`}>
                                     <Block className={`p-1 rounded-full mr-3 ${req.met ? 'bg-green-100' : 'bg-gray-200'}`}>
@@ -200,16 +203,16 @@ export const PasswordChangeForm = () => {
                 </Grid>
 
                 <AnimatePresence>
-                    {passwordFeedback && (
+                    {feedback && (
                         <Block
                             as={motion.div}
                             initial={{ opacity: 0, y: -10 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -10 }}
-                            className={`p-4 rounded-2xl text-sm font-bold ${passwordFeedback.type === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+                            className={`p-4 rounded-2xl text-sm font-bold ${feedback.type === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
                                 }`}
                         >
-                            {passwordFeedback.message}
+                            {feedback.message}
                         </Block>
                     )}
                 </AnimatePresence>
@@ -217,10 +220,10 @@ export const PasswordChangeForm = () => {
                 <Flex justify="end" className="pt-4 border-t border-gray-50">
                     <Button
                         type="submit"
-                        disabled={isUpdatingPassword || passwordStrength < 100 || passwordData.new !== passwordData.confirm}
+                        disabled={isUpdatingPassword.value || passwordStrength < 100 || values.new !== values.confirm}
                         className="px-12 py-4 rounded-2xl shadow-lg shadow-primary/20"
                     >
-                        {isUpdatingPassword ? 'Updating...' : 'Update Password'}
+                        {isUpdatingPassword.value ? 'Updating...' : 'Update Password'}
                     </Button>
                 </Flex>
             </Block>

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { usePaginatedData } from '@/hooks/usePaginatedData';
 import { Block, Flex, Heading, Text, Grid } from '@shared';
 import { Input, Button } from '@ui';
 import { User, Shield, AlertCircle, Search, ChevronLeft, ChevronRight } from 'lucide-react';
@@ -19,28 +19,20 @@ export const MemberDetailsForm = ({
     toggleRole,
     isEditing = false
 }: MemberDetailsFormProps) => {
-    // Local state for role search/pagination
-    const [roleSearchQuery, setRoleSearchQuery] = useState('');
-    const [currentRolePage, setCurrentRolePage] = useState(1);
-
-    const itemsPerPage = 3;
-    const availableRoles = mockData.roles;
-
-    // Filter and Paginate Roles
-    const filteredRoles = availableRoles.filter(role =>
-        role.name.toLowerCase().includes(roleSearchQuery.toLowerCase())
-    );
-
-    const totalRolePages = Math.ceil(filteredRoles.length / itemsPerPage);
-    const paginatedRoles = filteredRoles.slice(
-        (currentRolePage - 1) * itemsPerPage,
-        currentRolePage * itemsPerPage
-    );
-
-    const handleRoleSearch = (query: string) => {
-        setRoleSearchQuery(query);
-        setCurrentRolePage(1);
-    };
+    // Use usePaginatedData hook
+    const {
+        data: paginatedRoles,
+        currentPage: currentRolePage,
+        totalPages: totalRolePages,
+        searchQuery: roleSearchQuery,
+        setSearchQuery: setRoleSearchQuery,
+        goToNextPage,
+        goToPrevPage
+    } = usePaginatedData({
+        data: mockData.roles,
+        itemsPerPage: 3,
+        filterFn: (role, query) => role.name.toLowerCase().includes(query.toLowerCase())
+    });
 
     return (
         <Block className="lg:col-span-1 space-y-8">
@@ -83,7 +75,7 @@ export const MemberDetailsForm = ({
                             type="text"
                             placeholder="Find role..."
                             value={roleSearchQuery}
-                            onChange={(e) => handleRoleSearch(e.target.value)}
+                            onChange={(e) => setRoleSearchQuery(e.target.value)}
                             className="pl-9 pr-3 py-2.5 text-sm rounded-xl bg-gray-50 border-transparent focus:bg-white focus:border-primary/20 focus:ring-primary/10 transition-all font-medium placeholder:text-gray-400"
                         />
                     </Block>
@@ -130,7 +122,7 @@ export const MemberDetailsForm = ({
                             <Button
                                 variant="ghost"
                                 size="sm"
-                                onClick={() => setCurrentRolePage(p => Math.max(1, p - 1))}
+                                onClick={goToPrevPage}
                                 disabled={currentRolePage === 1}
                                 className="h-8 w-8 p-0 rounded-full flex items-center justify-center text-gray-400 hover:text-gray-600 hover:bg-gray-100 disabled:opacity-30"
                             >
@@ -142,7 +134,7 @@ export const MemberDetailsForm = ({
                             <Button
                                 variant="ghost"
                                 size="sm"
-                                onClick={() => setCurrentRolePage(p => Math.min(totalRolePages, p + 1))}
+                                onClick={goToNextPage}
                                 disabled={currentRolePage === totalRolePages}
                                 className="h-8 w-8 p-0 rounded-full flex items-center justify-center text-gray-400 hover:text-gray-600 hover:bg-gray-100 disabled:opacity-30"
                             >

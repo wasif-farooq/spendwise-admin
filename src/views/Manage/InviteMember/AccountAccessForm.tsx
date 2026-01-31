@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { usePaginatedData } from '@/hooks/usePaginatedData';
 import { AnimatePresence } from 'framer-motion';
 import { Block, Flex, Heading, Text, AnimatedBlock, Inline } from '@shared';
 import { Button, Input } from '@ui';
@@ -23,28 +23,20 @@ export const AccountAccessForm = ({
     toggleOverride,
     canOverridePermissions = false
 }: AccountAccessFormProps) => {
-    // Local state for account search/pagination
-    const [searchQuery, setSearchQuery] = useState('');
-    const [currentPage, setCurrentPage] = useState(1);
-
-    const itemsPerPage = 3;
-    const availableAccounts = mockData.accounts;
-
-    // Filter and Paginate Accounts
-    const filteredAccounts = availableAccounts.filter(acc =>
-        acc.name.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-
-    const totalPages = Math.ceil(filteredAccounts.length / itemsPerPage);
-    const paginatedAccounts = filteredAccounts.slice(
-        (currentPage - 1) * itemsPerPage,
-        currentPage * itemsPerPage
-    );
-
-    const handleSearch = (query: string) => {
-        setSearchQuery(query);
-        setCurrentPage(1); // Reset to first page on search
-    };
+    // Use usePaginatedData hook
+    const {
+        data: paginatedAccounts,
+        currentPage,
+        totalPages,
+        searchQuery,
+        setSearchQuery,
+        goToNextPage,
+        goToPrevPage
+    } = usePaginatedData({
+        data: mockData.accounts,
+        itemsPerPage: 3,
+        filterFn: (account, query) => account.name.toLowerCase().includes(query.toLowerCase())
+    });
 
     // Define permission metadata
     const accountPermissions = [
@@ -70,7 +62,7 @@ export const AccountAccessForm = ({
                     type="text"
                     placeholder="Search accounts..."
                     value={searchQuery}
-                    onChange={(e) => handleSearch(e.target.value)}
+                    onChange={(e) => setSearchQuery(e.target.value)}
                     className="pl-12 pr-4 py-4 rounded-2xl bg-white border-gray-100 shadow-sm focus:outline-none focus:ring-primary/20 focus:border-primary transition-all font-medium placeholder:text-gray-400"
                 />
             </Block>
@@ -203,7 +195,7 @@ export const AccountAccessForm = ({
                         <Button
                             variant="ghost"
                             size="sm"
-                            onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                            onClick={goToPrevPage}
                             disabled={currentPage === 1}
                             className="text-gray-500 font-bold disabled:opacity-30"
                         >
@@ -216,7 +208,7 @@ export const AccountAccessForm = ({
                         <Button
                             variant="ghost"
                             size="sm"
-                            onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                            onClick={goToNextPage}
                             disabled={currentPage === totalPages}
                             className="text-gray-500 font-bold disabled:opacity-30"
                         >

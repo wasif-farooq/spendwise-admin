@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react';
+import { useForm } from '@/hooks/useForm';
 import Select, { type StylesConfig } from 'react-select';
 import CreatableSelect from 'react-select/creatable';
 import {
@@ -173,13 +174,16 @@ const CustomSingleValue = ({ data }: any) => (
 );
 
 export const TransactionModal = ({ isOpen, onClose }: TransactionModalProps) => {
-    const [amount, setAmount] = useState('');
-    const [transactionType, setTransactionType] = useState<'expense' | 'income' | 'transfer'>('expense');
-    const [selectedAccount, setSelectedAccount] = useState<SelectOption | null>(ACCOUNT_OPTIONS[0]);
-    const [selectedToAccount, setSelectedToAccount] = useState<SelectOption | null>(ACCOUNT_OPTIONS[1]);
+    const { values, setFieldValue, handleChange, handleSubmit } = useForm({
+        amount: '',
+        transactionType: 'expense' as 'expense' | 'income' | 'transfer',
+        selectedAccount: ACCOUNT_OPTIONS[0],
+        selectedToAccount: ACCOUNT_OPTIONS[1],
+        selectedCategory: null as SelectOption | null,
+        receipt: null as string | null
+    });
+
     const [categories, setCategories] = useState(CATEGORY_OPTIONS);
-    const [selectedCategory, setSelectedCategory] = useState<SelectOption | null>(null);
-    const [receipt, setReceipt] = useState<string | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const handleCreateCategory = (inputValue: string) => {
@@ -191,12 +195,12 @@ export const TransactionModal = ({ isOpen, onClose }: TransactionModalProps) => 
             bg: 'bg-primary/5',
         };
         setCategories((prev) => [...prev, newCategory]);
-        setSelectedCategory(newCategory);
+        setFieldValue('selectedCategory', newCategory);
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
+    const onFormSubmit = async (formValues: typeof values) => {
         // Handle transaction creation logic here
+        console.log('Form submitted:', formValues);
         onClose();
     };
 
@@ -205,22 +209,22 @@ export const TransactionModal = ({ isOpen, onClose }: TransactionModalProps) => 
         if (file) {
             const reader = new FileReader();
             reader.onloadend = () => {
-                setReceipt(reader.result as string);
+                setFieldValue('receipt', reader.result as string);
             };
             reader.readAsDataURL(file);
         }
     };
 
     const removeReceipt = () => {
-        setReceipt(null);
+        setFieldValue('receipt', null);
         if (fileInputRef.current) {
             fileInputRef.current.value = '';
         }
     };
 
-    const isExpense = transactionType === 'expense';
-    const isIncome = transactionType === 'income';
-    const isTransfer = transactionType === 'transfer';
+    const isExpense = values.transactionType === 'expense';
+    const isIncome = values.transactionType === 'income';
+    const isTransfer = values.transactionType === 'transfer';
 
     const getTypeColor = () => {
         if (isExpense) return 'rose';
@@ -245,13 +249,13 @@ export const TransactionModal = ({ isOpen, onClose }: TransactionModalProps) => 
             title="New Transaction"
             maxWidth="max-w-xl"
         >
-            <form onSubmit={handleSubmit} className="space-y-8">
+            <form onSubmit={handleSubmit(onFormSubmit)} className="space-y-8">
                 {/* Transaction Type Toggle */}
                 <Flex className="p-1.5 bg-gray-100 rounded-[1.5rem] w-full max-w-sm mx-auto">
                     <Block
                         as="button"
                         type="button"
-                        onClick={() => setTransactionType('expense')}
+                        onClick={() => setFieldValue('transactionType', 'expense')}
                         className={`flex-1 py-3 rounded-[1.25rem] text-[10px] font-black uppercase tracking-widest transition-all ${isExpense
                             ? 'bg-white text-rose-600 shadow-sm'
                             : 'text-gray-500 hover:text-gray-700'
@@ -262,7 +266,7 @@ export const TransactionModal = ({ isOpen, onClose }: TransactionModalProps) => 
                     <Block
                         as="button"
                         type="button"
-                        onClick={() => setTransactionType('income')}
+                        onClick={() => setFieldValue('transactionType', 'income')}
                         className={`flex-1 py-3 rounded-[1.25rem] text-[10px] font-black uppercase tracking-widest transition-all ${isIncome
                             ? 'bg-white text-emerald-600 shadow-sm'
                             : 'text-gray-500 hover:text-gray-700'
@@ -273,7 +277,7 @@ export const TransactionModal = ({ isOpen, onClose }: TransactionModalProps) => 
                     <Block
                         as="button"
                         type="button"
-                        onClick={() => setTransactionType('transfer')}
+                        onClick={() => setFieldValue('transactionType', 'transfer')}
                         className={`flex-1 py-3 rounded-[1.25rem] text-[10px] font-black uppercase tracking-widest transition-all ${isTransfer
                             ? 'bg-white text-indigo-600 shadow-sm'
                             : 'text-gray-500 hover:text-gray-700'
@@ -294,8 +298,8 @@ export const TransactionModal = ({ isOpen, onClose }: TransactionModalProps) => 
                             <Select
                                 options={ACCOUNT_OPTIONS}
                                 styles={customSelectStyles}
-                                value={selectedAccount}
-                                onChange={(option) => setSelectedAccount(option)}
+                                value={values.selectedAccount}
+                                onChange={(option) => setFieldValue('selectedAccount', option)}
                                 components={{ Option: CustomOption, SingleValue: CustomSingleValue }}
                                 placeholder="Select Account"
                                 isSearchable
@@ -309,10 +313,10 @@ export const TransactionModal = ({ isOpen, onClose }: TransactionModalProps) => 
                                     To Account
                                 </label>
                                 <Select
-                                    options={ACCOUNT_OPTIONS.filter(opt => opt.value !== selectedAccount?.value)}
+                                    options={ACCOUNT_OPTIONS.filter(opt => opt.value !== values.selectedAccount?.value)}
                                     styles={customSelectStyles}
-                                    value={selectedToAccount}
-                                    onChange={(option) => setSelectedToAccount(option)}
+                                    value={values.selectedToAccount}
+                                    onChange={(option) => setFieldValue('selectedToAccount', option)}
                                     components={{ Option: CustomOption, SingleValue: CustomSingleValue }}
                                     placeholder="Select Destination Account"
                                     isSearchable
@@ -340,8 +344,9 @@ export const TransactionModal = ({ isOpen, onClose }: TransactionModalProps) => 
                             <input
                                 type="number"
                                 step="0.01"
-                                value={amount}
-                                onChange={(e) => setAmount(e.target.value)}
+                                name="amount"
+                                value={values.amount}
+                                onChange={handleChange}
                                 placeholder="0.00"
                                 className={`bg-transparent border-none focus:ring-0 text-6xl font-black placeholder:text-gray-200 w-56 text-center transition-colors duration-500 ${color === 'rose' ? 'text-rose-600' :
                                     color === 'emerald' ? 'text-emerald-600' :
@@ -379,8 +384,8 @@ export const TransactionModal = ({ isOpen, onClose }: TransactionModalProps) => 
                                 <CreatableSelect
                                     options={categories}
                                     styles={customSelectStyles}
-                                    value={selectedCategory}
-                                    onChange={(option) => setSelectedCategory(option)}
+                                    value={values.selectedCategory}
+                                    onChange={(option) => setFieldValue('selectedCategory', option)}
                                     onCreateOption={handleCreateCategory}
                                     components={{ Option: CustomOption, SingleValue: CustomSingleValue }}
                                     placeholder="Select or Create Category"
@@ -421,7 +426,7 @@ export const TransactionModal = ({ isOpen, onClose }: TransactionModalProps) => 
                                     ref={fileInputRef}
                                     className="hidden"
                                 />
-                                {!receipt ? (
+                                {!values.receipt ? (
                                     <Button
                                         type="button"
                                         variant="ghost"
@@ -434,7 +439,7 @@ export const TransactionModal = ({ isOpen, onClose }: TransactionModalProps) => 
                                 ) : (
                                     <Block className="w-full h-full relative group">
                                         <img
-                                            src={receipt}
+                                            src={values.receipt}
                                             alt="Receipt preview"
                                             className="w-full h-full object-cover rounded-2xl border border-gray-100"
                                         />

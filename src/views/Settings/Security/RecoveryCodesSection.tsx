@@ -1,11 +1,12 @@
 import { useState } from 'react';
+import { useModal } from '@/hooks/useModal';
 import { RefreshCw, Check, Copy, Download, AlertTriangle } from 'lucide-react';
 import { Block, Flex, Text, Grid } from '@shared';
 import { Modal, Button } from '@ui';
 
 export const RecoveryCodesSection = () => {
-    const [isRegenerateModalOpen, setIsRegenerateModalOpen] = useState(false);
-    const [isNewCodesModalOpen, setIsNewCodesModalOpen] = useState(false);
+    const regenerateModal = useModal(false);
+    const newCodesModal = useModal(false);
     const [hasCopied, setHasCopied] = useState(false);
 
     const recoveryCodes = [
@@ -15,8 +16,8 @@ export const RecoveryCodesSection = () => {
 
     const handleRegenerateCodes = () => {
         console.log('Codes regenerated');
-        setIsRegenerateModalOpen(false);
-        setIsNewCodesModalOpen(true);
+        regenerateModal.close();
+        newCodesModal.open();
     };
 
     const copyToClipboard = () => {
@@ -50,7 +51,7 @@ export const RecoveryCodesSection = () => {
                     <Flex align="center" gap={4}>
                         <Block
                             as="button"
-                            onClick={() => setIsRegenerateModalOpen(true)}
+                            onClick={regenerateModal.open}
                             className="px-8 py-4 bg-white border border-gray-200 text-gray-700 font-bold rounded-2xl hover:bg-gray-50 transition-all"
                         >
                             Regenerate New Codes
@@ -61,8 +62,8 @@ export const RecoveryCodesSection = () => {
 
             {/* New Recovery Codes Modal (Shown after regeneration) */}
             <Modal
-                isOpen={isNewCodesModalOpen}
-                onClose={() => setIsNewCodesModalOpen(false)}
+                isOpen={newCodesModal.isOpen}
+                onClose={newCodesModal.close}
                 title="Your New Recovery Codes"
             >
                 <Block className="space-y-8">
@@ -98,7 +99,7 @@ export const RecoveryCodesSection = () => {
                             Download
                         </Block>
                     </Flex>
-                    <Button onClick={() => setIsNewCodesModalOpen(false)} className="w-full py-4 rounded-2xl">
+                    <Button onClick={newCodesModal.close} className="w-full py-4 rounded-2xl">
                         I have saved these codes
                     </Button>
                 </Block>
@@ -106,8 +107,8 @@ export const RecoveryCodesSection = () => {
 
             {/* Regenerate Codes Modal */}
             <Modal
-                isOpen={isRegenerateModalOpen}
-                onClose={() => setIsRegenerateModalOpen(false)}
+                isOpen={regenerateModal.isOpen}
+                onClose={regenerateModal.close}
                 title="Regenerate Recovery Codes?"
             >
                 <Block className="space-y-6">
@@ -125,7 +126,7 @@ export const RecoveryCodesSection = () => {
                     <Flex direction="col" gap={4} className="sm:flex-row pt-4">
                         <Button
                             variant="outline"
-                            onClick={() => setIsRegenerateModalOpen(false)}
+                            onClick={regenerateModal.close}
                             className="flex-grow py-4 rounded-2xl"
                         >
                             Cancel

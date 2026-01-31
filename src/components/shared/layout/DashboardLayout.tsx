@@ -13,7 +13,6 @@ import {
     PieChart,
     Sparkles
 } from 'lucide-react';
-import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useLayout } from '@/context/LayoutContext';
 import OrgSwitcher from '@/components/features/organizations/OrgSwitcher';
@@ -24,6 +23,8 @@ import type { RootState } from '@/store/store';
 import { UpgradeButton, PlanBadge, UpgradeModal } from '@/views/Subscription';
 import { useAppDispatch, useAppSelector } from '@/store/redux';
 import { useFeatureFlag } from '@/hooks/useFeatureFlags';
+import { useToggle } from '@/hooks/useToggle';
+import { useModal } from '@/hooks/useModal';
 import {
     selectHasAIAdvisorAccess,
     selectHasExchangeRatesAccess,
@@ -34,9 +35,9 @@ import {
 import { useEffect } from 'react';
 
 export const DashboardLayout = () => {
-    const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-    const [isTransactionModalOpen, setIsTransactionModalOpen] = useState(false);
-    const [isUpgradeModalOpen, setIsUpgradeModalOpen] = useState(false);
+    const { value: isSidebarOpen, toggle: toggleSidebar } = useToggle(true);
+    const transactionModal = useModal(false);
+    const upgradeModal = useModal(false);
     const { layout } = useLayout();
     const navigate = useNavigate();
     const accountType = useSelector((state: RootState) => state.ui.accountType);
@@ -146,7 +147,7 @@ export const DashboardLayout = () => {
                 {layout !== 'top-nav' && layout !== 'minimal' && (
                     <Button
                         variant="ghost"
-                        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                        onClick={toggleSidebar}
                         className="p-2 hover:bg-gray-100 rounded-lg transition-colors text-gray-500 mr-4 h-auto"
                     >
                         {isSidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -196,7 +197,7 @@ export const DashboardLayout = () => {
                     <UpgradeButton
                         size="sm"
                         className="hidden md:flex"
-                        onClick={() => setIsUpgradeModalOpen(true)}
+                        onClick={() => upgradeModal.open()}
                     />
                 )}
 
@@ -204,7 +205,7 @@ export const DashboardLayout = () => {
                 {isTransactionsEnabled && (
                     <Button
                         size="sm"
-                        onClick={() => setIsTransactionModalOpen(true)}
+                        onClick={() => transactionModal.open()}
                         className="hidden md:flex items-center gap-2 rounded-xl px-4 py-2 shadow-lg shadow-primary/10"
                     >
                         <Plus size={18} />
@@ -246,14 +247,14 @@ export const DashboardLayout = () => {
 
             {/* Transaction Modal */}
             <TransactionModal
-                isOpen={isTransactionModalOpen}
-                onClose={() => setIsTransactionModalOpen(false)}
+                isOpen={transactionModal.isOpen}
+                onClose={transactionModal.close}
             />
 
             {/* Upgrade Modal */}
             <UpgradeModal
-                isOpen={isUpgradeModalOpen}
-                onClose={() => setIsUpgradeModalOpen(false)}
+                isOpen={upgradeModal.isOpen}
+                onClose={upgradeModal.close}
             />
         </Block>
     );
