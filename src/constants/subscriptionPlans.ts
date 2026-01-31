@@ -68,7 +68,7 @@ export const PLAN_LIMITS: Record<SubscriptionPlan, PlanLimits> = {
         analyticsHistoryDays: -1, // unlimited
         hasAIAdvisor: true,
         hasExchangeRates: false,
-        hasPermissionOverrides: false,
+        hasPermissionOverrides: true,
     },
     [SubscriptionPlan.ENTERPRISE]: {
         members: -1, // unlimited

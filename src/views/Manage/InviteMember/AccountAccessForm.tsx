@@ -12,6 +12,7 @@ interface AccountAccessFormProps {
     toggleAccountPermission: (accountId: string, permission: string) => void;
     overriddenAccounts: string[];
     toggleOverride: (accountId: string) => void;
+    canOverridePermissions?: boolean;
 }
 
 export const AccountAccessForm = ({
@@ -19,7 +20,8 @@ export const AccountAccessForm = ({
     toggleAccountSelection,
     toggleAccountPermission,
     overriddenAccounts,
-    toggleOverride
+    toggleOverride,
+    canOverridePermissions = false
 }: AccountAccessFormProps) => {
     // Local state for account search/pagination
     const [searchQuery, setSearchQuery] = useState('');
@@ -114,7 +116,7 @@ export const AccountAccessForm = ({
                                         </Flex>
 
                                         {/* Override Toggle */}
-                                        {isSelected && (
+                                        {isSelected && canOverridePermissions && (
                                             <Flex align="center" gap={4}>
                                                 <Text size="sm" weight="bold" color="text-gray-500">Override Permissions</Text>
                                                 <Block

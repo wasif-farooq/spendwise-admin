@@ -206,6 +206,7 @@ const InviteMemberPage = () => {
                     toggleAccountPermission={toggleAccountPermission}
                     overriddenAccounts={overriddenAccounts}
                     toggleOverride={toggleOverride}
+                    canOverridePermissions={useFeatureAccess('permission-overrides').hasAccess}
                 />
             </Grid>
 
