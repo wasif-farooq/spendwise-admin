@@ -1,6 +1,5 @@
 import React from 'react';
 import { FeatureLockedView } from '@/views/Subscription';
-import { TrendingUp } from 'lucide-react';
 
 export const ExchangeRatesPreviewPage: React.FC = () => {
     return (

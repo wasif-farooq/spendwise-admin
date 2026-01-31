@@ -1,12 +1,11 @@
 import React from 'react';
 import { Block } from '@shared';
-import { useAppSelector } from '@/store/redux';
-import { selectHasAIAdvisorAccess } from '@/store/slices/subscriptionSlice';
 import { FeatureLockedView } from '@/views/Subscription';
 import AIAdvisorContent from './AIAdvisorContent';
+import { useAIAdvisorAccess } from '@/hooks/features/ai-advisor/useAIAdvisorAccess';
 
 const AIAdvisorPage: React.FC = () => {
-    const hasAccess = useAppSelector(selectHasAIAdvisorAccess);
+    const { hasAccess } = useAIAdvisorAccess();
 
     // Show feature guide for free users
     if (!hasAccess) {
@@ -50,3 +49,4 @@ const AIAdvisorPage: React.FC = () => {
 };
 
 export default AIAdvisorPage;
+

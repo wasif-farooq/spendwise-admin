@@ -1,9 +1,7 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { registerSchema, type RegisterInput } from './schemas/authSchemas';
 import { Input, Button } from '@ui';
+import { CreditCard } from 'lucide-react';
 import {
     Block,
     Heading,
@@ -11,23 +9,16 @@ import {
     Container
 } from '@shared';
 import { SocialLogin } from './components/SocialLogin';
-import { CreditCard } from 'lucide-react';
+import { useRegisterForm } from '@/hooks/features/auth/useRegisterForm';
 
 export const RegisterForm = () => {
-    const navigate = useNavigate();
     const {
         register,
         handleSubmit,
-        formState: { errors, isSubmitting },
-    } = useForm<RegisterInput>({
-        resolver: zodResolver(registerSchema),
-    });
-
-    const onSubmit = (data: RegisterInput) => {
-        console.log('Register data:', data);
-        // Handle registration logic here
-        navigate('/confirm-email');
-    };
+        errors,
+        isSubmitting,
+        onSubmit
+    } = useRegisterForm();
 
     return (
         <Container as="div" size="full" className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">

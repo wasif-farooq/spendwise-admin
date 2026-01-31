@@ -2,26 +2,31 @@ import { Info, Check } from 'lucide-react';
 import Select from 'react-select';
 import { Block, Flex, Text, Grid } from '@shared';
 import { Button, Modal, Input } from '@ui';
-import { ACCOUNT_TYPES, CURRENCY_OPTIONS, customSelectStyles } from './types';
-import type { Account } from './types';
+import { customSelectStyles } from './types';
+import { useAccountForm } from '@/hooks/features/accounts/useAccountForm';
+import { type Account } from './types';
 
 interface AddAccountModalProps {
     isOpen: boolean;
     onClose: () => void;
-    selectedType: Account['type'];
-    onTypeChange: (type: Account['type']) => void;
-    selectedCurrency: any;
-    onCurrencyChange: (option: any) => void;
 }
 
 export const AddAccountModal = ({
     isOpen,
-    onClose,
-    selectedType,
-    onTypeChange,
-    selectedCurrency,
-    onCurrencyChange
+    onClose
 }: AddAccountModalProps) => {
+    const {
+        register,
+        handleSubmit,
+        selectedType,
+        setSelectedType,
+        selectedCurrency,
+        setSelectedCurrency,
+        onSubmit,
+        accountTypes,
+        currencyOptions
+    } = useAccountForm(onClose);
+
     return (
         <Modal
             isOpen={isOpen}
@@ -29,7 +34,7 @@ export const AddAccountModal = ({
             title="Add New Account"
             maxWidth="max-w-2xl"
         >
-            <form className="space-y-8" onSubmit={(e) => { e.preventDefault(); onClose(); }}>
+            <form className="space-y-8" onSubmit={handleSubmit(onSubmit)}>
                 <Block className="space-y-4">
                     <Flex align="center" justify="between" className="px-1">
                         <Text size="xs" weight="black" color="text-gray-400" className="uppercase tracking-widest">Select Account Type</Text>
@@ -39,12 +44,12 @@ export const AddAccountModal = ({
                         </Flex>
                     </Flex>
                     <Grid cols={1} gap={4} className="sm:grid-cols-2">
-                        {ACCOUNT_TYPES.map((type) => (
+                        {accountTypes.map((type) => (
                             <Block
                                 as="button"
                                 key={type.id}
                                 type="button"
-                                onClick={() => onTypeChange(type.id)}
+                                onClick={() => setSelectedType(type.id as Account['type'])}
                                 className={`relative flex items-center gap-4 p-4 rounded-3xl border-2 transition-all text-left group ${selectedType === type.id
                                     ? 'border-primary bg-primary/5 ring-4 ring-primary/10'
                                     : 'border-gray-100 hover:border-gray-200 hover:bg-gray-50'
@@ -70,16 +75,20 @@ export const AddAccountModal = ({
                 <Block className="space-y-6">
                     <Grid cols={1} gap={6} className="md:grid-cols-2">
                         <Block className="space-y-2">
-                            <Input label="Account Name" placeholder="e.g. Personal Savings" required />
+                            <Input
+                                label="Account Name"
+                                placeholder="e.g. Personal Savings"
+                                {...register('name', { required: true })}
+                            />
                             <Text size="xs" weight="bold" color="text-gray-400" className="ml-1">Give your account a recognizable name</Text>
                         </Block>
                         <Block className="space-y-2">
                             <Text size="xs" weight="black" color="text-gray-400" className="uppercase tracking-widest ml-1">Currency</Text>
                             <Select
-                                options={CURRENCY_OPTIONS}
+                                options={currencyOptions}
                                 styles={customSelectStyles}
                                 value={selectedCurrency}
-                                onChange={onCurrencyChange}
+                                onChange={(option: any) => setSelectedCurrency(option)}
                                 placeholder="Select Currency"
                                 isSearchable
                             />
@@ -87,7 +96,12 @@ export const AddAccountModal = ({
                     </Grid>
 
                     <Block className="space-y-2">
-                        <Input label="Initial Balance" type="number" placeholder="0.00" required />
+                        <Input
+                            label="Initial Balance"
+                            type="number"
+                            placeholder="0.00"
+                            {...register('balance', { required: true, valueAsNumber: true })}
+                        />
                         <Flex align="center" gap={2} className="ml-1">
                             <Block className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
                             <Text size="xs" weight="bold" color="text-gray-400">This will be your starting balance for tracking</Text>
@@ -96,7 +110,7 @@ export const AddAccountModal = ({
                 </Block>
 
                 <Flex direction="col" gap={4} className="sm:flex-row pt-4">
-                    <Button variant="outline" className="flex-1 rounded-2xl py-4" onClick={onClose}>
+                    <Button variant="outline" className="flex-1 rounded-2xl py-4" onClick={onClose} type="button">
                         Cancel
                     </Button>
                     <Button type="submit" className="flex-1 rounded-2xl py-4 shadow-xl shadow-primary/20">

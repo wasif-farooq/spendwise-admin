@@ -46,8 +46,9 @@ export interface AlertProps
 
 export const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
     ({ className, variant = 'info', dismissible, onDismiss, icon, showIcon = true, children, ...props }, ref) => {
-        const Icon = iconMap[variant];
-        const iconColor = iconColorMap[variant];
+        const v = (variant || 'info') as NonNullable<VariantProps<typeof alertVariants>['variant']>;
+        const Icon = iconMap[v];
+        const iconColor = iconColorMap[v];
 
         return (
             <Block

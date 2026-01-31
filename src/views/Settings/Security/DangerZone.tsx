@@ -1,15 +1,15 @@
-import { useState } from 'react';
 import { AlertTriangle, Trash2 } from 'lucide-react';
 import { Block, Flex, Heading, Text } from '@shared';
 import { Modal, Button } from '@ui';
+import { useDangerZone } from '@/hooks/features/settings/useDangerZone';
 
 export const DangerZone = () => {
-    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-
-    const handleDeleteAccount = () => {
-        console.log('Account deleted');
-        setIsDeleteModalOpen(false);
-    };
+    const {
+        isDeleteModalOpen,
+        openDeleteModal,
+        closeDeleteModal,
+        handleDeleteAccount
+    } = useDangerZone();
 
     return (
         <Block as="section" className="pt-12 border-t border-gray-100">
@@ -26,7 +26,7 @@ export const DangerZone = () => {
                     </Block>
                     <Block
                         as="button"
-                        onClick={() => setIsDeleteModalOpen(true)}
+                        onClick={openDeleteModal}
                         className="flex items-center justify-center px-8 py-4 bg-white border-2 border-red-100 text-red-600 font-bold rounded-2xl hover:bg-red-600 hover:text-white hover:border-red-600 transition-all active:scale-95"
                     >
                         <Trash2 className="h-5 w-5 mr-2" /> Delete Account
@@ -37,7 +37,7 @@ export const DangerZone = () => {
             {/* Delete Account Modal */}
             <Modal
                 isOpen={isDeleteModalOpen}
-                onClose={() => setIsDeleteModalOpen(false)}
+                onClose={closeDeleteModal}
                 title="Delete Account"
             >
                 <Block className="space-y-6">
@@ -60,7 +60,7 @@ export const DangerZone = () => {
                     <Flex direction="col" gap={4} className="sm:flex-row pt-4">
                         <Button
                             variant="outline"
-                            onClick={() => setIsDeleteModalOpen(false)}
+                            onClick={closeDeleteModal}
                             className="flex-grow py-4 rounded-2xl"
                         >
                             Cancel
@@ -77,3 +77,4 @@ export const DangerZone = () => {
         </Block>
     );
 };
+

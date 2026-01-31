@@ -1,29 +1,20 @@
-import { useState, useMemo } from 'react';
 import { RefreshCw, TrendingUp, DollarSign } from 'lucide-react';
 import { Block, Flex, Heading, Text, Grid } from '@shared';
 import { CustomSelect } from '@ui';
-import { CURRENCIES } from './types';
+import { useCurrencyConverter } from '@/hooks/features/exchange-rates/useCurrencyConverter';
 
 export const CurrencyConverter = () => {
-    const [fromCurrency, setFromCurrency] = useState('USD');
-    const [toCurrency, setToCurrency] = useState('EUR');
-    const [amount, setAmount] = useState<string>('1000');
-
-    const conversionResult = useMemo(() => {
-        const from = CURRENCIES.find(c => c.value === fromCurrency)?.rate || 1;
-        const to = CURRENCIES.find(c => c.value === toCurrency)?.rate || 1;
-        const rate = to / from;
-        const result = parseFloat(amount || '0') * rate;
-        return {
-            result: result.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
-            rate: rate.toFixed(4)
-        };
-    }, [fromCurrency, toCurrency, amount]);
-
-    const handleSwap = () => {
-        setFromCurrency(toCurrency);
-        setToCurrency(fromCurrency);
-    };
+    const {
+        fromCurrency,
+        setFromCurrency,
+        toCurrency,
+        setToCurrency,
+        amount,
+        setAmount,
+        conversionResult,
+        handleSwap,
+        currencies
+    } = useCurrencyConverter();
 
     return (
         <Block as="section" className="bg-white p-8 sm:p-10 rounded-[3rem] border border-gray-100 shadow-2xl shadow-primary/5 relative overflow-hidden group">
@@ -48,7 +39,7 @@ export const CurrencyConverter = () => {
                                 as="input"
                                 type="number"
                                 value={amount}
-                                onChange={(e: any) => setAmount(e.target.value)}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setAmount(e.target.value)}
                                 className="w-full pl-12 pr-4 py-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-primary font-black text-xl text-gray-900 transition-all"
                                 placeholder="0.00"
                             />
@@ -58,7 +49,7 @@ export const CurrencyConverter = () => {
                     <Block className="lg:col-span-3 space-y-3">
                         <CustomSelect
                             label="From"
-                            options={CURRENCIES.map(c => ({ value: c.value, label: c.label, icon: c.icon }))}
+                            options={currencies.map((c: any) => ({ value: c.value, label: c.label, icon: c.icon }))}
                             value={fromCurrency}
                             onChange={(val: string) => setFromCurrency(val)}
                         />
@@ -77,7 +68,7 @@ export const CurrencyConverter = () => {
                     <Block className="lg:col-span-3 space-y-3">
                         <CustomSelect
                             label="To"
-                            options={CURRENCIES.map(c => ({ value: c.value, label: c.label, icon: c.icon }))}
+                            options={currencies.map((c: any) => ({ value: c.value, label: c.label, icon: c.icon }))}
                             value={toCurrency}
                             onChange={(val: string) => setToCurrency(val)}
                         />
@@ -113,3 +104,4 @@ export const CurrencyConverter = () => {
         </Block>
     );
 };
+

@@ -1,162 +1,36 @@
-import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Block, Flex, Heading, Text, Grid, AnimatedBlock } from '@shared';
 import { Button } from '@ui';
 import { ArrowLeft, Save } from 'lucide-react';
-import mockData from '@/data/mockData.json';
 
 import { MemberDetailsForm } from '@/views/Manage/InviteMember/MemberDetailsForm';
 import { AccountAccessForm } from '@/views/Manage/InviteMember/AccountAccessForm';
 import { InviteSummaryModal } from '@/views/Manage/InviteMember/InviteSummaryModal';
-import type { InvitationData } from '@/views/Manage/InviteMember/types';
+import { useFeatureAccess } from '@/hooks/useFeatureAccess';
+import { useEditMember } from '@/hooks/features/organization/useEditMember';
 
 const EditMemberPage = () => {
     const navigate = useNavigate();
     const { id } = useParams();
 
-    // ... (state code intentionally omitted/preserved in search) ...
-    // Note: Since I can't preserve lines effectively without matching huge blocks, I will match the loader and the back button specifically.
-    // Wait, the instruction says "Replace matches". I will target the Loader first.
-
-    // ...
-    // Using multiple chunks for efficiency if possible? The tool supports single chunk.
-    // I will try to target specific blocks. But first, let's see if I can do it in one go if they are close? No, they are far apart.
-    // I will use replace_file_content multiple times or maybe just target the render method if I include everything.
-    // The previous view_file output is complete. I can replace the whole render return or parts.
-    // Let's replace the loader first.
-
-
-    // State
-    const [email, setEmail] = useState('');
-    const [selectedRoles, setSelectedRoles] = useState<string[]>([]);
-    const [accountConfigs, setAccountConfigs] = useState<InvitationData['accountPermissions']>({});
-    const [overriddenAccounts, setOverriddenAccounts] = useState<string[]>([]);
-
-    // UI State
-    const [showConfirmation, setShowConfirmation] = useState(false);
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [isLoading, setIsLoading] = useState(true);
-
-    const availableRoles = mockData.roles;
-
-    // Simulate fetching member data
-    useEffect(() => {
-        const fetchMember = async () => {
-            setIsLoading(true);
-            await new Promise(resolve => setTimeout(resolve, 600)); // Simulating network
-
-            const member = mockData.members.find(m => m.id === Number(id));
-
-            if (member) {
-                setEmail(member.email);
-                // logic to handle legacy 'role' vs new 'roles' array
-                const roles = (member as any).roles || [member.role.toLowerCase()];
-                setSelectedRoles(roles);
-
-                const permissions = (member as any).accountPermissions || {};
-                setAccountConfigs(permissions);
-
-                // Infer overridden accounts from permissions existence
-                setOverriddenAccounts(Object.keys(permissions));
-            }
-
-            setIsLoading(false);
-        };
-
-        if (id) {
-            fetchMember();
-        }
-    }, [id]);
-
-    const toggleRole = (roleName: string) => {
-        const normalized = roleName.toLowerCase();
-        setSelectedRoles(prev =>
-            prev.includes(normalized)
-                ? prev.filter(r => r !== normalized)
-                : [...prev, normalized]
-        );
-    };
-
-    const toggleAccountSelection = (accountId: string) => {
-        setAccountConfigs(prev => {
-            if (prev[accountId]) {
-                const { [accountId]: removed, ...rest } = prev;
-                return rest;
-            }
-
-            // Calculate initial permissions based on selected roles
-            const initialPermissions = new Set<string>();
-            selectedRoles.forEach(roleName => {
-                const role = availableRoles.find(r => r.name.toLowerCase() === roleName);
-                role?.permissions?.accounts?.forEach(p => initialPermissions.add(p));
-            });
-
-            return {
-                ...prev,
-                [accountId]: {
-                    accountId,
-                    permissions: Array.from(initialPermissions),
-                    denied: []
-                }
-            };
-        });
-    };
-
-    const toggleAccountPermission = (accountId: string, permission: string) => {
-        setAccountConfigs(prev => {
-            const config = prev[accountId];
-            if (!config) return prev;
-
-            const currentPermissions = config.permissions || [];
-            const hasPermission = currentPermissions.includes(permission);
-
-            const newPermissions = hasPermission
-                ? currentPermissions.filter(p => p !== permission)
-                : [...currentPermissions, permission];
-
-            return {
-                ...prev,
-                [accountId]: {
-                    ...config,
-                    permissions: newPermissions
-                }
-            };
-        });
-    };
-
-    const toggleOverride = (accountId: string) => {
-        setOverriddenAccounts(prev =>
-            prev.includes(accountId)
-                ? prev.filter(id => id !== accountId)
-                : [...prev, accountId]
-        );
-    };
-
-    const handleSaveClick = () => {
-        if (isFormValid) {
-            setShowConfirmation(true);
-        }
-    };
-
-    const processUpdate = async () => {
-        setIsSubmitting(true);
-        const data: InvitationData = {
-            email,
-            roles: selectedRoles,
-            accountPermissions: accountConfigs
-        };
-
-        console.log('Updating member:', data);
-
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 1500));
-
-        setIsSubmitting(false);
-        setShowConfirmation(false);
-        navigate('/manage/members');
-    };
-
-    const isFormValid = email && selectedRoles.length > 0;
+    const {
+        email,
+        setEmail,
+        selectedRoles,
+        toggleRole,
+        accountConfigs,
+        overriddenAccounts,
+        toggleAccountSelection,
+        toggleAccountPermission,
+        toggleOverride,
+        isLoading,
+        isSubmitting,
+        showConfirmation,
+        setShowConfirmation,
+        handleSaveClick,
+        processUpdate,
+        isFormValid
+    } = useEditMember(id);
 
     if (isLoading) {
         return (
@@ -224,6 +98,7 @@ const EditMemberPage = () => {
                     toggleAccountPermission={toggleAccountPermission}
                     overriddenAccounts={overriddenAccounts}
                     toggleOverride={toggleOverride}
+                    canOverridePermissions={useFeatureAccess('permission-overrides').hasAccess}
                 />
             </Grid>
 

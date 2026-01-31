@@ -1,13 +1,10 @@
 import { Link } from 'react-router-dom';
-import { Smartphone, MessageSquare, Mail, ChevronRight, ShieldCheck } from 'lucide-react';
+import { ChevronRight, ShieldCheck } from 'lucide-react';
+import { useTwoFactorSettings } from '@/hooks/features/useTwoFactorSettings';
 import { Block, Flex, Heading, Text } from '@shared';
 
 export const TwoFactorSection = () => {
-    const methods = [
-        { id: 'authenticator', name: 'Authenticator App', description: 'Use an app like Google Authenticator or Authy', icon: Smartphone, enabled: true },
-        { id: 'whatsapp', name: 'WhatsApp', description: 'Receive codes via WhatsApp', icon: MessageSquare, enabled: false },
-        { id: 'email', name: 'Email', description: 'Receive codes via email', icon: Mail, enabled: false },
-    ];
+    const { methods } = useTwoFactorSettings();
 
     return (
         <Block as="section" className="pt-12 border-t border-gray-100">

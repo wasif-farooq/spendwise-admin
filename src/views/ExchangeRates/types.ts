@@ -1,6 +1,14 @@
 import { DollarSign } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 
-export const CURRENCIES = [
+export interface Currency {
+    value: string;
+    label: string;
+    icon: LucideIcon;
+    rate: number;
+}
+
+export const CURRENCIES: Currency[] = [
     { value: 'USD', label: 'USD - US Dollar ($)', icon: DollarSign, rate: 1 },
     { value: 'EUR', label: 'EUR - Euro (€)', icon: DollarSign, rate: 0.92 },
     { value: 'GBP', label: 'GBP - British Pound (£)', icon: DollarSign, rate: 0.79 },
@@ -14,3 +22,4 @@ export const CURRENCIES = [
     { value: 'CNY', label: 'CNY - Chinese Yuan (¥)', icon: DollarSign, rate: 7.18 },
     { value: 'BRL', label: 'BRL - Brazilian Real (R$)', icon: DollarSign, rate: 4.95 },
 ];
+

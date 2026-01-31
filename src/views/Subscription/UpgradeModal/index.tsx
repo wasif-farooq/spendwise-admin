@@ -1,11 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Modal } from '@ui';
 import { Block, Text, Heading, Flex } from '@shared';
 import { BillingToggle } from './BillingToggle';
 import { PlanCard } from './PlanCard';
-import { useAppDispatch, useAppSelector } from '@/store/redux';
-import { selectPlans, selectCurrentPlan, upgradePlanThunk } from '@/store/slices/subscriptionSlice';
-import { toast } from 'sonner';
+import { useUpgradeModal as useUpgradeModalLogic } from '@/hooks/features/subscription/useUpgradeModalLogic';
 import { Sparkles } from 'lucide-react';
 
 export interface UpgradeModalProps {
@@ -19,24 +17,14 @@ export const UpgradeModal: React.FC<UpgradeModalProps> = ({
     onClose,
     triggerFeature,
 }) => {
-    const dispatch = useAppDispatch();
-    const plans = selectPlans();
-    const currentPlan = useAppSelector(selectCurrentPlan);
-    const [billingPeriod, setBillingPeriod] = useState<'monthly' | 'yearly'>('monthly');
-    const [loading, setLoading] = useState(false);
-
-    const handleUpgrade = async (planId: string) => {
-        setLoading(true);
-        try {
-            await dispatch(upgradePlanThunk({ planId, billingPeriod })).unwrap();
-            toast.success(`Successfully upgraded to ${planId} plan!`);
-            onClose();
-        } catch (error) {
-            toast.error('Failed to upgrade plan. Please try again.');
-        } finally {
-            setLoading(false);
-        }
-    };
+    const {
+        plans,
+        currentPlan,
+        billingPeriod,
+        setBillingPeriod,
+        loading,
+        handleUpgrade
+    } = useUpgradeModalLogic(onClose);
 
     return (
         <Modal isOpen={isOpen} onClose={onClose} title="" maxWidth="max-w-5xl">

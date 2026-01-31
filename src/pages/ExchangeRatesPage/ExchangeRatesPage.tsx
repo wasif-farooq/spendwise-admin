@@ -1,14 +1,18 @@
-import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Block, Grid } from '@shared';
 import { ExchangeRatesHeader } from '@/views/ExchangeRates/ExchangeRatesHeader';
 import { CurrencyConverter } from '@/views/ExchangeRates/CurrencyConverter';
 import { ExchangeRatesSidebar } from '@/views/ExchangeRates/ExchangeRatesSidebar';
 import { ExchangeRatesGrid } from '@/views/ExchangeRates/ExchangeRatesGrid';
+import { useExchangeRates } from '@/hooks/features/exchange-rates/useExchangeRates';
 
 const ExchangeRatesPage = () => {
-    const [baseCurrency, setBaseCurrency] = useState('USD');
-    const [searchQuery, setSearchQuery] = useState('');
+    const {
+        baseCurrency,
+        setBaseCurrency,
+        searchQuery,
+        setSearchQuery
+    } = useExchangeRates();
 
     return (
         <Block
@@ -42,3 +46,4 @@ const ExchangeRatesPage = () => {
 };
 
 export default ExchangeRatesPage;
+

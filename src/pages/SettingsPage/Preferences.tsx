@@ -5,8 +5,11 @@ import { ThemeSelector } from '@/views/Settings/Preferences/ThemeSelector';
 import { ColorSchemeSelector } from '@/views/Settings/Preferences/ColorSchemeSelector';
 import { LayoutSelector } from '@/views/Settings/Preferences/LayoutSelector';
 import { LocalizationSettings } from '@/views/Settings/Preferences/LocalizationSettings';
+import { usePreferences } from '@/hooks/features/settings/usePreferences';
 
 const Preferences = () => {
+    const { handleSave, handleCancel } = usePreferences();
+
     return (
         <Block
             as={motion.div}
@@ -34,10 +37,17 @@ const Preferences = () => {
             <LocalizationSettings />
 
             <Flex align="center" justify="end" gap={4} className="pt-8 border-t border-gray-100">
-                <Block as="button" className="px-8 py-4 text-gray-500 font-bold hover:text-gray-900 transition-colors">
+                <Block
+                    as="button"
+                    onClick={handleCancel}
+                    className="px-8 py-4 text-gray-500 font-bold hover:text-gray-900 transition-colors"
+                >
                     Cancel
                 </Block>
-                <Button className="px-10 py-4 shadow-lg shadow-primary/20">
+                <Button
+                    onClick={handleSave}
+                    className="px-10 py-4 shadow-lg shadow-primary/20"
+                >
                     Save Changes
                 </Button>
             </Flex>
@@ -46,3 +56,4 @@ const Preferences = () => {
 };
 
 export default Preferences;
+

@@ -3,7 +3,8 @@ import { Block, Flex, Heading, Text } from '@shared';
 import { Button, Input } from '@ui';
 import { useFeatureAccess } from '@/hooks/useFeatureAccess';
 import { LimitBanner, UpgradeModal } from '@/views/Subscription';
-import { useState } from 'react';
+import { useUpgradeModal } from '@/hooks/features/subscription/useUpgradeModal';
+
 
 interface RolesHeaderProps {
     searchQuery: string;
@@ -20,17 +21,16 @@ export const RolesHeader = ({
     activeFilterCount,
     onOpenFilter,
     onCreateRole,
-    customRoleCount = 0
 }: RolesHeaderProps) => {
     const roleAccess = useFeatureAccess('customRoles');
     const canAddRole = roleAccess.hasAccess;
-    const [isUpgradeModalOpen, setIsUpgradeModalOpen] = useState(false);
+    const { isUpgradeModalOpen, openUpgradeModal, closeUpgradeModal } = useUpgradeModal();
 
     const handleCreateClick = () => {
         if (canAddRole) {
             onCreateRole();
         } else {
-            setIsUpgradeModalOpen(true);
+            openUpgradeModal();
         }
     };
 
@@ -101,7 +101,7 @@ export const RolesHeader = ({
 
             <UpgradeModal
                 isOpen={isUpgradeModalOpen}
-                onClose={() => setIsUpgradeModalOpen(false)}
+                onClose={closeUpgradeModal}
                 triggerFeature="custom roles"
             />
         </Flex>

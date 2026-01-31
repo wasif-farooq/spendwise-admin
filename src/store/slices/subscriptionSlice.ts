@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk, type PayloadAction } from '@reduxjs/toolkit';
 import subscriptionService from '@/api/services/subscription/subscriptionService';
-import type { UserSubscription, FeatureUsage, SubscriptionState, SubscriptionPlanDetails } from '@/types/subscription.types';
+import type { FeatureUsage, SubscriptionState, SubscriptionPlanDetails } from '@/types/subscription.types';
+
 import { PLAN_LIMITS } from '@/constants/subscriptionPlans';
 import type { RootState } from '../store';
 

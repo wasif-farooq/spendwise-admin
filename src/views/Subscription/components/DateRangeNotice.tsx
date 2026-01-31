@@ -1,15 +1,14 @@
 import React from 'react';
 import { Alert, AlertTitle, AlertDescription } from '@ui';
-import { useAppSelector } from '@/store/redux';
-import { selectAnalyticsHistoryDays } from '@/store/slices/subscriptionSlice';
 import { Text } from '@shared';
+import { useSubscriptionNotices } from '@/hooks/features/subscription/useSubscriptionNotices';
 
 export interface DateRangeNoticeProps {
     className?: string;
 }
 
 export const DateRangeNotice: React.FC<DateRangeNoticeProps> = ({ className = '' }) => {
-    const maxDays = useAppSelector(selectAnalyticsHistoryDays);
+    const { maxDays } = useSubscriptionNotices();
 
     if (maxDays === -1) {
         return null; // Unlimited access
@@ -27,3 +26,4 @@ export const DateRangeNotice: React.FC<DateRangeNoticeProps> = ({ className = ''
         </Alert>
     );
 };
+

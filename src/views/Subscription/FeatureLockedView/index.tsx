@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Card, CardHeader, CardContent } from '@ui';
 import { Block, Flex, Heading, Text } from '@shared';
 import { Lock } from 'lucide-react';
@@ -6,6 +6,7 @@ import { FeatureIcon } from './FeatureIcon';
 import { BenefitsList } from './BenefitsList';
 import { UpgradeButton } from '../components/UpgradeButton';
 import { UpgradeModal } from '../UpgradeModal';
+import { useFeatureLockedView } from '@/hooks/features/subscription/useFeatureLockedView';
 
 export interface FeatureLockedViewProps {
     featureName: string;
@@ -22,7 +23,7 @@ export const FeatureLockedView: React.FC<FeatureLockedViewProps> = ({
     featureIcon,
     previewImage,
 }) => {
-    const [isUpgradeModalOpen, setIsUpgradeModalOpen] = useState(false);
+    const { isUpgradeModalOpen, openUpgradeModal, closeUpgradeModal } = useFeatureLockedView();
 
     return (
         <>
@@ -69,7 +70,7 @@ export const FeatureLockedView: React.FC<FeatureLockedViewProps> = ({
 
                             <Flex justify="center" className="pt-4">
                                 <UpgradeButton
-                                    onClick={() => setIsUpgradeModalOpen(true)}
+                                    onClick={openUpgradeModal}
                                     size="lg"
                                     className="px-12 py-4 text-lg"
                                 />
@@ -87,7 +88,7 @@ export const FeatureLockedView: React.FC<FeatureLockedViewProps> = ({
 
             <UpgradeModal
                 isOpen={isUpgradeModalOpen}
-                onClose={() => setIsUpgradeModalOpen(false)}
+                onClose={closeUpgradeModal}
                 triggerFeature={featureName}
             />
         </>
@@ -95,3 +96,4 @@ export const FeatureLockedView: React.FC<FeatureLockedViewProps> = ({
 };
 
 export default FeatureLockedView;
+

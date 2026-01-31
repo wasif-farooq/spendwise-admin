@@ -1,8 +1,5 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { loginSchema, type LoginInput } from './schemas/authSchemas';
 import { Input, Button } from '@ui';
 import {
     Block,
@@ -13,45 +10,16 @@ import {
 } from '@shared';
 import { SocialLogin } from './components/SocialLogin';
 import { CreditCard } from 'lucide-react';
-import { toast } from 'sonner';
-import { useAppDispatch, useAppSelector } from '@/hooks/redux';
-import { loginThunk, selectAuthLoading } from '@/store/slices/authSlice';
+import { useLoginForm } from '@/hooks/features/auth/useLoginForm';
 
 export const LoginForm = () => {
-    const navigate = useNavigate();
-    const dispatch = useAppDispatch();
-    const loading = useAppSelector(selectAuthLoading);
-
     const {
         register,
         handleSubmit,
-        formState: { errors },
-    } = useForm<LoginInput>({
-        resolver: zodResolver(loginSchema),
-    });
-
-    const onSubmit = async (data: LoginInput) => {
-        try {
-            const result = await dispatch(loginThunk(data));
-
-            if (loginThunk.fulfilled.match(result)) {
-                // Check if 2FA is required
-                if (result.payload.requiresTwoFactor) {
-                    // Redux state is already updated, just navigate
-                    navigate('/verify-2fa');
-                } else {
-                    // No 2FA required, redirect to dashboard
-                    navigate('/dashboard');
-                }
-            } else if (loginThunk.rejected.match(result)) {
-                // Handle error
-                toast.error(result.payload as string || 'Login failed');
-            }
-        } catch (error: any) {
-            console.error('Login error:', error);
-            toast.error('An error occurred during login. Please try again.');
-        }
-    };
+        errors,
+        loading,
+        onSubmit
+    } = useLoginForm();
 
     return (
         <Container as="div" size="full" className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">

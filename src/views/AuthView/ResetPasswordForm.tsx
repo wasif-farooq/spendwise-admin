@@ -8,8 +8,17 @@ import {
     Container
 } from '@shared';
 import { CreditCard } from 'lucide-react';
+import { useResetPasswordForm } from '@/hooks/features/auth/useResetPasswordForm';
 
 export const ResetPasswordForm = () => {
+    const {
+        register,
+        handleSubmit,
+        errors,
+        isSubmitting,
+        onSubmit
+    } = useResetPasswordForm();
+
     return (
         <Container as="div" size="full" className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
             <Block
@@ -29,27 +38,30 @@ export const ResetPasswordForm = () => {
                     </Text>
                 </Block>
 
-                <form className="mt-8 space-y-6">
+                <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
                     <Block className="space-y-4">
                         <Input
                             label="New Password"
                             type="password"
                             placeholder="••••••••"
-                            required
+                            {...register('password')}
+                            error={errors.password?.message}
                         />
                         <Input
                             label="Confirm Password"
                             type="password"
                             placeholder="••••••••"
-                            required
+                            {...register('confirmPassword')}
+                            error={errors.confirmPassword?.message}
                         />
                     </Block>
 
-                    <Button type="submit" className="w-full py-6 text-lg">
-                        Reset password
+                    <Button type="submit" className="w-full py-6 text-lg" disabled={isSubmitting}>
+                        {isSubmitting ? 'Resetting...' : 'Reset password'}
                     </Button>
                 </form>
             </Block>
         </Container>
     );
 };
+

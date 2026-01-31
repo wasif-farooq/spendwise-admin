@@ -1,11 +1,9 @@
-import { useAppDispatch, useAppSelector } from '@hooks/redux';
-import { toggleBillingCycle } from '@store/uiSlice';
 import { PricingCard } from '@ui';
 import { Grid, Flex, Block, Container, Heading, Text } from '@shared';
+import { usePricing } from '@/hooks/features/landing/usePricing';
 
 export const Pricing = () => {
-    const dispatch = useAppDispatch();
-    const isYearly = useAppSelector((state: any) => state.ui.isYearlyBilling);
+    const { isYearly, handleToggleBilling } = usePricing();
 
     const plans = [
         {
@@ -52,7 +50,7 @@ export const Pricing = () => {
                         <Text as="span" weight={!isYearly ? 'medium' : undefined} color={!isYearly ? 'text-gray-900' : 'text-gray-500'}>Monthly</Text>
                         <Block
                             as="button"
-                            onClick={() => dispatch(toggleBillingCycle())}
+                            onClick={handleToggleBilling}
                             className="relative w-12 h-6 rounded-full bg-gray-200 transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
                         >
                             <Block
@@ -75,3 +73,4 @@ export const Pricing = () => {
         </Block>
     );
 };
+

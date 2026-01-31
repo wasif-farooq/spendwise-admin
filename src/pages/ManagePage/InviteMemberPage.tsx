@@ -1,152 +1,34 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Block, Flex, Heading, Text, Grid, AnimatedBlock } from '@shared';
 import { Button } from '@ui';
 import { ArrowLeft, Check } from 'lucide-react';
-import mockData from '@/data/mockData.json';
 
 import { MemberDetailsForm } from '@/views/Manage/InviteMember/MemberDetailsForm';
 import { AccountAccessForm } from '@/views/Manage/InviteMember/AccountAccessForm';
 import { InviteSummaryModal } from '@/views/Manage/InviteMember/InviteSummaryModal';
-import type { InvitationData } from '@/views/Manage/InviteMember/types';
 import { useFeatureAccess } from '@/hooks/useFeatureAccess';
-import { FeatureLockedView } from '@/views/Subscription';
-
+import { useInviteMember } from '@/hooks/features/organization/useInviteMember';
 
 const InviteMemberPage = () => {
     const navigate = useNavigate();
-    const [email, setEmail] = useState('');
-    const [selectedRoles, setSelectedRoles] = useState<string[]>(['member']);
-    const [accountConfigs, setAccountConfigs] = useState<InvitationData['accountPermissions']>({});
-    const [overriddenAccounts, setOverriddenAccounts] = useState<string[]>([]);
 
-    const memberAccess = useFeatureAccess('members');
-    const canAddMember = memberAccess.hasAccess;
-
-    if (!canAddMember) {
-        return (
-            <Block className="min-h-screen bg-gray-50 p-8">
-                <Block className="mx-auto max-w-4xl">
-                    <FeatureLockedView
-                        featureName="Team Members"
-                        featureDescription={memberAccess.reason || "You have reached the limit for team members on your current plan."}
-                        benefits={[
-                            'Invite more team members',
-                            'Collaborate in real-time',
-                            'Manage user permissions',
-                            'Assign roles and access levels'
-                        ]}
-                    />
-                </Block>
-            </Block>
-        );
-    }
-
-    // UI State
-    const [showConfirmation, setShowConfirmation] = useState(false);
-    const [isSubmitting, setIsSubmitting] = useState(false);
-
-    const availableRoles = mockData.roles;
-
-    const toggleRole = (roleName: string) => {
-        const normalized = roleName.toLowerCase();
-        setSelectedRoles(prev =>
-            prev.includes(normalized)
-                ? prev.filter(r => r !== normalized)
-                : [...prev, normalized]
-        );
-    };
-
-    const toggleAccountSelection = (accountId: string) => {
-        setAccountConfigs(prev => {
-            if (prev[accountId]) {
-                const { [accountId]: removed, ...rest } = prev;
-                return rest;
-            }
-
-            // Calculate initial permissions based on selected roles
-            const initialPermissions = new Set<string>();
-            selectedRoles.forEach(roleName => {
-                const role = availableRoles.find(r => r.name.toLowerCase() === roleName);
-                role?.permissions?.accounts?.forEach(p => initialPermissions.add(p));
-            });
-
-            return {
-                ...prev,
-                [accountId]: {
-                    accountId,
-                    permissions: Array.from(initialPermissions),
-                    denied: []
-                }
-            };
-        });
-    };
-
-    const toggleAccountPermission = (accountId: string, permission: string) => {
-        setAccountConfigs(prev => {
-            const config = prev[accountId];
-            // If account not selected, select it first with this permission
-            if (!config) {
-                return {
-                    ...prev,
-                    [accountId]: {
-                        accountId,
-                        permissions: [permission],
-                        denied: []
-                    }
-                };
-            }
-
-            const currentPermissions = config.permissions || [];
-            const hasPermission = currentPermissions.includes(permission);
-
-            const newPermissions = hasPermission
-                ? currentPermissions.filter(p => p !== permission)
-                : [...currentPermissions, permission];
-
-            return {
-                ...prev,
-                [accountId]: {
-                    ...config,
-                    permissions: newPermissions
-                }
-            };
-        });
-    };
-
-    const toggleOverride = (accountId: string) => {
-        setOverriddenAccounts(prev =>
-            prev.includes(accountId)
-                ? prev.filter(id => id !== accountId)
-                : [...prev, accountId]
-        );
-    };
-
-    const handleInviteClick = () => {
-        if (isFormValid) {
-            setShowConfirmation(true);
-        }
-    };
-
-    const processInvite = async () => {
-        setIsSubmitting(true);
-        const data: InvitationData = {
-            email,
-            roles: selectedRoles,
-            accountPermissions: accountConfigs
-        };
-
-        console.log('Sending invitation:', data);
-
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 1500));
-
-        setIsSubmitting(false);
-        setShowConfirmation(false);
-        navigate('/manage/members', { state: { invitationSent: true, email: data.email } });
-    };
-
-    const isFormValid = email && selectedRoles.length > 0 && Object.keys(accountConfigs).length > 0;
+    const {
+        email,
+        setEmail,
+        selectedRoles,
+        toggleRole,
+        accountConfigs,
+        overriddenAccounts,
+        toggleAccountSelection,
+        toggleAccountPermission,
+        toggleOverride,
+        showConfirmation,
+        setShowConfirmation,
+        isSubmitting,
+        handleInviteClick,
+        processInvite,
+        isFormValid
+    } = useInviteMember();
 
     return (
         <AnimatedBlock

@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { User, Camera } from 'lucide-react';
+import { User, Camera, Save } from 'lucide-react';
 import { Input, Button } from '@ui';
 import {
     Block,
@@ -8,8 +8,22 @@ import {
     Text,
     Grid
 } from '@shared';
+import { useProfile } from '@/hooks/features/settings/useProfile';
 
 const Profile = () => {
+    const {
+        firstName,
+        setFirstName,
+        lastName,
+        setLastName,
+        email,
+        setEmail,
+        phone,
+        setPhone,
+        isSaving,
+        handleSave
+    } = useProfile();
+
     return (
         <Block
             as={motion.div}
@@ -36,13 +50,35 @@ const Profile = () => {
                     </Block>
 
                     <Grid cols={1} gap={6} className="flex-grow sm:grid-cols-2 w-full">
-                        <Input label="First Name" defaultValue="John" className="bg-gray-50 border-none focus:ring-2 focus:ring-primary h-14 rounded-2xl" />
-                        <Input label="Last Name" defaultValue="Doe" className="bg-gray-50 border-none focus:ring-2 focus:ring-primary h-14 rounded-2xl" />
+                        <Input
+                            label="First Name"
+                            value={firstName}
+                            onChange={(e) => setFirstName(e.target.value)}
+                            className="bg-gray-50 border-none focus:ring-2 focus:ring-primary h-14 rounded-2xl"
+                        />
+                        <Input
+                            label="Last Name"
+                            value={lastName}
+                            onChange={(e) => setLastName(e.target.value)}
+                            className="bg-gray-50 border-none focus:ring-2 focus:ring-primary h-14 rounded-2xl"
+                        />
                         <Block className="sm:col-span-2">
-                            <Input label="Email Address" defaultValue="john@example.com" type="email" className="bg-gray-50 border-none focus:ring-2 focus:ring-primary h-14 rounded-2xl" />
+                            <Input
+                                label="Email Address"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                type="email"
+                                className="bg-gray-50 border-none focus:ring-2 focus:ring-primary h-14 rounded-2xl"
+                            />
                         </Block>
                         <Block className="sm:col-span-2">
-                            <Input label="Phone Number" defaultValue="+1 (555) 000-0000" type="tel" className="bg-gray-50 border-none focus:ring-2 focus:ring-primary h-14 rounded-2xl" />
+                            <Input
+                                label="Phone Number"
+                                value={phone}
+                                onChange={(e) => setPhone(e.target.value)}
+                                type="tel"
+                                className="bg-gray-50 border-none focus:ring-2 focus:ring-primary h-14 rounded-2xl"
+                            />
                         </Block>
                     </Grid>
                 </Flex>
@@ -52,8 +88,14 @@ const Profile = () => {
                 <Button variant="ghost" className="px-8 py-4 text-gray-500 font-bold hover:text-gray-900 transition-colors">
                     Cancel
                 </Button>
-                <Button className="px-10 py-4 shadow-lg shadow-primary/20">
-                    Save Changes
+                <Button
+                    onClick={handleSave}
+                    disabled={isSaving}
+                    className="px-10 py-4 shadow-lg shadow-primary/20 flex items-center gap-2"
+                >
+                    {isSaving && <Block className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />}
+                    <Save className="h-5 w-5" />
+                    {isSaving ? 'Saving...' : 'Save Changes'}
                 </Button>
             </Flex>
         </Block>
@@ -61,3 +103,4 @@ const Profile = () => {
 };
 
 export default Profile;
+

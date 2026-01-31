@@ -5,13 +5,14 @@ import { BillingHeader } from '@/views/Manage/Billing/BillingHeader';
 import { PlanOverview } from '@/views/Manage/Billing/PlanOverview';
 import { PaymentMethods } from '@/views/Manage/Billing/PaymentMethods';
 import { BillingHistory } from '@/views/Manage/Billing/BillingHistory';
-import mockData from '@/data/mockData.json';
+import { useBilling } from '@/hooks/features/organization/useBilling';
 
 const Billing = () => {
-
-    const currentPlan = mockData.billing.currentPlan;
-    const paymentMethods = mockData.billing.paymentMethods;
-    const billingHistory = mockData.billing.history;
+    const {
+        currentPlan,
+        paymentMethods,
+        billingHistory
+    } = useBilling();
 
     return (
         <Block

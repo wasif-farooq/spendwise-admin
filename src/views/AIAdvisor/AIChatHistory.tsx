@@ -1,9 +1,9 @@
-import { useEffect, useRef } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import { Bot } from 'lucide-react';
 import { Block, Flex, AnimatedBlock } from '@shared';
 import { ChatMessage } from '@ui';
 import type { Message } from './types';
+import { useChatScroll } from '@/hooks/ui/useChatScroll';
 
 interface AIChatHistoryProps {
     messages: Message[];
@@ -11,11 +11,7 @@ interface AIChatHistoryProps {
 }
 
 export const AIChatHistory = ({ messages, isTyping }: AIChatHistoryProps) => {
-    const messagesEndRef = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    }, [messages, isTyping]);
+    const messagesEndRef = useChatScroll([messages, isTyping]);
 
     return (
         <Block className="flex-grow overflow-y-auto p-6 space-y-6">
@@ -46,3 +42,4 @@ export const AIChatHistory = ({ messages, isTyping }: AIChatHistoryProps) => {
         </Block>
     );
 };
+

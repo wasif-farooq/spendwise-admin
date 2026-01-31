@@ -41,7 +41,8 @@ export const DashboardLayout = () => {
     const { layout } = useLayout();
     const navigate = useNavigate();
     const accountType = useSelector((state: RootState) => state.ui.accountType);
-    const hasAIAdvisor = useAppSelector(selectHasAIAdvisorAccess);
+    // AI Advisor access check
+    useAppSelector(selectHasAIAdvisorAccess);
     const hasExchangeRates = useAppSelector(selectHasExchangeRatesAccess);
     const currentPlan = useAppSelector(selectSubscriptionPlan);
     const dispatch = useAppDispatch();

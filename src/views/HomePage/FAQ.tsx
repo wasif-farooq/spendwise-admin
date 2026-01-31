@@ -1,6 +1,6 @@
-import { useState } from 'react';
 import { FAQItem } from '@ui';
 import { Block, Container, Heading, Text } from '@shared';
+import { useFAQ } from '@/hooks/features/landing/useFAQ';
 
 const faqs = [
     {
@@ -22,7 +22,7 @@ const faqs = [
 ];
 
 export const FAQ = () => {
-    const [activeIndex, setActiveIndex] = useState<number | null>(null);
+    const { activeIndex, toggleFAQ } = useFAQ();
 
     return (
         <Block as="section" id="faq" className="py-20 bg-white">
@@ -41,7 +41,7 @@ export const FAQ = () => {
                             question={faq.question}
                             answer={faq.answer}
                             isOpen={activeIndex === index}
-                            onClick={() => setActiveIndex(activeIndex === index ? null : index)}
+                            onClick={() => toggleFAQ(index)}
                         />
                     ))}
                 </Block>
@@ -49,3 +49,4 @@ export const FAQ = () => {
         </Block>
     );
 };
+

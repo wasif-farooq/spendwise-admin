@@ -3,7 +3,8 @@ import { Block, Flex, Heading, Text } from '@shared';
 import { Button, Input } from '@ui';
 import { useFeatureAccess } from '@/hooks/useFeatureAccess';
 import { LimitBanner, UpgradeModal } from '@/views/Subscription';
-import { useState } from 'react';
+import { useUpgradeModal } from '@/hooks/features/subscription/useUpgradeModal';
+
 
 interface MembersHeaderProps {
     searchQuery: string;
@@ -20,17 +21,16 @@ export const MembersHeader = ({
     activeFilterCount,
     onOpenFilter,
     onOpenInvite,
-    memberCount = 0
 }: MembersHeaderProps) => {
     const memberAccess = useFeatureAccess('members');
     const canAddMember = memberAccess.hasAccess;
-    const [isUpgradeModalOpen, setIsUpgradeModalOpen] = useState(false);
+    const { isUpgradeModalOpen, openUpgradeModal, closeUpgradeModal } = useUpgradeModal();
 
     const handleInviteClick = () => {
         if (canAddMember) {
             onOpenInvite();
         } else {
-            setIsUpgradeModalOpen(true);
+            openUpgradeModal();
         }
     };
 
@@ -101,8 +101,8 @@ export const MembersHeader = ({
 
             <UpgradeModal
                 isOpen={isUpgradeModalOpen}
-                onClose={() => setIsUpgradeModalOpen(false)}
-                triggerFeature="team members"
+                onClose={closeUpgradeModal}
+                triggerFeature="Member Roles"
             />
         </Flex>
     );

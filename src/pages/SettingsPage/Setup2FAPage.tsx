@@ -1,7 +1,6 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Smartphone, MessageSquare, Mail, CheckCircle2, Copy, Download, RefreshCw, Check } from 'lucide-react';
-import { Link, useSearchParams, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { ArrowLeft, CheckCircle2, Copy, Download, RefreshCw, Check } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { Button, Input } from '@ui';
 import {
     Block,
@@ -11,90 +10,28 @@ import {
     Grid,
     Container
 } from '@shared';
+import { useSetup2FA } from '@/hooks/features/settings/useSetup2FA';
 
 const Setup2FAPage = () => {
-    const [searchParams] = useSearchParams();
-    const navigate = useNavigate();
-    const method = searchParams.get('method') || 'authenticator';
-
-    const [step, setStep] = useState(1);
-    const [inputValue, setInputValue] = useState('');
-    const [verificationCode, setVerificationCode] = useState('');
-    const [isVerifying, setIsVerifying] = useState(false);
-    const [hasCopied, setHasCopied] = useState(false);
-    const [hasAcknowledged, setHasAcknowledged] = useState(false);
-
-    const recoveryCodes = [
-        'ABCD-1234', 'EFGH-5678', 'IJKL-9012', 'MNOP-3456',
-        'QRST-7890', 'UVWX-1234', 'YZAB-5678', 'CDEF-9012'
-    ];
-
-    const handleNextStep = () => {
-        if (step === 1) {
-            setIsVerifying(true);
-            // Simulate sending code
-            setTimeout(() => {
-                setIsVerifying(false);
-                setStep(2);
-            }, 1500);
-        } else if (step === 2) {
-            // Verify code and move to recovery codes
-            setIsVerifying(true);
-            setTimeout(() => {
-                setIsVerifying(false);
-                setStep(3); // Recovery codes step
-            }, 1500);
-        } else {
-            // Final step - success
-            setStep(4);
-        }
-    };
-
-    const copyToClipboard = () => {
-        navigator.clipboard.writeText(recoveryCodes.join('\n'));
-        setHasCopied(true);
-        setTimeout(() => setHasCopied(false), 2000);
-    };
-
-    const downloadCodes = () => {
-        const element = document.createElement('a');
-        const file = new Blob([recoveryCodes.join('\n')], { type: 'text/plain' });
-        element.href = URL.createObjectURL(file);
-        element.download = 'spendwise-recovery-codes.txt';
-        document.body.appendChild(element);
-        element.click();
-    };
-
-    const getMethodDetails = () => {
-        switch (method) {
-            case 'whatsapp':
-                return {
-                    title: 'WhatsApp',
-                    icon: MessageSquare,
-                    inputLabel: 'WhatsApp Number',
-                    inputPlaceholder: '+1 (555) 000-0000',
-                    inputType: 'tel',
-                    description: 'We will send a 6-digit verification code to your WhatsApp.'
-                };
-            case 'email':
-                return {
-                    title: 'Email',
-                    icon: Mail,
-                    inputLabel: 'Email Address',
-                    inputPlaceholder: 'john@example.com',
-                    inputType: 'email',
-                    description: 'We will send a 6-digit verification code to your email address.'
-                };
-            default:
-                return {
-                    title: 'Authenticator App',
-                    icon: Smartphone,
-                    description: 'Scan the QR code with your authenticator app.'
-                };
-        }
-    };
-
-    const details = getMethodDetails();
+    const {
+        method,
+        step,
+        setStep,
+        inputValue,
+        setInputValue,
+        verificationCode,
+        setVerificationCode,
+        isVerifying,
+        hasCopied,
+        hasAcknowledged,
+        setHasAcknowledged,
+        recoveryCodes,
+        handleNextStep,
+        copyToClipboard,
+        downloadCodes,
+        details,
+        handleBackToSecurity
+    } = useSetup2FA();
 
     return (
         <Container size="full" className="py-10">
@@ -306,7 +243,7 @@ const Setup2FAPage = () => {
                                     <Heading as="h1" size="xl" weight="black" className="text-gray-900">2FA Enabled!</Heading>
                                     <Text color="text-gray-500" className="mt-2">Your account is now secured with {details.title}.</Text>
                                 </Block>
-                                <Button onClick={() => navigate('/settings/security')} className="w-full py-6 text-lg rounded-2xl font-black">
+                                <Button onClick={handleBackToSecurity} className="w-full py-6 text-lg rounded-2xl font-black">
                                     Back to Security Settings
                                 </Button>
                             </Block>
@@ -319,3 +256,4 @@ const Setup2FAPage = () => {
 };
 
 export default Setup2FAPage;
+

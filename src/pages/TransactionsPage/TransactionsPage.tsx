@@ -1,16 +1,4 @@
-import { useState, useMemo } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import {
-    Smartphone,
-    Coffee,
-    TrendingUp,
-    Car,
-    Home,
-    ShoppingBag,
-    Zap
-} from 'lucide-react';
-import type { LucideIcon } from 'lucide-react';
 import {
     Container,
 } from '@shared';
@@ -19,57 +7,23 @@ import { TransactionHistoryModal } from '@/views/Transactions/TransactionHistory
 import { StatsOverview } from '@/views/Transactions/StatsOverview';
 import { TransactionFilters } from '@/views/Transactions/TransactionFilters';
 import { TransactionList } from '@/views/Transactions/TransactionList';
-import mockData from '@/data/mockData.json';
-
-interface Transaction {
-    id: string;
-    date: string;
-    description: string;
-    category: string;
-    amount: number;
-    type: 'expense' | 'income';
-    status: 'completed' | 'pending';
-    icon: LucideIcon;
-    color: string;
-}
-
-const iconMap: Record<string, LucideIcon> = {
-    Smartphone,
-    Coffee,
-    TrendingUp,
-    Car,
-    Home,
-    ShoppingBag,
-    Zap
-};
+import { useTransactions } from '@/hooks/features/transactions/useTransactions';
 
 const TransactionsPage = () => {
-    // Map icons from JSON strings to components
-    const [transactions] = useState<Transaction[]>(() =>
-        mockData.transactions.map(t => ({
-            ...t,
-            type: t.type as 'expense' | 'income',
-            status: t.status as 'completed' | 'pending',
-            icon: iconMap[t.iconName] || ShoppingBag // Fallback icon
-        }))
-    );
-    const { id } = useParams();
-    const navigate = useNavigate();
-    const [searchQuery, setSearchQuery] = useState('');
-    const [selectedCategory, setSelectedCategory] = useState('All');
-    const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
-    const [selectedTransaction, setSelectedTransaction] = useState<Transaction | null>(null);
-
-    const filteredTransactions = useMemo(() => {
-        return transactions.filter(t => {
-            const matchesSearch = t.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                t.category.toLowerCase().includes(searchQuery.toLowerCase());
-            const matchesCategory = selectedCategory === 'All' || t.category === selectedCategory;
-            return matchesSearch && matchesCategory;
-        });
-    }, [transactions, searchQuery, selectedCategory]);
-
-    const categories = ['All', ...Array.from(new Set(transactions.map((t: Transaction) => t.category)))];
+    const {
+        id,
+        searchQuery,
+        setSearchQuery,
+        selectedCategory,
+        setSelectedCategory,
+        isHistoryModalOpen,
+        setIsHistoryModalOpen,
+        selectedTransaction,
+        filteredTransactions,
+        categories,
+        handleTransactionClick,
+        handleBack
+    } = useTransactions();
 
     return (
         <Container size="wide" as={motion.div}
@@ -80,7 +34,7 @@ const TransactionsPage = () => {
             {/* Header */}
             <TransactionHeader
                 accountId={id}
-                onBack={() => navigate('/accounts')}
+                onBack={handleBack}
             />
 
             {/* Stats Overview */}
@@ -98,10 +52,7 @@ const TransactionsPage = () => {
             {/* Transaction List */}
             <TransactionList
                 transactions={filteredTransactions}
-                onTransactionClick={(t) => {
-                    setSelectedTransaction(t);
-                    setIsHistoryModalOpen(true);
-                }}
+                onTransactionClick={handleTransactionClick}
             />
 
             {/* Modification History Modal */}
@@ -115,3 +66,4 @@ const TransactionsPage = () => {
 };
 
 export default TransactionsPage;
+

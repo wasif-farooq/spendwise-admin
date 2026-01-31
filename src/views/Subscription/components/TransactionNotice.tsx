@@ -1,15 +1,14 @@
 import React from 'react';
 import { Alert, AlertTitle, AlertDescription } from '@ui';
-import { useAppSelector } from '@/store/redux';
-import { selectTransactionHistoryMonths } from '@/store/slices/subscriptionSlice';
 import { Text } from '@shared';
+import { useSubscriptionNotices } from '@/hooks/features/subscription/useSubscriptionNotices';
 
 export interface TransactionNoticeProps {
     className?: string;
 }
 
 export const TransactionNotice: React.FC<TransactionNoticeProps> = ({ className = '' }) => {
-    const maxMonths = useAppSelector(selectTransactionHistoryMonths);
+    const { maxMonths } = useSubscriptionNotices();
 
     if (maxMonths === -1) {
         return null; // Unlimited access
@@ -27,3 +26,4 @@ export const TransactionNotice: React.FC<TransactionNoticeProps> = ({ className 
         </Alert>
     );
 };
+

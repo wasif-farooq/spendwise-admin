@@ -1,4 +1,5 @@
-import { useState, useCallback, ChangeEvent } from 'react';
+import { useState, useCallback, type ChangeEvent } from 'react';
+
 
 interface ValidationRules {
     [key: string]: (value: any) => string | undefined;

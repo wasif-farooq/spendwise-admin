@@ -2,7 +2,6 @@ import { Wallet, Plus } from 'lucide-react';
 import { Block, Flex, Heading, Text } from '@shared';
 import { Button } from '@ui';
 import { useFeatureAccess } from '@/hooks/useFeatureAccess';
-import { LimitBanner } from '@/views/Subscription';
 
 interface AccountsHeaderProps {
     totalBalance: number;
@@ -10,7 +9,7 @@ interface AccountsHeaderProps {
     accountCount?: number;
 }
 
-export const AccountsHeader = ({ totalBalance, onAddAccount, accountCount = 0 }: AccountsHeaderProps) => {
+export const AccountsHeader = ({ totalBalance, onAddAccount }: AccountsHeaderProps) => {
     const accountAccess = useFeatureAccess('accounts');
     const canAddAccount = accountAccess.hasAccess;
 

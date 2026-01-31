@@ -1,5 +1,6 @@
 import { AnimatePresence } from 'framer-motion';
-import { Plus, Building2, Banknote, CreditCard, Wallet } from 'lucide-react';
+import { Plus } from 'lucide-react';
+
 import { Block, Heading, Text, Grid } from '@shared';
 import { AccountCard } from '@ui';
 import type { Account } from './types';
@@ -7,26 +8,20 @@ import type { Account } from './types';
 interface AccountsGridProps {
     accounts: Account[];
     onAddAccount: () => void;
+    getAccountIcon: (type: string) => React.ReactNode;
 }
 
-export const AccountsGrid = ({ accounts, onAddAccount }: AccountsGridProps) => {
 
-    const getIcon = (type: string) => {
-        switch (type) {
-            case 'bank': return <Building2 size={24} />;
-            case 'cash': return <Banknote size={24} />;
-            case 'credit_card': return <CreditCard size={24} />;
-            case 'savings': return <Wallet size={24} />;
-            default: return <Wallet size={24} />;
-        }
-    };
+export const AccountsGrid = ({ accounts, onAddAccount, getAccountIcon }: AccountsGridProps) => {
+
 
     return (
         <Grid cols={1} gap={8} className="md:grid-cols-2 lg:grid-cols-3">
             <AnimatePresence mode="popLayout">
                 {accounts.map((account) => (
-                    <AccountCard key={account.id} account={account} getIcon={getIcon} />
+                    <AccountCard key={account.id} account={account} getIcon={getAccountIcon} />
                 ))}
+
             </AnimatePresence>
 
             {/* Add New Account Card */}

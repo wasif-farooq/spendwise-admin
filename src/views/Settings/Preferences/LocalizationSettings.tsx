@@ -1,24 +1,16 @@
-import { DollarSign, Globe } from 'lucide-react';
-import type { LucideIcon } from 'lucide-react';
 import { Block, Heading, Text, Grid } from '@shared';
 import { CustomSelect } from '@ui';
-import mockData from '@/data/mockData.json';
-
-const iconMap: Record<string, LucideIcon> = {
-    DollarSign,
-    Globe
-};
+import { useLocalizationSettings } from '@/hooks/features/useLocalizationSettings';
 
 export const LocalizationSettings = () => {
-    const currencyOptions = mockData.preferences.currencyOptions.map(opt => ({
-        ...opt,
-        icon: iconMap[opt.iconName] || DollarSign
-    }));
-
-    const timezoneOptions = mockData.preferences.timezoneOptions.map(opt => ({
-        ...opt,
-        icon: iconMap[opt.iconName] || Globe
-    }));
+    const {
+        currency,
+        setCurrency,
+        timezone,
+        setTimezone,
+        currencyOptions,
+        timezoneOptions
+    } = useLocalizationSettings();
 
     return (
         <Block as="section" className="pt-12 border-t border-gray-100">
@@ -31,14 +23,14 @@ export const LocalizationSettings = () => {
                 <CustomSelect
                     label="Default Currency"
                     options={currencyOptions}
-                    value="USD"
-                    onChange={() => { }}
+                    value={currency}
+                    onChange={(opt: any) => setCurrency(opt.value)}
                 />
                 <CustomSelect
                     label="Timezone"
                     options={timezoneOptions}
-                    value="EST"
-                    onChange={() => { }}
+                    value={timezone}
+                    onChange={(opt: any) => setTimezone(opt.value)}
                 />
             </Grid>
         </Block>

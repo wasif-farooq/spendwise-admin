@@ -1,82 +1,34 @@
 import { motion } from 'framer-motion';
 import { LayoutDashboard, Save } from 'lucide-react';
-import { useState, useRef } from 'react';
 import { Button } from '@ui';
 import { Block, Flex, Grid, Text } from '@shared';
-import { useDispatch, useSelector } from 'react-redux';
-import { setAccountType } from '../../store/uiSlice';
-import type { RootState } from '../../store/store';
-
 import { GeneralHeader } from '@/views/Manage/General/GeneralHeader';
 import { AccountTypeSelection } from '@/views/Manage/General/AccountTypeSelection';
 import { IdentityForm } from '@/views/Manage/General/IdentityForm';
 import { IdentityPreview } from '@/views/Manage/General/IdentityPreview';
 import { ProfileCompletionCards } from '@/views/Manage/General/ProfileCompletionCards';
 import { ConversionModals } from '@/views/Manage/General/ConversionModals';
+import { useGeneralSettings } from '@/hooks/features/organization/useGeneralSettings';
 
 const ManageGeneral = () => {
-    const dispatch = useDispatch();
-    const accountType = useSelector((state: RootState) => state.ui.accountType);
-    const [orgName, setOrgName] = useState('My Account');
-    const [orgIcon, setOrgIcon] = useState<string | null>(null);
-    const [isSaving, setIsSaving] = useState(false);
-    const [isConvertModalOpen, setIsConvertModalOpen] = useState(false);
-    const [isDowngradeModalOpen, setIsDowngradeModalOpen] = useState(false);
-    const [pendingType, setPendingType] = useState<'personal' | 'organization' | null>(null);
-    const [feedback, setFeedback] = useState<{ type: 'success' | 'error', message: string } | null>(null);
-
-    const fileInputRef = useRef<HTMLInputElement>(null);
-
-    const handleSave = (e: React.FormEvent) => {
-        e.preventDefault();
-        setIsSaving(true);
-        setFeedback(null);
-
-        // Simulate API call
-        setTimeout(() => {
-            setIsSaving(false);
-            setFeedback({ type: 'success', message: `${accountType === 'personal' ? 'Account' : 'Organization'} settings updated successfully!` });
-        }, 1500);
-    };
-
-    const handleTypeChange = (type: 'personal' | 'organization') => {
-        if (type === accountType) return;
-
-        setPendingType(type);
-        if (type === 'organization') {
-            setIsConvertModalOpen(true);
-        } else {
-            setIsDowngradeModalOpen(true);
-        }
-    };
-
-    const confirmConversion = () => {
-        if (pendingType) {
-            dispatch(setAccountType(pendingType));
-            setIsConvertModalOpen(false);
-            setIsDowngradeModalOpen(false);
-            setPendingType(null);
-        }
-    };
-
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setOrgIcon(reader.result as string);
-            };
-            reader.readAsDataURL(file);
-        }
-    };
-
-    const removeIcon = (e: React.MouseEvent) => {
-        e.stopPropagation();
-        setOrgIcon(null);
-        if (fileInputRef.current) {
-            fileInputRef.current.value = '';
-        }
-    };
+    const {
+        orgName,
+        setOrgName,
+        orgIcon,
+        handleFileChange,
+        removeIcon,
+        fileInputRef,
+        isConvertModalOpen,
+        setIsConvertModalOpen,
+        isDowngradeModalOpen,
+        setIsDowngradeModalOpen,
+        handleTypeChange,
+        confirmConversion,
+        accountType,
+        isSaving,
+        feedback,
+        handleSave
+    } = useGeneralSettings();
 
     return (
         <Block

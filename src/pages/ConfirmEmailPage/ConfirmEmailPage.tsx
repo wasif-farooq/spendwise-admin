@@ -9,8 +9,11 @@ import {
     Text,
     Container
 } from '@shared';
+import { useEmailStatus } from '@/hooks/features/auth/useEmailStatus';
 
 const ConfirmEmailPage = () => {
+    const { handleOpenEmailApp, handleResendEmail } = useEmailStatus();
+
     return (
         <Container as="div" size="full" className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
             <Block
@@ -31,7 +34,7 @@ const ConfirmEmailPage = () => {
 
                 <Block className="mt-8 space-y-4">
                     <Button
-                        onClick={() => window.open('mailto:', '_blank')}
+                        onClick={handleOpenEmailApp}
                         className="w-full py-4 text-lg"
                     >
                         Open Email App
@@ -39,7 +42,11 @@ const ConfirmEmailPage = () => {
 
                     <Text size="sm" color="text-gray-500">
                         Didn't receive the email?{' '}
-                        <Button variant="ghost" className="font-medium text-primary hover:underline">
+                        <Button
+                            variant="ghost"
+                            onClick={handleResendEmail}
+                            className="font-medium text-primary hover:underline"
+                        >
                             Click to resend
                         </Button>
                     </Text>
@@ -60,3 +67,4 @@ const ConfirmEmailPage = () => {
 };
 
 export default ConfirmEmailPage;
+

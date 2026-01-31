@@ -1,8 +1,5 @@
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { twoFactorSchema, type TwoFactorInput } from './schemas/authSchemas';
 import { Input, Button } from '@ui';
 import {
     Block,
@@ -12,113 +9,25 @@ import {
     Container,
     Grid
 } from '@shared';
-import { CreditCard, ArrowLeft, Smartphone, MessageSquare, Mail, ShieldCheck } from 'lucide-react';
-import { useState, useEffect, useRef } from 'react';
-import { useAppDispatch } from '@/hooks/redux';
-import { verify2FAThunk, resend2FACodeThunk, selectAuthLoading, selectAvailableMethods, selectTempToken } from '@/store/slices/authSlice';
-import { useAppSelector } from '@/hooks/redux';
-import { toast } from 'sonner';
-
-type AuthMethod = 'authenticator' | 'sms' | 'email';
+import { CreditCard, ArrowLeft, ShieldCheck } from 'lucide-react';
+import { useTwoFactorForm } from '@/hooks/features/auth/useTwoFactorForm';
 
 export const TwoFactorForm = () => {
-    const navigate = useNavigate();
-    const location = useLocation();
-    const dispatch = useAppDispatch();
-    const isVerifying = useRef(false); // Track if verification is in progress
-
-    // Get 2FA state from Redux
-    const loading = useAppSelector(selectAuthLoading);
-    const availableMethods = useAppSelector(selectAvailableMethods);
-    const tempToken = useAppSelector(selectTempToken);
-
-    // Also check location state as fallback
-    const locationMethods = location.state?.availableMethods || [];
-    const locationTempToken = location.state?.tempToken || '';
-
-    const methods2FA = availableMethods.length > 0 ? availableMethods : locationMethods;
-    const token = tempToken || locationTempToken;
-
-    const [resendDisabled, setResendDisabled] = useState(false);
-    const [countdown, setCountdown] = useState(0);
-    const [method, setMethod] = useState<AuthMethod>('authenticator');
-    const [useBackupCode, setUseBackupCode] = useState(false);
-
     const {
         register,
         handleSubmit,
-        formState: { errors },
-    } = useForm<TwoFactorInput>({
-        resolver: zodResolver(twoFactorSchema),
-    });
-
-    useEffect(() => {
-        // Only redirect if no token/methods AND not currently verifying
-        if ((!token || methods2FA.length === 0) && !isVerifying.current) {
-            navigate('/login', { replace: true });
-        } else if (token && methods2FA.length > 0) {
-            // Set first available method as default
-            const firstMethod = methods2FA[0];
-            setMethod(firstMethod.type as AuthMethod);
-        }
-    }, [token, methods2FA, navigate]);
-
-    useEffect(() => {
-        // Countdown timer for resend button
-        if (countdown > 0) {
-            const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
-            return () => clearTimeout(timer);
-        }
-    }, [countdown]);
-
-    const onSubmit = async (data: TwoFactorInput) => {
-        if (!token) return;
-
-        // Set flag to prevent redirect during verification
-        isVerifying.current = true;
-
-        const result = await dispatch(verify2FAThunk({
-            code: data.code,
-            method,
-            tempToken: token,
-            backupCode: useBackupCode,
-        }));
-
-        if (verify2FAThunk.fulfilled.match(result)) {
-            // Redirect to intended destination or dashboard
-            const from = location.state?.from?.pathname || '/dashboard';
-            navigate(from, { replace: true });
-        } else if (verify2FAThunk.rejected.match(result)) {
-            // Reset flag on error so user can try again
-            isVerifying.current = false;
-            // Show error toast
-            toast.error(result.payload as string || 'Invalid verification code');
-        }
-    };
-
-    const handleResendCode = async () => {
-        if (method === 'authenticator' || countdown > 0) return;
-
-        setResendDisabled(true);
-        const result = await dispatch(resend2FACodeThunk(method));
-
-        if (resend2FACodeThunk.fulfilled.match(result)) {
-            setCountdown(60);
-        }
-
-        setResendDisabled(false);
-    };
-
-    // Map available methods to UI
-    const availableMethodsUI = methods2FA.map((m: any) => {
-        if (m.type === 'authenticator') {
-            return { id: 'authenticator' as AuthMethod, label: 'App', icon: Smartphone, description: 'Authenticator App' };
-        } else if (m.type === 'sms') {
-            return { id: 'sms' as AuthMethod, label: 'SMS', icon: MessageSquare, description: m.phoneNumber || 'SMS' };
-        } else {
-            return { id: 'email' as AuthMethod, label: 'Email', icon: Mail, description: m.email || 'Email' };
-        }
-    });
+        errors,
+        loading,
+        method,
+        setMethod,
+        useBackupCode,
+        setUseBackupCode,
+        countdown,
+        resendDisabled,
+        availableMethodsUI,
+        onSubmit,
+        handleResendCode
+    } = useTwoFactorForm();
 
     return (
         <Container as="div" size="full" className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">

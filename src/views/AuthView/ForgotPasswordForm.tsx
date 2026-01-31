@@ -1,8 +1,5 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { forgotPasswordSchema, type ForgotPasswordInput } from './schemas/authSchemas';
 import { Input, Button } from '@ui';
 import {
     Block,
@@ -11,22 +8,16 @@ import {
     Container
 } from '@shared';
 import { CreditCard, ArrowLeft } from 'lucide-react';
+import { useForgotPasswordForm } from '@/hooks/features/auth/useForgotPasswordForm';
 
 export const ForgotPasswordForm = () => {
-    const navigate = useNavigate();
     const {
         register,
         handleSubmit,
-        formState: { errors },
-    } = useForm<ForgotPasswordInput>({
-        resolver: zodResolver(forgotPasswordSchema),
-    });
+        errors,
+        onSubmit
+    } = useForgotPasswordForm();
 
-    const onSubmit = (data: ForgotPasswordInput) => {
-        console.log('Forgot password data:', data);
-        // Trigger password reset API here
-        navigate('/check-email');
-    };
     return (
         <Container as="div" size="full" className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
             <Block
@@ -73,3 +64,4 @@ export const ForgotPasswordForm = () => {
         </Container>
     );
 };
+
