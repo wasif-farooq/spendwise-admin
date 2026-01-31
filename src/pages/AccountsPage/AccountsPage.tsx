@@ -7,6 +7,8 @@ import { AddAccountModal } from '@/views/Accounts/AddAccountModal';
 import { CURRENCY_OPTIONS } from '@/views/Accounts/types';
 import type { Account } from '@/views/Accounts/types';
 import mockData from '@/data/mockData.json';
+import { useFeatureAccess } from '@/hooks/useFeatureAccess';
+import { UpgradeModal, LimitBanner } from '@/views/Subscription';
 
 
 const AccountsPage = () => {
@@ -14,8 +16,20 @@ const AccountsPage = () => {
     const [accounts] = useState<Account[]>(mockData.accounts as Account[]);
     const [searchQuery, setSearchQuery] = useState('');
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+    const [isUpgradeModalOpen, setIsUpgradeModalOpen] = useState(false);
     const [selectedType, setSelectedType] = useState<Account['type']>('bank');
     const [selectedCurrency, setSelectedCurrency] = useState(CURRENCY_OPTIONS[0]);
+
+    const accountAccess = useFeatureAccess('accounts');
+    const canAddAccount = accountAccess.hasAccess;
+
+    const handleAddAccountClick = () => {
+        if (canAddAccount) {
+            setIsAddModalOpen(true);
+        } else {
+            setIsUpgradeModalOpen(true);
+        }
+    };
 
     const totalBalance = useMemo(() => {
         return accounts.reduce((acc, curr) => acc + curr.balance, 0);
@@ -31,9 +45,18 @@ const AccountsPage = () => {
     return (
         <Container size="wide" className="p-8 space-y-10">
             {/* Header Section */}
+            {/* Header Section */}
+            {!canAddAccount && (
+                <LimitBanner
+                    featureName="accounts"
+                    current={accountAccess.current}
+                    limit={accountAccess.limit}
+                    variant="warning"
+                />
+            )}
             <AccountsHeader
                 totalBalance={totalBalance}
-                onAddAccount={() => setIsAddModalOpen(true)}
+                onAddAccount={handleAddAccountClick}
             />
 
             {/* Search and Filters */}
@@ -45,7 +68,7 @@ const AccountsPage = () => {
             {/* Accounts Grid */}
             <AccountsGrid
                 accounts={filteredAccounts}
-                onAddAccount={() => setIsAddModalOpen(true)}
+                onAddAccount={handleAddAccountClick}
             />
 
             {/* Add Account Modal */}
@@ -56,6 +79,13 @@ const AccountsPage = () => {
                 onTypeChange={setSelectedType}
                 selectedCurrency={selectedCurrency}
                 onCurrencyChange={(option) => option && setSelectedCurrency(option)}
+            />
+
+            {/* Upgrade Modal */}
+            <UpgradeModal
+                isOpen={isUpgradeModalOpen}
+                onClose={() => setIsUpgradeModalOpen(false)}
+                triggerFeature="accounts"
             />
         </Container>
     );

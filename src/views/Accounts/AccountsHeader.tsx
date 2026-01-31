@@ -16,15 +16,7 @@ export const AccountsHeader = ({ totalBalance, onAddAccount, accountCount = 0 }:
 
     return (
         <>
-            {/* Limit Reached Banner */}
-            {!canAddAccount && (
-                <LimitBanner
-                    featureName="accounts"
-                    current={accountAccess.current}
-                    limit={accountAccess.limit}
-                    variant="warning"
-                />
-            )}
+            {/* Limit Reached Banner removed - handled in parent page */}
 
             <header className="flex flex-col md:flex-row md:items-end justify-between gap-8">
                 <Block className="space-y-2">
@@ -49,9 +41,8 @@ export const AccountsHeader = ({ totalBalance, onAddAccount, accountCount = 0 }:
                     <Block className="h-12 w-px bg-gray-100" />
                     <Button
                         onClick={onAddAccount}
-                        disabled={!canAddAccount}
-                        className="rounded-2xl px-6 py-4 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                        title={!canAddAccount ? accountAccess.reason : 'Add a new account'}
+                        className="rounded-2xl px-6 py-4 flex items-center gap-2"
+                        title={canAddAccount ? 'Add a new account' : 'Upgrade to add more accounts'}
                     >
                         <Plus size={20} />
                         Add Account
