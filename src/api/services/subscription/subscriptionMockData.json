@@ -1,0 +1,295 @@
+{
+    "plans": [
+        {
+            "id": "free",
+            "name": "Free",
+            "price": 0,
+            "currency": "USD",
+            "billingPeriod": "monthly",
+            "description": "Perfect for getting started with basic expense tracking",
+            "popular": false,
+            "features": [
+                {
+                    "name": "Team Members",
+                    "description": "Invite team members",
+                    "included": true,
+                    "limit": "2 members"
+                },
+                {
+                    "name": "Accounts",
+                    "description": "Manage financial accounts",
+                    "included": true,
+                    "limit": "1 account"
+                },
+                {
+                    "name": "Transaction History",
+                    "description": "View past transactions",
+                    "included": true,
+                    "limit": "3 months"
+                },
+                {
+                    "name": "Analytics",
+                    "description": "Basic analytics dashboard",
+                    "included": true,
+                    "limit": "30 days"
+                },
+                {
+                    "name": "Organizations",
+                    "description": "Join organizations",
+                    "included": true,
+                    "limit": "5 organizations"
+                },
+                {
+                    "name": "Custom Roles",
+                    "description": "Create custom roles",
+                    "included": true,
+                    "limit": "1 role"
+                },
+                {
+                    "name": "AI Advisor",
+                    "description": "AI-powered financial insights",
+                    "included": false
+                },
+                {
+                    "name": "Exchange Rates",
+                    "description": "Real-time exchange rates",
+                    "included": false
+                },
+                {
+                    "name": "Permission Overrides",
+                    "description": "Advanced permission controls",
+                    "included": false
+                }
+            ],
+            "limits": {
+                "members": 2,
+                "accounts": 1,
+                "organizations": 5,
+                "customRoles": 1,
+                "transactionHistoryMonths": 3,
+                "analyticsHistoryDays": 30,
+                "hasAIAdvisor": false,
+                "hasExchangeRates": false,
+                "hasPermissionOverrides": false
+            }
+        },
+        {
+            "id": "pro",
+            "name": "Pro",
+            "price": 29,
+            "currency": "USD",
+            "billingPeriod": "monthly",
+            "description": "For growing teams that need more power and flexibility",
+            "popular": true,
+            "features": [
+                {
+                    "name": "Team Members",
+                    "description": "Invite team members",
+                    "included": true,
+                    "limit": "10 members"
+                },
+                {
+                    "name": "Accounts",
+                    "description": "Manage financial accounts",
+                    "included": true,
+                    "limit": "5 accounts"
+                },
+                {
+                    "name": "Transaction History",
+                    "description": "View past transactions",
+                    "included": true,
+                    "limit": "Unlimited"
+                },
+                {
+                    "name": "Analytics",
+                    "description": "Advanced analytics dashboard",
+                    "included": true,
+                    "limit": "Unlimited"
+                },
+                {
+                    "name": "Organizations",
+                    "description": "Join organizations",
+                    "included": true,
+                    "limit": "20 organizations"
+                },
+                {
+                    "name": "Custom Roles",
+                    "description": "Create custom roles",
+                    "included": true,
+                    "limit": "Unlimited"
+                },
+                {
+                    "name": "AI Advisor",
+                    "description": "AI-powered financial insights",
+                    "included": true
+                },
+                {
+                    "name": "Exchange Rates",
+                    "description": "Real-time exchange rates",
+                    "included": true
+                },
+                {
+                    "name": "Permission Overrides",
+                    "description": "Advanced permission controls",
+                    "included": true
+                }
+            ],
+            "limits": {
+                "members": 10,
+                "accounts": 5,
+                "organizations": 20,
+                "customRoles": -1,
+                "transactionHistoryMonths": -1,
+                "analyticsHistoryDays": -1,
+                "hasAIAdvisor": true,
+                "hasExchangeRates": true,
+                "hasPermissionOverrides": true
+            }
+        },
+        {
+            "id": "enterprise",
+            "name": "Enterprise",
+            "price": 99,
+            "currency": "USD",
+            "billingPeriod": "monthly",
+            "description": "For large organizations with advanced needs",
+            "popular": false,
+            "features": [
+                {
+                    "name": "Team Members",
+                    "description": "Invite team members",
+                    "included": true,
+                    "limit": "Unlimited"
+                },
+                {
+                    "name": "Accounts",
+                    "description": "Manage financial accounts",
+                    "included": true,
+                    "limit": "Unlimited"
+                },
+                {
+                    "name": "Transaction History",
+                    "description": "View past transactions",
+                    "included": true,
+                    "limit": "Unlimited"
+                },
+                {
+                    "name": "Analytics",
+                    "description": "Enterprise analytics",
+                    "included": true,
+                    "limit": "Unlimited"
+                },
+                {
+                    "name": "Organizations",
+                    "description": "Join organizations",
+                    "included": true,
+                    "limit": "Unlimited"
+                },
+                {
+                    "name": "Custom Roles",
+                    "description": "Create custom roles",
+                    "included": true,
+                    "limit": "Unlimited"
+                },
+                {
+                    "name": "AI Advisor",
+                    "description": "AI-powered financial insights",
+                    "included": true
+                },
+                {
+                    "name": "Exchange Rates",
+                    "description": "Real-time exchange rates",
+                    "included": true
+                },
+                {
+                    "name": "Permission Overrides",
+                    "description": "Advanced permission controls",
+                    "included": true
+                },
+                {
+                    "name": "Priority Support",
+                    "description": "24/7 dedicated support",
+                    "included": true
+                },
+                {
+                    "name": "Custom Integrations",
+                    "description": "API access and custom integrations",
+                    "included": true
+                }
+            ],
+            "limits": {
+                "members": -1,
+                "accounts": -1,
+                "organizations": -1,
+                "customRoles": -1,
+                "transactionHistoryMonths": -1,
+                "analyticsHistoryDays": -1,
+                "hasAIAdvisor": true,
+                "hasExchangeRates": true,
+                "hasPermissionOverrides": true
+            }
+        }
+    ],
+    "userSubscriptions": [
+        {
+            "userId": "user-001",
+            "plan": "free",
+            "status": "active",
+            "startDate": "2024-01-01T00:00:00Z",
+            "expiresAt": null,
+            "cancelledAt": null,
+            "trialEndsAt": null,
+            "featureUsage": {
+                "members": 1,
+                "accounts": 1,
+                "organizations": 2,
+                "customRoles": 0
+            }
+        },
+        {
+            "userId": "user-002",
+            "plan": "pro",
+            "status": "active",
+            "startDate": "2024-01-15T00:00:00Z",
+            "expiresAt": "2025-01-15T00:00:00Z",
+            "cancelledAt": null,
+            "trialEndsAt": null,
+            "featureUsage": {
+                "members": 5,
+                "accounts": 3,
+                "organizations": 8,
+                "customRoles": 3
+            }
+        },
+        {
+            "userId": "user-003",
+            "plan": "free",
+            "status": "trial",
+            "startDate": "2024-12-01T00:00:00Z",
+            "expiresAt": null,
+            "cancelledAt": null,
+            "trialEndsAt": "2025-01-01T00:00:00Z",
+            "featureUsage": {
+                "members": 2,
+                "accounts": 1,
+                "organizations": 1,
+                "customRoles": 1
+            }
+        },
+        {
+            "userId": "user-004",
+            "plan": "enterprise",
+            "status": "active",
+            "startDate": "2023-06-01T00:00:00Z",
+            "expiresAt": "2025-06-01T00:00:00Z",
+            "cancelledAt": null,
+            "trialEndsAt": null,
+            "featureUsage": {
+                "members": 25,
+                "accounts": 12,
+                "organizations": 15,
+                "customRoles": 8
+            }
+        }
+    ]
+}

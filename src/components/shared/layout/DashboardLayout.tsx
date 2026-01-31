@@ -21,20 +21,30 @@ import Button from '@/components/ui/Button';
 import TransactionModal from '@/components/features/transactions/TransactionModal';
 import { Block, Flex, Text } from '@shared';
 import type { RootState } from '@/store/store';
+import { UpgradeButton, PlanBadge, UpgradeModal } from '@/views/Subscription';
+import { useAppSelector } from '@/store/redux';
+import { selectHasAIAdvisorAccess, selectHasExchangeRatesAccess } from '@/store/slices/subscriptionSlice';
 
 export const DashboardLayout = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
     const [isTransactionModalOpen, setIsTransactionModalOpen] = useState(false);
+    const [isUpgradeModalOpen, setIsUpgradeModalOpen] = useState(false);
     const { layout } = useLayout();
     const navigate = useNavigate();
     const accountType = useSelector((state: RootState) => state.ui.accountType);
+    const hasAIAdvisor = useAppSelector(selectHasAIAdvisorAccess);
+    const hasExchangeRates = useAppSelector(selectHasExchangeRatesAccess);
 
     const navItems = [
         { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
         { name: 'Analytics', path: '/analytics', icon: PieChart },
-        { name: 'AI Advisor', path: '/ai-advisor', icon: Sparkles },
+        ...(hasAIAdvisor ? [
+            { name: 'AI Advisor', path: '/ai-advisor', icon: Sparkles },
+        ] : []),
         { name: 'Accounts', path: '/accounts', icon: Wallet },
-        { name: 'Exchange Rates', path: '/exchange-rates', icon: Globe },
+        ...(hasExchangeRates ? [
+            { name: 'Exchange Rates', path: '/exchange-rates', icon: Globe },
+        ] : []),
         { name: 'Manage', path: '/manage/general', icon: LayoutDashboard },
         ...(accountType === 'organization' ? [
             { name: 'Members', path: '/manage/members', icon: User },
@@ -153,6 +163,13 @@ export const DashboardLayout = () => {
             </Flex>
 
             <Flex align="center" gap={6}>
+                {/* Upgrade Button */}
+                <UpgradeButton
+                    size="sm"
+                    className="hidden md:flex"
+                    onClick={() => setIsUpgradeModalOpen(true)}
+                />
+
                 <Button
                     size="sm"
                     onClick={() => setIsTransactionModalOpen(true)}
@@ -165,7 +182,10 @@ export const DashboardLayout = () => {
                 <Flex align="center" gap={4}>
                     <Block className="text-right hidden sm:block">
                         <Text className="text-sm font-bold text-gray-900">John Doe</Text>
-                        <Text className="text-xs text-gray-500">Premium Member</Text>
+                        <Flex align="center" gap={2} className="justify-end">
+                            <Text className="text-xs text-gray-500">Premium Member</Text>
+                            <PlanBadge plan={useAppSelector((state: RootState) => state.subscription.currentSubscription?.plan || 'free')} />
+                        </Flex>
                     </Block>
                     <Block className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center border border-primary/20">
                         <User className="h-5 w-5 text-primary" />
@@ -191,9 +211,16 @@ export const DashboardLayout = () => {
                 </Block>
             </Block>
 
+            {/* Transaction Modal */}
             <TransactionModal
                 isOpen={isTransactionModalOpen}
                 onClose={() => setIsTransactionModalOpen(false)}
+            />
+
+            {/* Upgrade Modal */}
+            <UpgradeModal
+                isOpen={isUpgradeModalOpen}
+                onClose={() => setIsUpgradeModalOpen(false)}
             />
         </Block>
     );

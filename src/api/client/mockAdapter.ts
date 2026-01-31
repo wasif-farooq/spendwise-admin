@@ -1,5 +1,6 @@
 import type { AxiosRequestConfig, AxiosResponse } from 'axios';
 import mockAuthData from '../services/auth/authMockData.json';
+import mockSubscriptionData from '../services/subscription/subscriptionMockData.json';
 
 class MockAdapter {
     private mockDataRegistry: Map<string, any> = new Map();
@@ -20,6 +21,31 @@ class MockAdapter {
         // Special handling for 2FA verification endpoint
         if (config.url?.includes('/auth/2fa/verify') && config.method?.toUpperCase() === 'POST') {
             return this.handle2FAVerification(config);
+        }
+
+        // Special handling for subscription endpoints
+        if (config.url?.includes('/subscription/plans') && config.method?.toUpperCase() === 'GET') {
+            return this.handleGetPlans(config);
+        }
+
+        if (config.url?.includes('/subscription/current') && config.method?.toUpperCase() === 'GET') {
+            return this.handleGetUserSubscription(config);
+        }
+
+        if (config.url?.includes('/subscription/upgrade') && config.method?.toUpperCase() === 'POST') {
+            return this.handleUpgradePlan(config);
+        }
+
+        if (config.url?.includes('/subscription/cancel') && config.method?.toUpperCase() === 'POST') {
+            return this.handleCancelSubscription(config);
+        }
+
+        if (config.url?.includes('/subscription/usage') && config.method?.toUpperCase() === 'GET') {
+            return this.handleGetFeatureUsage(config);
+        }
+
+        if (config.url?.includes('/subscription/check-access/') && config.method?.toUpperCase() === 'GET') {
+            return this.handleCheckFeatureAccess(config);
         }
 
         const mockData = this.findMockData(config.url || '');
@@ -176,6 +202,197 @@ class MockAdapter {
                 user: userWithoutSensitiveData,
                 token: mockAuthData.token,
                 refreshToken: mockAuthData.refreshToken,
+            },
+            status: 200,
+            statusText: 'OK',
+            headers: {},
+            config: config as any,
+        };
+    }
+
+    // Subscription Handlers
+    private async handleGetPlans(config: AxiosRequestConfig): Promise<AxiosResponse> {
+        return {
+            data: {
+                plans: mockSubscriptionData.plans,
+            },
+            status: 200,
+            statusText: 'OK',
+            headers: {},
+            config: config as any,
+        };
+    }
+
+    private async handleGetUserSubscription(config: AxiosRequestConfig): Promise<AxiosResponse> {
+        // Get user ID from auth token (in real app, would decode JWT)
+        // For mock, we'll use user-001 as default
+        const userId = 'user-001';
+        const userSubscription = mockSubscriptionData.userSubscriptions.find(
+            (sub: any) => sub.userId === userId
+        );
+
+        if (!userSubscription) {
+            const error: any = new Error('Subscription not found');
+            error.response = {
+                data: { message: 'Subscription not found' },
+                status: 404,
+                statusText: 'Not Found',
+                headers: {},
+                config: config as any,
+            };
+            error.config = config;
+            throw error;
+        }
+
+        return {
+            data: {
+                subscription: {
+                    plan: userSubscription.plan,
+                    status: userSubscription.status,
+                    startDate: userSubscription.startDate,
+                    expiresAt: userSubscription.expiresAt,
+                    cancelledAt: userSubscription.cancelledAt,
+                    trialEndsAt: userSubscription.trialEndsAt,
+                },
+                featureUsage: userSubscription.featureUsage,
+            },
+            status: 200,
+            statusText: 'OK',
+            headers: {},
+            config: config as any,
+        };
+    }
+
+    private async handleUpgradePlan(config: AxiosRequestConfig): Promise<AxiosResponse> {
+        const { planId } = config.data || {};
+
+        if (!planId) {
+            const error: any = new Error('Plan ID is required');
+            error.response = {
+                data: { message: 'Plan ID is required' },
+                status: 400,
+                statusText: 'Bad Request',
+                headers: {},
+                config: config as any,
+            };
+            error.config = config;
+            throw error;
+        }
+
+        // Simulate successful upgrade
+        return {
+            data: {
+                subscription: {
+                    plan: planId,
+                    status: 'active',
+                    startDate: new Date().toISOString(),
+                    expiresAt: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(),
+                    cancelledAt: null,
+                    trialEndsAt: null,
+                },
+                message: `Successfully upgraded to ${planId} plan`,
+            },
+            status: 200,
+            statusText: 'OK',
+            headers: {},
+            config: config as any,
+        };
+    }
+
+    private async handleCancelSubscription(config: AxiosRequestConfig): Promise<AxiosResponse> {
+        return {
+            data: {
+                message: 'Subscription cancelled successfully',
+            },
+            status: 200,
+            statusText: 'OK',
+            headers: {},
+            config: config as any,
+        };
+    }
+
+    private async handleGetFeatureUsage(config: AxiosRequestConfig): Promise<AxiosResponse> {
+        const userId = 'user-001';
+        const userSubscription = mockSubscriptionData.userSubscriptions.find(
+            (sub: any) => sub.userId === userId
+        );
+
+        return {
+            data: {
+                usage: userSubscription?.featureUsage || {
+                    members: 0,
+                    accounts: 0,
+                    organizations: 0,
+                    customRoles: 0,
+                },
+            },
+            status: 200,
+            statusText: 'OK',
+            headers: {},
+            config: config as any,
+        };
+    }
+
+    private async handleCheckFeatureAccess(config: AxiosRequestConfig): Promise<AxiosResponse> {
+        const feature = config.url?.split('/').pop();
+        const userId = 'user-001';
+        const userSubscription = mockSubscriptionData.userSubscriptions.find(
+            (sub: any) => sub.userId === userId
+        );
+
+        if (!userSubscription) {
+            return {
+                data: {
+                    hasAccess: false,
+                    reason: 'No active subscription',
+                },
+                status: 200,
+                statusText: 'OK',
+                headers: {},
+                config: config as any,
+            };
+        }
+
+        const plan = mockSubscriptionData.plans.find((p: any) => p.id === userSubscription.plan);
+
+        if (!plan) {
+            return {
+                data: {
+                    hasAccess: false,
+                    reason: 'Invalid plan',
+                },
+                status: 200,
+                statusText: 'OK',
+                headers: {},
+                config: config as any,
+            };
+        }
+
+        // Check feature access based on plan limits
+        let hasAccess = true;
+        let reason = '';
+
+        switch (feature) {
+            case 'ai-advisor':
+                hasAccess = plan.limits.hasAIAdvisor;
+                reason = hasAccess ? '' : 'AI Advisor is only available on Pro and Enterprise plans';
+                break;
+            case 'exchange-rates':
+                hasAccess = plan.limits.hasExchangeRates;
+                reason = hasAccess ? '' : 'Exchange Rates is only available on Pro and Enterprise plans';
+                break;
+            case 'permission-overrides':
+                hasAccess = plan.limits.hasPermissionOverrides;
+                reason = hasAccess ? '' : 'Permission Overrides is only available on Pro and Enterprise plans';
+                break;
+            default:
+                hasAccess = true;
+        }
+
+        return {
+            data: {
+                hasAccess,
+                reason,
             },
             status: 200,
             statusText: 'OK',
