@@ -38,9 +38,7 @@ export const DashboardLayout = () => {
     const navItems = [
         { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
         { name: 'Analytics', path: '/analytics', icon: PieChart },
-        ...(hasAIAdvisor ? [
-            { name: 'AI Advisor', path: '/ai-advisor', icon: Sparkles },
-        ] : []),
+        { name: 'AI Advisor', path: '/ai-advisor', icon: Sparkles },
         { name: 'Accounts', path: '/accounts', icon: Wallet },
         ...(hasExchangeRates ? [
             { name: 'Exchange Rates', path: '/exchange-rates', icon: Globe },

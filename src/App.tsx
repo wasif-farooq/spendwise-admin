@@ -30,8 +30,8 @@ import AccountsPage from './pages/AccountsPage';
 import TransactionsPage from './pages/TransactionsPage';
 import AnalyticsPage from './pages/AnalyticsPage';
 import AIAdvisorPage from './pages/AIAdvisorPage';
-import AIAdvisorPreviewPage from './pages/AIAdvisorPreviewPage';
-import { ProtectedRoute } from './components/shared/ProtectedRoute';
+
+
 
 import { LayoutProvider } from './context/LayoutContext';
 import { Toaster } from 'sonner';
@@ -52,15 +52,8 @@ function App() {
             <Route element={<DashboardLayout />}>
               <Route path="/dashboard" element={<DashboardPage />} />
               <Route path="/analytics" element={<AnalyticsPage />} />
-              <Route
-                path="/ai-advisor"
-                element={
-                  <ProtectedRoute feature="ai-advisor">
-                    <AIAdvisorPage />
-                  </ProtectedRoute>
-                }
-              />
-              <Route path="/ai-advisor-preview" element={<AIAdvisorPreviewPage />} />
+              <Route path="/ai-advisor" element={<AIAdvisorPage />} />
+
               <Route path="/exchange-rates" element={<ExchangeRatesPage />} />
               <Route path="/accounts" element={<AccountsPage />} />
               <Route path="/accounts/:id/transactions" element={<TransactionsPage />} />
