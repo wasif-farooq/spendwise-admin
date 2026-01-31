@@ -27,7 +27,6 @@ export const MembersHeader = ({
     const [isUpgradeModalOpen, setIsUpgradeModalOpen] = useState(false);
 
     const handleInviteClick = () => {
-        console.log('DEBUG: Invite Clicked', { canAddMember, current: memberAccess.current, limit: memberAccess.limit });
         if (canAddMember) {
             onOpenInvite();
         } else {

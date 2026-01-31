@@ -112,7 +112,6 @@ class MockAdapter {
 
         // Set current user ID
         this.currentUserId = user.id;
-        console.log(`[MockAdapter] Logged in as ${user.name} (${user.id})`);
 
         // ... (rest of handleLogin)
         // Check if user has 2FA enabled
@@ -283,7 +282,6 @@ class MockAdapter {
 
     private async handleGetUserSubscription(config: AxiosRequestConfig): Promise<AxiosResponse> {
         const userId = this.currentUserId;
-        console.log(`[MockAdapter] Getting subscription for user: ${userId}`);
 
         const userSubscription = mockSubscriptionData.userSubscriptions.find(
             (sub: any) => sub.userId === userId
@@ -303,8 +301,6 @@ class MockAdapter {
             error.config = config;
             throw error;
         }
-
-        console.log(`[MockAdapter] Found subscription:`, userSubscription);
 
         return {
             data: {
@@ -330,7 +326,6 @@ class MockAdapter {
 
     private async handleGetFeatureUsage(config: AxiosRequestConfig): Promise<AxiosResponse> {
         const userId = this.currentUserId;
-        console.log(`[MockAdapter] Getting feature usage for user: ${userId}`);
 
         const userSubscription = mockSubscriptionData.userSubscriptions.find(
             (sub: any) => sub.userId === userId
@@ -338,8 +333,6 @@ class MockAdapter {
 
         if (!userSubscription) {
             console.error(`[MockAdapter] User subscription not found for ${userId} in usage check`);
-        } else {
-            console.log(`[MockAdapter] Found subscription for ${userId} in usage check`, userSubscription);
         }
 
         // FAIL SAFE: If user not found, assume MAX usage to prevent leaks
@@ -356,8 +349,6 @@ class MockAdapter {
         };
 
         const usage = userSubscription?.featureUsage || defaultUsage;
-
-        console.log(`[MockAdapter] Returning usage:`, usage);
 
         return {
             data: {
