@@ -1,20 +1,21 @@
 # SpendWise API Documentation
 
-This document provides a comprehensive reference for the SpendWise API. It includes all available endpoints, their required request payloads, and sample responses.
+This document provides a 100% comprehensive reference for the SpendWise API. It includes all available endpoints, their required request payloads, sample responses, and query parameters.
 
-## Base URL
-- Default: `/api`
-- Configurable via: `VITE_API_URL` environment variable
-
-## Authentication
-All authenticated requests require a Bearer token in the `Authorization` header:
-`Authorization: Bearer <your_access_token>`
+## Table of Contents
+1. [Authentication](#1-authentication)
+2. [Security & Session Management](#2-security--session-management)
+3. [Organization & Team](#3-organization--team)
+4. [Financial Management](#4-financial-management)
+5. [Subscription & Billing](#5-subscription--billing)
+6. [Intelligence & Analytics](#6-intelligence--analytics)
+7. [Personalization & Dashboard](#7-personalization--dashboard)
 
 ---
 
-## 1. Authentication & Security
+## 1. Authentication
 
-### 1.1 Authentication Services
+### Auth Services (`AuthService`)
 
 #### Login
 `POST /auth/login`
@@ -23,8 +24,28 @@ All authenticated requests require a Bearer token in the `Authorization` header:
 
 #### Register
 `POST /auth/register`
-- **Payload**: `{ "email": "...", "password": "...", "name": "...", "accountType": "personal"|"organization" }`
+- **Payload**: `{ "email": "...", "password": "...", "name": "...", "accountType": "personal"|"organization", "organizationName": "..." }`
 - **Response**: Same as Login.
+
+#### Logout
+`POST /auth/logout`
+
+#### Get Current User
+`GET /auth/me`
+- **Response**: User Profile Object.
+
+#### Forgot Password
+`POST /auth/forgot-password`
+- **Payload**: `{ "email": "..." }`
+
+#### Reset Password
+`POST /auth/reset-password`
+- **Payload**: `{ "token": "...", "password": "...", "confirmPassword": "..." }`
+
+#### Refresh Token
+`POST /auth/refresh`
+- **Payload**: `{ "refreshToken": "..." }`
+- **Response**: `{ "token": "..." }`
 
 #### 2FA Verify (Login Flow)
 `POST /auth/2fa/verify`
@@ -34,18 +55,15 @@ All authenticated requests require a Bearer token in the `Authorization` header:
 `POST /auth/2fa/resend`
 - **Payload**: `{ "method": "sms"|"email" }`
 
-#### Refresh Token
-`POST /auth/refresh`
-- **Payload**: `{ "refreshToken": "..." }`
-- **Response**: `{ "token": "..." }`
-
 ---
 
-### 1.2 Security Services
+## 2. Security & Session Management
+
+### Security Services (`SecurityService`)
 
 #### Get Security Settings
 `GET /security/settings`
-- **Response**: Security settings object including active sessions.
+- **Response**: `{ "twoFactorEnabled": boolean, "twoFactorMethod": "...", "activeSessions": [...], "loginHistory": [...] }`
 
 #### Setup 2FA
 `POST /security/2fa/setup`
@@ -54,7 +72,7 @@ All authenticated requests require a Bearer token in the `Authorization` header:
 
 #### Verify 2FA Setup
 `POST /security/2fa/verify`
-- **Payload**: `{ "code": "123456" }`
+- **Payload**: `{ "code": "..." }`
 - **Response**: `{ "success": true, "backupCodes": [...] }`
 
 #### Disable 2FA
@@ -69,125 +87,248 @@ All authenticated requests require a Bearer token in the `Authorization` header:
 `POST /security/password/change`
 - **Payload**: `{ "currentPassword": "...", "newPassword": "..." }`
 
-#### Revoke Session
-`DELETE /security/sessions/:id`
+#### List Active Sessions
+`GET /security/sessions`
 
-#### Revoke All Sessions
+#### Revoke Session
+`DELETE /security/sessions/:sessionId`
+
+#### Revoke All Other Sessions
 `POST /security/sessions/revoke-all`
+
+#### Get Login History
+`GET /security/login-history`
 
 ---
 
-## 2. Organization & Team
+## 3. Organization & Team
 
-### 2.1 Members & Invites
+### Organization Services (`OrganizationService`)
+
+#### Get Organization
+`GET /organization`
+
+#### Update Organization
+`PUT /organization`
+- **Payload**: `{ "name": "...", "description": "...", "website": "...", "industry": "...", "size": "..." }`
+
+#### Upload Organization Logo
+`POST /organization/logo`
+- **Payload**: `multipart/form-data` with `logo` file.
+
+#### Get Organization Settings
+`GET /organization/settings`
+
+#### Update Organization Settings
+`PUT /organization/settings`
+- **Payload**: `{ "defaultRole": "...", "requireEmailVerification": boolean, ... }`
+
+#### Delete Organization
+`POST /organization/delete`
+- **Payload**: `{ "password": "..." }`
+
+### Members Services (`MembersService`)
 
 #### List Members
 `GET /members`
 
+#### Get Member Details
+`GET /members/:id`
+
+#### Create Member
+`POST /members`
+- **Payload**: `{ "email": "...", "roles": [...], "accountPermissions": {...} }`
+
+#### Update Member
+`PUT /members/:id`
+- **Payload**: Same as Create.
+
+#### Delete Member
+`DELETE /members/:id`
+
 #### Invite Member
 `POST /members/invite`
-- **Payload**: `{ "email": "...", "roles": [...] }`
+- **Payload**: `{ "email": "...", "roles": [...], "accountPermissions": {...} }`
 
 #### Resend Invite
 `POST /members/:id/resend-invite`
 
-#### Update Member
-`PUT /members/:id`
-- **Payload**: `{ "name": "...", "roles": [...], "status": "Active"|"Inactive"|"Pending" }`
+### Roles Services (`RolesService`)
 
----
+#### List Roles
+`GET /roles`
 
-### 2.2 Roles Management
+#### Get Role Details
+`GET /roles/:id`
 
 #### Create Role
 `POST /roles`
 - **Payload**: `{ "name": "...", "description": "...", "color": "...", "iconName": "...", "permissions": {...} }`
 
+#### Update Role
+`PUT /roles/:id`
+- **Payload**: Same as Create.
+
+#### Delete Role
+`DELETE /roles/:id`
+
 #### Duplicate Role
 `POST /roles/:id/duplicate`
-- **Response**: The newly created role object.
 
 ---
 
-## 3. Financial Management
+## 4. Financial Management
 
-### 3.1 Accounts
+### Accounts Services (`AccountsService`)
+
+#### List Accounts
+`GET /accounts`
+
+#### Get Account Details
+`GET /accounts/:id`
 
 #### Create Account
 `POST /accounts`
-- **Payload**: `{ "name": "...", "type": "...", "balance": number, "currency": "...", "color": "..." }`
+- **Payload**: `{ "name": "...", "type": "...", "balance": 0, "currency": "...", "color": "..." }`
 
-#### Get Balance
+#### Update Account
+`PUT /accounts/:id`
+- **Payload**: Same as Create.
+
+#### Delete Account
+`DELETE /accounts/:id`
+
+#### Get Account Balance
 `GET /accounts/:id/balance`
-- **Response**: `{ "balance": number }`
 
----
-
-### 3.2 Transactions
+### Transactions Services (`TransactionsService`)
 
 #### List Transactions
 `GET /transactions`
-- **Query Params**: `category`, `type`, `start`, `end`
+- **Query Params**: `category`, `type` (income/expense/all), `start`, `end`
 
-#### Upload Receipt
+#### Get Transaction Details
+`GET /transactions/:id`
+
+#### Create Transaction
+`POST /transactions`
+- **Payload**: `{ "description": "...", "category": "...", "amount": 0.00, "type": "...", "accountId": "..." }`
+
+#### Update Transaction
+`PUT /transactions/:id`
+- **Payload**: Same as Create.
+
+#### Delete Transaction
+`DELETE /transactions/:id`
+
+#### Upload Transaction Receipt
 `POST /transactions/:id/receipt`
 - **Payload**: `multipart/form-data` with `receipt` file.
 
 ---
 
-## 4. Billing & Subscription
+## 5. Subscription & Billing
 
-### 4.1 Subscription
+### Subscription Services (`SubscriptionService`)
 
-#### Upgrade Plan
+#### List Available Plans
+`GET /subscription/plans`
+
+#### Get Current Subscription
+`GET /subscription/current`
+
+#### Upgrade/Change Plan Flow
 `POST /subscription/upgrade`
 - **Payload**: `{ "planId": "...", "billingPeriod": "monthly"|"yearly" }`
 
 #### Cancel Subscription
 `POST /subscription/cancel`
 
-#### Feature Access Check
+#### Feature Check
 `GET /subscription/check-access/:feature`
-- **Response**: `{ "hasAccess": boolean, "reason": "..." }`
 
----
+#### Get Feature Usage
+`GET /subscription/usage`
 
-### 4.2 Billing
+### Billing Services (`BillingService`)
+
+#### Get Aggregated Billing Data
+`GET /billing`
+
+#### Get Current Plan Detail
+`GET /billing/plan`
+
+#### List Payment Methods
+`GET /billing/payment-methods`
 
 #### Add Payment Method
 `POST /billing/payment-methods`
-- **Payload**: `{ "type": "...", "cardNumber": "...", "expiry": "...", "cvv": "..." }`
+- **Payload**: `{ "type": "Visa"|"MasterCard", "cardNumber": "...", "expiry": "...", "cvv": "..." }`
+
+#### Delete Payment Method
+`DELETE /billing/payment-methods/:id`
 
 #### Set Default Payment Method
 `POST /billing/payment-methods/:id/set-default`
 
-#### Change Plan
+#### List Billing History
+`GET /billing/history`
+
+#### Download Invoice (PDF)
+`GET /billing/invoices/:invoiceId/download`
+
+#### Change Plan (Alternate Endpoint)
 `POST /billing/change-plan`
 - **Payload**: `{ "planId": "..." }`
 
+#### Cancel Billing (Alternate Endpoint)
+`POST /billing/cancel`
+
 ---
 
-## 5. Intelligence & Reports
+## 6. Intelligence & Analytics
 
-### 5.1 Analytics
+### Analytics Services (`AnalyticsService`)
 
-#### Get Overview
+#### Get Full Analytics Data
+`GET /analytics`
+- **Query Params**: `start`, `end` (dates)
+
+#### Get Executive Overview
 `GET /analytics/overview`
 - **Query Params**: `period` (week/month/year)
 
-#### Export
+#### Get Category Trends
+`GET /analytics/category-trends`
+- **Query Params**: `months`
+
+#### Get Monthly Comparison
+`GET /analytics/monthly-comparison`
+- **Query Params**: `months`
+
+#### Export Analytics
 `GET /analytics/export`
 - **Query Params**: `format` (csv/pdf/excel)
-- **Response**: File blob.
 
----
+### AI Advisor Services (`AIAdvisorService`)
 
-### 5.2 AI Advisor
+#### Get AI Insights
+`GET /ai-advisor/insights`
+- **Query Params**: `limit`
 
-#### Ask Question
+#### Get AI Recommendations
+`GET /ai-advisor/recommendations`
+
+#### Get AI Budget Suggestions
+`GET /ai-advisor/budget-suggestions`
+
+#### Get AI Spending Patterns
+`GET /ai-advisor/spending-patterns`
+
+#### Chat with AI Assistant
 `POST /ai-advisor/ask`
 - **Payload**: `{ "question": "..." }`
-- **Response**: `{ "answer": "...", "confidence": number }`
+- **Response**: `{ "answer": "...", "confidence": 0.00 }`
 
 #### Dismiss Insight
 `POST /ai-advisor/insights/:id/dismiss`
@@ -195,34 +336,60 @@ All authenticated requests require a Bearer token in the `Authorization` header:
 #### Apply Recommendation
 `POST /ai-advisor/recommendations/:id/apply`
 
-#### Generate Report
+#### Generate AI Report
 `POST /ai-advisor/generate-report`
 - **Payload**: `{ "type": "spending"|"saving"|"investment" }`
 
 ---
 
-## 6. Preferences & Dashboard
+## 7. Personalization & Dashboard
 
-### 6.1 Preferences
+### Preferences Services (`PreferencesService`)
 
-#### Update User Preferences
+#### Get Valid Options (Locale/Currency/etc.)
+`GET /preferences/options`
+
+#### Get User Customizations
+`GET /preferences/user`
+
+#### Bulk Update Preferences
 `PUT /preferences/user`
-- **Payload**: Full or partial `UserPreferences` object.
+- **Payload**: Partial or full `UserPreferences` object.
 
-#### Update Theme/Currency/etc.
+#### Patch Specific Settings
 - `PATCH /preferences/user/theme` -> `{ "theme": "..." }`
 - `PATCH /preferences/user/color-scheme` -> `{ "colorScheme": "..." }`
 - `PATCH /preferences/user/currency` -> `{ "currency": "..." }`
 - `PATCH /preferences/user/timezone` -> `{ "timezone": "..." }`
 - `PATCH /preferences/user/notifications` -> `{ "notifications": {...} }`
 
-#### Reset to Defaults
+#### Reset All Preferences
 `POST /preferences/user/reset`
 
----
+### Dashboard Services (`DashboardService`)
 
-### 6.2 Dashboard
+#### Get Aggregated Dashboard Data
+`GET /dashboard`
 
-#### Refresh Data
+#### Get KPI Stats
+`GET /dashboard/stats`
+
+#### Get Category Breakdown
+`GET /dashboard/spending-by-category`
+- **Query Params**: `period`
+
+#### Get Income vs Expense Trend
+`GET /dashboard/income-vs-expense`
+- **Query Params**: `months`
+
+#### Get Recent Feed
+`GET /dashboard/recent-activity`
+- **Query Params**: `limit`
+
+#### Trigger Dashboard Re-calculation
 `POST /dashboard/refresh`
-- **Response**: Freshest dashboard data object.
+
+### Feature Flags (`FeatureFlagService`)
+
+#### List Enabled Flags
+`GET /feature-flags`
