@@ -13,9 +13,13 @@ import {
 } from '@shared';
 import { SocialLogin } from './components/SocialLogin';
 import { CreditCard } from 'lucide-react';
+import { authService } from '@/api/services/auth/authService';
+import { useToast } from '@/contexts/ToastContext';
 
 export const LoginForm = () => {
     const navigate = useNavigate();
+    const { showToast } = useToast();
+
     const {
         register,
         handleSubmit,
@@ -24,12 +28,29 @@ export const LoginForm = () => {
         resolver: zodResolver(loginSchema),
     });
 
-    const onSubmit = (data: LoginInput) => {
-        console.log('Login data:', data);
-        // Simulate successful login and redirect to 2FA
-        setTimeout(() => {
-            navigate('/verify-2fa');
-        }, 500);
+    const onSubmit = async (data: LoginInput) => {
+        try {
+            const response = await authService.login(data);
+
+            // Check if 2FA is required
+            if (response.requiresTwoFactor) {
+                // Store temp token for 2FA verification
+                if (response.tempToken) {
+                    sessionStorage.setItem('tempToken', response.tempToken);
+                    sessionStorage.setItem('availableMethods', JSON.stringify(response.availableMethods || []));
+                }
+                navigate('/verify-2fa');
+            } else {
+                // No 2FA required, redirect to dashboard
+                navigate('/dashboard');
+            }
+        } catch (error: any) {
+            console.error('Login error:', error);
+            const errorMessage = error?.response?.status === 401
+                ? 'Invalid email or password'
+                : 'An error occurred during login. Please try again.';
+            showToast(errorMessage, 'error');
+        }
     };
 
     return (

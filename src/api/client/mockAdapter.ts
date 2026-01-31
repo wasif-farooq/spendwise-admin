@@ -1,4 +1,5 @@
 import type { AxiosRequestConfig, AxiosResponse } from 'axios';
+import mockAuthData from '../services/auth/authMockData.json';
 
 class MockAdapter {
     private mockDataRegistry: Map<string, any> = new Map();
@@ -10,6 +11,11 @@ class MockAdapter {
 
     async handleRequest(config: AxiosRequestConfig): Promise<AxiosResponse> {
         await this.simulateDelay();
+
+        // Special handling for login endpoint
+        if (config.url?.includes('/auth/login') && config.method?.toUpperCase() === 'POST') {
+            return this.handleLogin(config);
+        }
 
         const mockData = this.findMockData(config.url || '');
 
@@ -43,6 +49,60 @@ class MockAdapter {
 
         return {
             data: responseData,
+            status: 200,
+            statusText: 'OK',
+            headers: {},
+            config: config as any,
+        };
+    }
+
+    private async handleLogin(config: AxiosRequestConfig): Promise<AxiosResponse> {
+        const { email, password } = config.data || {};
+
+        // Find user with matching credentials
+        const user = mockAuthData.users.find(
+            (u: any) => u.email === email && u.password === password
+        );
+
+        if (!user) {
+            // Invalid credentials - throw error to be caught by error handler
+            const error: any = new Error('Invalid credentials');
+            error.response = {
+                data: null,
+                status: 401,
+                statusText: 'Unauthorized',
+                headers: {},
+                config: config as any,
+            };
+            error.config = config;
+            throw error;
+        }
+
+        // Check if user has 2FA enabled
+        if (user.twoFactorEnabled) {
+            // Return 2FA required response
+            return {
+                data: {
+                    requiresTwoFactor: true,
+                    availableMethods: user.twoFactorMethods,
+                    tempToken: `temp-token-${user.id}-${Date.now()}`,
+                },
+                status: 200,
+                statusText: 'OK',
+                headers: {},
+                config: config as any,
+            };
+        }
+
+        // User doesn't have 2FA, return full auth response
+        const { password: _, twoFactorEnabled, twoFactorMethods, backupCodes, ...userWithoutSensitiveData } = user;
+
+        return {
+            data: {
+                user: userWithoutSensitiveData,
+                token: mockAuthData.token,
+                refreshToken: mockAuthData.refreshToken,
+            },
             status: 200,
             statusText: 'OK',
             headers: {},

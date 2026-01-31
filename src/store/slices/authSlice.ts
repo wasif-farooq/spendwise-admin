@@ -10,6 +10,11 @@ const initialState: AuthState = {
     isAuthenticated: false,
     loading: false,
     error: null,
+    // 2FA fields
+    requiresTwoFactor: false,
+    availableMethods: [],
+    tempToken: null,
+    twoFactorVerified: false,
 };
 
 // Async thunks
@@ -96,6 +101,31 @@ export const resetPasswordThunk = createAsyncThunk(
     }
 );
 
+// 2FA Thunks
+export const verify2FAThunk = createAsyncThunk(
+    'auth/verify2FA',
+    async (data: { code: string; method: 'authenticator' | 'sms' | 'email'; tempToken: string; backupCode?: boolean }, { rejectWithValue }) => {
+        try {
+            // This will be implemented in authService
+            const response = await authService.verify2FA(data);
+            return response;
+        } catch (error: any) {
+            return rejectWithValue(error.message || '2FA verification failed');
+        }
+    }
+);
+
+export const resend2FACodeThunk = createAsyncThunk(
+    'auth/resend2FACode',
+    async (method: 'sms' | 'email', { rejectWithValue }) => {
+        try {
+            await authService.resend2FACode(method);
+        } catch (error: any) {
+            return rejectWithValue(error.message || 'Failed to resend code');
+        }
+    }
+);
+
 // Slice
 const authSlice = createSlice({
     name: 'auth',
@@ -132,9 +162,21 @@ const authSlice = createSlice({
             })
             .addCase(loginThunk.fulfilled, (state, action) => {
                 state.loading = false;
-                state.user = action.payload.user;
-                state.accessToken = action.payload.token;
-                state.isAuthenticated = true;
+
+                // Check if 2FA is required
+                if (action.payload.requiresTwoFactor) {
+                    state.requiresTwoFactor = true;
+                    state.availableMethods = action.payload.availableMethods || [];
+                    state.tempToken = action.payload.tempToken || null;
+                    state.isAuthenticated = false;
+                } else {
+                    // Direct login without 2FA
+                    state.user = action.payload.user || null;
+                    state.accessToken = action.payload.token || null;
+                    state.isAuthenticated = true;
+                    state.requiresTwoFactor = false;
+                    state.twoFactorVerified = false;
+                }
                 state.error = null;
             })
             .addCase(loginThunk.rejected, (state, action) => {
@@ -151,8 +193,9 @@ const authSlice = createSlice({
             })
             .addCase(registerThunk.fulfilled, (state, action) => {
                 state.loading = false;
-                state.user = action.payload.user;
-                state.accessToken = action.payload.token;
+                // Registration typically doesn't require immediate 2FA
+                state.user = action.payload.user || null;
+                state.accessToken = action.payload.token || null;
                 state.isAuthenticated = true;
                 state.error = null;
             })
@@ -246,6 +289,43 @@ const authSlice = createSlice({
                 state.loading = false;
                 state.error = action.payload as string;
             });
+
+        // Verify 2FA
+        builder
+            .addCase(verify2FAThunk.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(verify2FAThunk.fulfilled, (state, action) => {
+                state.loading = false;
+                state.user = action.payload.user || null;
+                state.accessToken = action.payload.token || null;
+                state.isAuthenticated = true;
+                state.requiresTwoFactor = false;
+                state.twoFactorVerified = true;
+                state.tempToken = null;
+                state.availableMethods = [];
+                state.error = null;
+            })
+            .addCase(verify2FAThunk.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload as string;
+            });
+
+        // Resend 2FA Code
+        builder
+            .addCase(resend2FACodeThunk.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(resend2FACodeThunk.fulfilled, (state) => {
+                state.loading = false;
+                state.error = null;
+            })
+            .addCase(resend2FACodeThunk.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload as string;
+            });
     },
 });
 
@@ -259,6 +339,11 @@ export const selectIsAuthenticated = (state: RootState) => state.auth.isAuthenti
 export const selectAuthLoading = (state: RootState) => state.auth.loading;
 export const selectAuthError = (state: RootState) => state.auth.error;
 export const selectAccessToken = (state: RootState) => state.auth.accessToken;
+// 2FA Selectors
+export const selectRequiresTwoFactor = (state: RootState) => state.auth.requiresTwoFactor;
+export const selectAvailableMethods = (state: RootState) => state.auth.availableMethods;
+export const selectTempToken = (state: RootState) => state.auth.tempToken;
+export const selectTwoFactorVerified = (state: RootState) => state.auth.twoFactorVerified;
 
 // Reducer
 export default authSlice.reducer;

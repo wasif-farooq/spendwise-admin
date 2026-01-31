@@ -91,6 +91,24 @@ class AuthService {
     getToken(): string | null {
         return localStorage.getItem('authToken');
     }
+
+    // 2FA Methods
+    async verify2FA(data: { code: string; method: 'authenticator' | 'sms' | 'email'; tempToken: string; backupCode?: boolean }): Promise<AuthResponse> {
+        const response = await apiClient.post<AuthResponse>('/auth/2fa/verify', data);
+
+        if (response.data.token) {
+            localStorage.setItem('authToken', response.data.token);
+            if (response.data.refreshToken) {
+                localStorage.setItem('refreshToken', response.data.refreshToken);
+            }
+        }
+
+        return response.data;
+    }
+
+    async resend2FACode(method: 'sms' | 'email'): Promise<void> {
+        await apiClient.post('/auth/2fa/resend', { method });
+    }
 }
 
 export const authService = new AuthService();

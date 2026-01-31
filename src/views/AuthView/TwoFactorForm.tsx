@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -13,42 +13,103 @@ import {
     Grid
 } from '@shared';
 import { CreditCard, ArrowLeft, Smartphone, MessageSquare, Mail, ShieldCheck } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useAppDispatch } from '@/hooks/redux';
+import { verify2FAThunk, resend2FACodeThunk, selectAuthLoading, selectAuthError, selectAvailableMethods, selectTempToken } from '@/store/slices/authSlice';
+import { useAppSelector } from '@/hooks/redux';
 
-type AuthMethod = 'authenticator' | 'whatsapp' | 'email';
+type AuthMethod = 'authenticator' | 'sms' | 'email';
 
 export const TwoFactorForm = () => {
     const navigate = useNavigate();
+    const location = useLocation();
+    const dispatch = useAppDispatch();
+
+    // Get 2FA state from Redux
+    const loading = useAppSelector(selectAuthLoading);
+    const error = useAppSelector(selectAuthError);
+    const availableMethods = useAppSelector(selectAvailableMethods);
+    const tempToken = useAppSelector(selectTempToken);
+
+    // Also check location state as fallback
+    const locationMethods = location.state?.availableMethods || [];
+    const locationTempToken = location.state?.tempToken || '';
+
+    const methods2FA = availableMethods.length > 0 ? availableMethods : locationMethods;
+    const token = tempToken || locationTempToken;
+
     const [resendDisabled, setResendDisabled] = useState(false);
+    const [countdown, setCountdown] = useState(0);
     const [method, setMethod] = useState<AuthMethod>('authenticator');
+    const [useBackupCode, setUseBackupCode] = useState(false);
 
     const {
         register,
         handleSubmit,
-        formState: { errors, isSubmitting },
+        formState: { errors },
     } = useForm<TwoFactorInput>({
         resolver: zodResolver(twoFactorSchema),
     });
 
-    const onSubmit = (data: TwoFactorInput) => {
-        console.log('2FA code:', data, 'Method:', method);
-        setTimeout(() => {
-            navigate('/dashboard');
-        }, 500);
+    useEffect(() => {
+        // Redirect if no temp token or no available methods
+        if (!token || methods2FA.length === 0) {
+            navigate('/login', { replace: true });
+        } else {
+            // Set first available method as default
+            const firstMethod = methods2FA[0];
+            setMethod(firstMethod.type as AuthMethod);
+        }
+    }, [token, methods2FA, navigate]);
+
+    useEffect(() => {
+        // Countdown timer for resend button
+        if (countdown > 0) {
+            const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
+            return () => clearTimeout(timer);
+        }
+    }, [countdown]);
+
+    const onSubmit = async (data: TwoFactorInput) => {
+        if (!token) return;
+
+        const result = await dispatch(verify2FAThunk({
+            code: data.code,
+            method,
+            tempToken: token,
+            backupCode: useBackupCode,
+        }));
+
+        if (verify2FAThunk.fulfilled.match(result)) {
+            // Redirect to intended destination or dashboard
+            const from = location.state?.from?.pathname || '/dashboard';
+            navigate(from, { replace: true });
+        }
     };
 
-    const handleResendCode = () => {
+    const handleResendCode = async () => {
+        if (method === 'authenticator' || countdown > 0) return;
+
         setResendDisabled(true);
-        setTimeout(() => {
-            setResendDisabled(false);
-        }, 30000);
+        const result = await dispatch(resend2FACodeThunk(method));
+
+        if (resend2FACodeThunk.fulfilled.match(result)) {
+            setCountdown(60);
+        }
+
+        setResendDisabled(false);
     };
 
-    const methods = [
-        { id: 'authenticator' as AuthMethod, label: 'App', icon: Smartphone, description: 'Authenticator App' },
-        { id: 'whatsapp' as AuthMethod, label: 'WhatsApp', icon: MessageSquare, description: 'SMS/WhatsApp' },
-        { id: 'email' as AuthMethod, label: 'Email', icon: Mail, description: 'Email Address' },
-    ];
+    // Map available methods to UI
+    const availableMethodsUI = methods2FA.map((m: any) => {
+        if (m.type === 'authenticator') {
+            return { id: 'authenticator' as AuthMethod, label: 'App', icon: Smartphone, description: 'Authenticator App' };
+        } else if (m.type === 'sms') {
+            return { id: 'sms' as AuthMethod, label: 'SMS', icon: MessageSquare, description: m.phoneNumber || 'SMS' };
+        } else {
+            return { id: 'email' as AuthMethod, label: 'Email', icon: Mail, description: m.email || 'Email' };
+        }
+    });
 
     return (
         <Container as="div" size="full" className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
@@ -74,58 +135,70 @@ export const TwoFactorForm = () => {
                     </Flex>
                     <Heading as="h2" size="3xl" weight="extrabold" color="text-gray-900" className="tracking-tight">Security Check</Heading>
                     <Text size="sm" color="text-gray-500" className="mt-3 leading-relaxed">
-                        Choose your preferred method to receive a 6-digit verification code.
+                        {useBackupCode
+                            ? 'Enter your backup code to continue'
+                            : 'Choose your preferred method to receive a 6-digit verification code.'}
                     </Text>
                 </Block>
 
-                <Grid cols={3} gap={3} className="mt-8">
-                    {methods.map((m) => {
-                        const Icon = m.icon;
-                        const isActive = method === m.id;
-                        return (
-                            <Button
-                                variant="ghost"
-                                key={m.id}
-                                type="button"
-                                onClick={() => setMethod(m.id)}
-                                className={`flex flex-col items-center p-4 rounded-2xl border-2 transition-all duration-200 ${isActive
-                                    ? 'border-primary bg-primary/5 ring-4 ring-primary/10'
-                                    : 'border-gray-100 bg-white hover:border-gray-200 hover:bg-gray-50'
-                                    }`}
-                            >
-                                <Icon className={`h-6 w-6 mb-2 ${isActive ? 'text-primary' : 'text-gray-400'}`} />
-                                <Text size="xs" weight="bold" className={isActive ? 'text-primary' : 'text-gray-500'}>
-                                    {m.label}
-                                </Text>
-                            </Button>
-                        );
-                    })}
-                </Grid>
+                {!useBackupCode && availableMethodsUI.length > 1 && (
+                    <Grid cols={availableMethodsUI.length} gap={3} className="mt-8">
+                        {availableMethodsUI.map((m: any) => {
+                            const Icon = m.icon;
+                            const isActive = method === m.id;
+                            return (
+                                <Button
+                                    variant="ghost"
+                                    key={m.id}
+                                    type="button"
+                                    onClick={() => setMethod(m.id)}
+                                    className={`flex flex-col items-center p-4 rounded-2xl border-2 transition-all duration-200 ${isActive
+                                        ? 'border-primary bg-primary/5 ring-4 ring-primary/10'
+                                        : 'border-gray-100 bg-white hover:border-gray-200 hover:bg-gray-50'
+                                        }`}
+                                >
+                                    <Icon className={`h-6 w-6 mb-2 ${isActive ? 'text-primary' : 'text-gray-400'}`} />
+                                    <Text size="xs" weight="bold" className={isActive ? 'text-primary' : 'text-gray-500'}>
+                                        {m.label}
+                                    </Text>
+                                </Button>
+                            );
+                        })}
+                    </Grid>
+                )}
 
                 <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
-                    <AnimatePresence mode="wait">
-                        <Block
-                            as={motion.div}
-                            key={method}
-                            initial={{ opacity: 0, x: 10 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: -10 }}
-                            className="text-center"
-                        >
-                            <Text size="sm" weight="medium" color="text-gray-600" className="mb-4">
-                                {method === 'authenticator' && 'Enter the code from your Authenticator app'}
-                                {method === 'whatsapp' && 'We\'ve sent a code to your WhatsApp'}
-                                {method === 'email' && 'We\'ve sent a code to your email'}
-                            </Text>
+                    {!useBackupCode && (
+                        <AnimatePresence mode="wait">
+                            <Block
+                                as={motion.div}
+                                key={method}
+                                initial={{ opacity: 0, x: 10 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                exit={{ opacity: 0, x: -10 }}
+                                className="text-center"
+                            >
+                                <Text size="sm" weight="medium" color="text-gray-600" className="mb-4">
+                                    {method === 'authenticator' && 'Enter the code from your Authenticator app'}
+                                    {method === 'sms' && 'We\'ve sent a code to your phone'}
+                                    {method === 'email' && 'We\'ve sent a code to your email'}
+                                </Text>
+                            </Block>
+                        </AnimatePresence>
+                    )}
+
+                    {error && (
+                        <Block className="rounded-md bg-red-50 p-4">
+                            <Text size="sm" color="text-red-800">{error}</Text>
                         </Block>
-                    </AnimatePresence>
+                    )}
 
                     <Block className="space-y-4">
                         <Input
-                            label="Verification Code"
+                            label={useBackupCode ? "Backup Code" : "Verification Code"}
                             type="text"
-                            placeholder="000 000"
-                            maxLength={6}
+                            placeholder={useBackupCode ? "Enter backup code" : "000 000"}
+                            maxLength={useBackupCode ? 20 : 6}
                             autoFocus
                             {...register('code')}
                             error={errors.code?.message}
@@ -133,20 +206,32 @@ export const TwoFactorForm = () => {
                         />
                     </Block>
 
-                    <Button type="submit" className="w-full py-6 text-lg font-bold shadow-lg shadow-primary/20" disabled={isSubmitting}>
-                        {isSubmitting ? 'Verifying...' : 'Verify & Continue'}
+                    <Button type="submit" className="w-full py-6 text-lg font-bold shadow-lg shadow-primary/20" disabled={loading}>
+                        {loading ? 'Verifying...' : 'Verify & Continue'}
                     </Button>
 
                     <Flex direction="col" gap={4} className="text-center">
+                        {!useBackupCode && (method === 'sms' || method === 'email') && (
+                            <Button
+                                variant="ghost"
+                                type="button"
+                                onClick={handleResendCode}
+                                disabled={resendDisabled || countdown > 0}
+                                className="text-sm font-semibold text-primary hover:text-primary/80 disabled:text-gray-400 transition-colors"
+                            >
+                                {countdown > 0 ? `Resend code in ${countdown}s` : resendDisabled ? 'Sending...' : 'Didn\'t receive a code? Resend'}
+                            </Button>
+                        )}
+
                         <Button
                             variant="ghost"
                             type="button"
-                            onClick={handleResendCode}
-                            disabled={resendDisabled}
-                            className="text-sm font-semibold text-primary hover:text-primary/80 disabled:text-gray-400 transition-colors"
+                            onClick={() => setUseBackupCode(!useBackupCode)}
+                            className="text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors"
                         >
-                            {resendDisabled ? 'Code sent! Wait 30s' : 'Didn\'t receive a code? Resend'}
+                            {useBackupCode ? 'Use verification code' : 'Use backup code instead'}
                         </Button>
+
                         <Link
                             to="/login"
                             className="inline-flex items-center justify-center text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors"

@@ -16,34 +16,103 @@
     "users": [
         {
             "id": "user-001",
-            "email": "john@example.com",
+            "email": "user1@example.com",
             "password": "password123",
-            "name": "John Doe",
-            "avatar": "https://ui-avatars.com/api/?name=John+Doe&background=4F46E5&color=fff",
+            "name": "Alice Johnson",
+            "avatar": "https://ui-avatars.com/api/?name=Alice+Johnson&background=4F46E5&color=fff",
             "role": "Admin",
             "accountType": "organization",
             "organizationId": "org-001",
-            "createdAt": "2023-10-01T10:00:00Z"
+            "createdAt": "2023-10-01T10:00:00Z",
+            "twoFactorEnabled": false,
+            "twoFactorMethods": []
         },
         {
             "id": "user-002",
-            "email": "jane@example.com",
+            "email": "user2@example.com",
             "password": "password123",
-            "name": "Jane Smith",
-            "avatar": "https://ui-avatars.com/api/?name=Jane+Smith&background=10B981&color=fff",
+            "name": "Bob Smith",
+            "avatar": "https://ui-avatars.com/api/?name=Bob+Smith&background=10B981&color=fff",
             "role": "Member",
             "accountType": "personal",
-            "createdAt": "2023-11-15T10:00:00Z"
+            "createdAt": "2023-11-15T10:00:00Z",
+            "twoFactorEnabled": true,
+            "twoFactorMethods": [
+                {
+                    "type": "authenticator",
+                    "enabled": true,
+                    "verified": true
+                }
+            ],
+            "backupCodes": [
+                "AUTH001",
+                "AUTH002",
+                "AUTH003",
+                "AUTH004",
+                "AUTH005"
+            ]
         },
         {
             "id": "user-003",
-            "email": "demo@spendwise.com",
-            "password": "demo123",
-            "name": "Demo User",
-            "avatar": "https://ui-avatars.com/api/?name=Demo+User&background=F59E0B&color=fff",
+            "email": "user3@example.com",
+            "password": "password123",
+            "name": "Charlie Davis",
+            "avatar": "https://ui-avatars.com/api/?name=Charlie+Davis&background=F59E0B&color=fff",
+            "role": "Member",
+            "accountType": "personal",
+            "createdAt": "2024-01-01T10:00:00Z",
+            "twoFactorEnabled": true,
+            "twoFactorMethods": [
+                {
+                    "type": "authenticator",
+                    "enabled": true,
+                    "verified": true
+                },
+                {
+                    "type": "sms",
+                    "enabled": true,
+                    "verified": true,
+                    "phoneNumber": "+1234567890"
+                }
+            ],
+            "backupCodes": [
+                "DUAL001",
+                "DUAL002",
+                "DUAL003",
+                "DUAL004",
+                "DUAL005"
+            ]
+        },
+        {
+            "id": "user-004",
+            "email": "user4@example.com",
+            "password": "password123",
+            "name": "Diana Martinez",
+            "avatar": "https://ui-avatars.com/api/?name=Diana+Martinez&background=EC4899&color=fff",
             "role": "Viewer",
             "accountType": "personal",
-            "createdAt": "2024-01-01T10:00:00Z"
+            "createdAt": "2024-02-15T10:00:00Z",
+            "twoFactorEnabled": true,
+            "twoFactorMethods": [
+                {
+                    "type": "authenticator",
+                    "enabled": true,
+                    "verified": true
+                },
+                {
+                    "type": "email",
+                    "enabled": true,
+                    "verified": true,
+                    "email": "user4@example.com"
+                }
+            ],
+            "backupCodes": [
+                "EMAIL001",
+                "EMAIL002",
+                "EMAIL003",
+                "EMAIL004",
+                "EMAIL005"
+            ]
         }
     ]
 }
