@@ -1,4 +1,5 @@
-import { usePaginatedData } from '@/hooks/usePaginatedData';
+import { useSearch } from '@/hooks/useSearch';
+import { usePagination } from '@/hooks/usePagination';
 import { Block, Flex, Heading, Text, Grid } from '@shared';
 import { Input, Button } from '@ui';
 import { User, Shield, AlertCircle, Search, ChevronLeft, ChevronRight } from 'lucide-react';
@@ -19,20 +20,17 @@ export const MemberDetailsForm = ({
     toggleRole,
     isEditing = false
 }: MemberDetailsFormProps) => {
-    // Use usePaginatedData hook
+    const roles = mockData.roles;
+    const { searchQuery: roleSearchQuery, setSearchQuery: setRoleSearchQuery, filteredData: searchedRoles } = useSearch(roles, ['name']);
     const {
-        data: paginatedRoles,
+        paginatedData: paginatedRoles,
         currentPage: currentRolePage,
         totalPages: totalRolePages,
-        searchQuery: roleSearchQuery,
-        setSearchQuery: setRoleSearchQuery,
-        goToNextPage,
-        goToPrevPage
-    } = usePaginatedData({
-        data: mockData.roles,
-        itemsPerPage: 3,
-        filterFn: (role, query) => role.name.toLowerCase().includes(query.toLowerCase())
-    });
+        setCurrentPage: setRolePage
+    } = usePagination(searchedRoles, { itemsPerPage: 3 });
+
+    const goToPrevPage = () => setRolePage(p => p - 1);
+    const goToNextPage = () => setRolePage(p => p + 1);
 
     return (
         <Block className="lg:col-span-1 space-y-8">
@@ -82,7 +80,7 @@ export const MemberDetailsForm = ({
 
                     <Grid cols={1} gap={3}>
                         {paginatedRoles.length > 0 ? (
-                            paginatedRoles.map((role) => {
+                            paginatedRoles.map((role: any) => {
                                 const isSelected = selectedRoles.includes(role.name.toLowerCase());
                                 return (
                                     <Block
@@ -156,6 +154,6 @@ export const MemberDetailsForm = ({
                     </Block>
                 </Flex>
             </Block>
-        </Block>
+        </Block >
     );
 };

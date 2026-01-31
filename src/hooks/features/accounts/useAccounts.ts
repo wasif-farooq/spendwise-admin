@@ -1,37 +1,33 @@
-import { useState, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import type { Account } from '@/views/Accounts/types';
 import { Building2, Banknote, CreditCard, Wallet } from 'lucide-react';
-import React from 'react';
 import mockData from '@/data/mockData.json';
 import { useFeatureAccess } from '@/hooks/useFeatureAccess';
+import { useSearch } from '@/hooks/useSearch';
+import { useToggle } from '@/hooks/useToggle';
+import { useModal } from '@/hooks/useModal';
 
 export const useAccounts = () => {
     const [accounts] = useState<Account[]>(mockData.accounts as Account[]);
-    const [searchQuery, setSearchQuery] = useState('');
-    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-    const [isUpgradeModalOpen, setIsUpgradeModalOpen] = useState(false);
+    const addModal = useModal();
+    const upgradeModal = useToggle(false);
+
+    const { searchQuery, setSearchQuery, filteredData: filteredAccounts } = useSearch(accounts, ['name', 'type']);
 
     const accountAccess = useFeatureAccess('accounts');
     const canAddAccount = accountAccess.hasAccess;
 
     const handleAddAccountClick = () => {
         if (canAddAccount) {
-            setIsAddModalOpen(true);
+            addModal.open();
         } else {
-            setIsUpgradeModalOpen(true);
+            upgradeModal.setTrue();
         }
     };
 
     const totalBalance = useMemo(() => {
         return accounts.reduce((acc, curr) => acc + curr.balance, 0);
     }, [accounts]);
-
-    const filteredAccounts = useMemo(() => {
-        return accounts.filter(acc =>
-            acc.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            acc.type.toLowerCase().includes(searchQuery.toLowerCase())
-        );
-    }, [accounts, searchQuery]);
 
     const getAccountIcon = (type: string) => {
         switch (type) {
@@ -47,10 +43,12 @@ export const useAccounts = () => {
         accounts,
         searchQuery,
         setSearchQuery,
-        isAddModalOpen,
-        setIsAddModalOpen,
-        isUpgradeModalOpen,
-        setIsUpgradeModalOpen,
+        isAddModalOpen: addModal.isOpen,
+        openAddModal: addModal.open,
+        closeAddModal: addModal.close,
+        setIsAddModalOpen: (val: boolean) => val ? addModal.open() : addModal.close(),
+        isUpgradeModalOpen: upgradeModal.value,
+        setIsUpgradeModalOpen: upgradeModal.setValue,
         canAddAccount,
         accountAccess,
         handleAddAccountClick,

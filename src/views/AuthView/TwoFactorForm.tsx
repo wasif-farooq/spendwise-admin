@@ -21,7 +21,7 @@ export const TwoFactorForm = () => {
         method,
         setMethod,
         useBackupCode,
-        setUseBackupCode,
+        toggleBackupCode,
         countdown,
         resendDisabled,
         availableMethodsUI,
@@ -137,9 +137,8 @@ export const TwoFactorForm = () => {
 
                         <Button
                             variant="ghost"
-                            type="button"
-                            onClick={() => setUseBackupCode(!useBackupCode)}
-                            className="text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors"
+                            onClick={toggleBackupCode}
+                            className="text-gray-500 hover:text-primary font-bold text-sm"
                         >
                             {useBackupCode ? 'Use verification code' : 'Use backup code instead'}
                         </Button>

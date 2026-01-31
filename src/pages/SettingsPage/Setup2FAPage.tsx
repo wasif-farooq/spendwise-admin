@@ -24,10 +24,10 @@ const Setup2FAPage = () => {
         isVerifying,
         hasCopied,
         hasAcknowledged,
-        setHasAcknowledged,
+        toggleAcknowledgement,
         recoveryCodes,
         handleNextStep,
-        copyToClipboard,
+        handleCopyQR,
         downloadCodes,
         details,
         handleBackToSecurity
@@ -184,7 +184,7 @@ const Setup2FAPage = () => {
                                     <Flex gap={4} className="mt-8">
                                         <Button
                                             variant="outline"
-                                            onClick={copyToClipboard}
+                                            onClick={handleCopyQR}
                                             className="flex-grow flex items-center justify-center px-6 py-4 bg-white rounded-2xl font-bold text-gray-700 hover:bg-gray-100 transition-all border border-gray-200"
                                         >
                                             {hasCopied ? <Check className="h-5 w-5 mr-2 text-green-600" /> : <Copy className="h-5 w-5 mr-2" />}
@@ -207,7 +207,7 @@ const Setup2FAPage = () => {
                                             <input
                                                 type="checkbox"
                                                 checked={hasAcknowledged}
-                                                onChange={(e) => setHasAcknowledged(e.target.checked)}
+                                                onChange={toggleAcknowledgement}
                                                 className="peer h-6 w-6 cursor-pointer appearance-none rounded-lg border-2 border-gray-200 transition-all checked:border-primary checked:bg-primary"
                                             />
                                             <Check className="absolute h-4 w-4 text-white opacity-0 peer-checked:opacity-100 left-1 transition-opacity pointer-events-none" />

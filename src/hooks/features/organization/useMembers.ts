@@ -2,31 +2,19 @@ import { useState, useMemo, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import type { Member, MemberFilters } from '@/views/Manage/Members/types';
 import mockData from '@/data/mockData.json';
+import { usePagination } from '@/hooks/usePagination';
+import { useModal } from '@/hooks/useModal';
+import { useToggle } from '@/hooks/useToggle';
 
 export const useMembers = () => {
-    const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
-    const [isRemoveModalOpen, setIsRemoveModalOpen] = useState(false);
-    const [removingMember, setRemovingMember] = useState<Member | null>(null);
-    const [isProcessing, setIsProcessing] = useState(false);
+    const filterDrawer = useToggle(false);
+    const removeModal = useModal<Member>();
+    const isProcessing = useToggle(false);
     const [feedback, setFeedback] = useState<{ type: 'success' | 'error', message: string } | null>(null);
     const location = useLocation();
 
-    // Check for success feedback from navigation
-    useEffect(() => {
-        const state = location.state as { invitationSent?: boolean; email?: string } | null;
-        if (state?.invitationSent && state?.email) {
-            setFeedback({ type: 'success', message: `Invitation sent to ${state.email}!` });
-            window.history.replaceState({}, document.title);
-            setTimeout(() => setFeedback(null), 3000);
-        }
-    }, [location]);
-
-
-    // Pagination state
-    const [currentPage, setCurrentPage] = useState(1);
+    // Pagination/Data Source state
     const itemsPerPage = 5;
-
-    // Use centralized mock data (in real app, this would be fetched)
     const [members, setMembers] = useState<Member[]>(mockData.members);
 
     const [searchQuery, setSearchQuery] = useState('');
@@ -54,37 +42,32 @@ export const useMembers = () => {
         });
     }, [members, searchQuery, filters]);
 
-    // Pagination logic
-    const totalPages = Math.ceil(filteredMembers.length / itemsPerPage);
-    const paginatedMembers = useMemo(() => {
-        const start = (currentPage - 1) * itemsPerPage;
-        return filteredMembers.slice(start, start + itemsPerPage);
-    }, [currentPage, filteredMembers]);
-
-    // Reset to first page when searching or filtering
+    // Check for success feedback from navigation
     useEffect(() => {
-        setCurrentPage(1);
-    }, [searchQuery, filters]);
+        const state = location.state as { invitationSent?: boolean; email?: string } | null;
+        if (state?.invitationSent && state?.email) {
+            setFeedback({ type: 'success', message: `Invitation sent to ${state.email}!` });
+            window.history.replaceState({}, document.title);
+            setTimeout(() => setFeedback(null), 3000);
+        }
+    }, [location]);
 
-    const openRemoveModal = (member: Member) => {
-        setRemovingMember(member);
-        setIsRemoveModalOpen(true);
-    };
-
-    const closeRemoveModal = () => {
-        setIsRemoveModalOpen(false);
-        setRemovingMember(null);
-    };
+    const {
+        paginatedData: paginatedMembers,
+        currentPage,
+        setCurrentPage,
+        totalPages,
+        totalItems: filteredMembersCount
+    } = usePagination(filteredMembers, { itemsPerPage });
 
     const confirmRemoveMember = () => {
-        if (!removingMember) return;
-        setIsProcessing(true);
+        if (!removeModal.data) return;
+        isProcessing.setTrue();
         // Simulate API call
         setTimeout(() => {
-            setMembers(prev => prev.filter(m => m.id !== removingMember.id));
-            setIsProcessing(false);
-            setIsRemoveModalOpen(false);
-            setRemovingMember(null);
+            setMembers(prev => prev.filter(m => m.id !== removeModal.data?.id));
+            isProcessing.setFalse();
+            removeModal.close();
         }, 1000);
     };
 
@@ -105,18 +88,18 @@ export const useMembers = () => {
         currentPage,
         setCurrentPage,
         totalPages,
-        filteredMembersCount: filteredMembers.length,
-        itemsPerPage, // Exposed so component knows
-        isRemoveModalOpen,
-        openRemoveModal,
-        closeRemoveModal,
-        removingMember,
+        filteredMembersCount,
+        itemsPerPage,
+        isRemoveModalOpen: removeModal.isOpen,
+        openRemoveModal: removeModal.open,
+        closeRemoveModal: removeModal.close,
+        removingMember: removeModal.data,
         confirmRemoveMember,
-        isProcessing,
+        isProcessing: isProcessing.value,
         feedback,
         setFeedback,
-        isFilterDrawerOpen,
-        setIsFilterDrawerOpen,
+        isFilterDrawerOpen: filterDrawer.value,
+        setIsFilterDrawerOpen: filterDrawer.setValue,
         clearFilters,
         activeFilterCount
     };

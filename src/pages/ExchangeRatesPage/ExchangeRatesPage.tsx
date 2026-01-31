@@ -11,7 +11,8 @@ const ExchangeRatesPage = () => {
         baseCurrency,
         setBaseCurrency,
         searchQuery,
-        setSearchQuery
+        setSearchQuery,
+        filteredCurrencies
     } = useExchangeRates();
 
     return (
@@ -38,7 +39,7 @@ const ExchangeRatesPage = () => {
                 {/* Rates Grid */}
                 <ExchangeRatesGrid
                     baseCurrency={baseCurrency}
-                    searchQuery={searchQuery}
+                    filteredCurrencies={filteredCurrencies}
                 />
             </Grid>
         </Block>

@@ -1,18 +1,20 @@
 import { useState } from 'react';
+import { useToggle } from '@/hooks/useToggle';
 
 export const useProfile = () => {
     const [firstName, setFirstName] = useState('John');
     const [lastName, setLastName] = useState('Doe');
     const [email, setEmail] = useState('john@example.com');
     const [phone, setPhone] = useState('+1 (555) 000-0000');
-    const [isSaving, setIsSaving] = useState(false);
+    const isSaving = useToggle(false);
 
     const handleSave = async () => {
-        setIsSaving(true);
+        isSaving.setTrue();
         // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        setIsSaving(false);
-        console.log('Saved Profile:', { firstName, lastName, email, phone });
+        setTimeout(() => {
+            console.log('Saved Profile:', { firstName, lastName, email, phone });
+            isSaving.setFalse();
+        }, 1000);
     };
 
     return {
@@ -24,7 +26,7 @@ export const useProfile = () => {
         setEmail,
         phone,
         setPhone,
-        isSaving,
+        isSaving: isSaving.value,
         handleSave
     };
 };

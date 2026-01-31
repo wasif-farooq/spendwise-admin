@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useToggle } from '@/hooks/useToggle';
 import { useAppSelector } from '@/store/redux';
 import { selectSubscriptionPlan, selectSubscription } from '@/store/slices/subscriptionSlice';
 import mockData from '@/data/mockData.json';
@@ -6,7 +6,7 @@ import mockData from '@/data/mockData.json';
 export const useSubscriptionSettings = () => {
     const currentPlanId = useAppSelector(selectSubscriptionPlan);
     const subscription = useAppSelector(selectSubscription);
-    const [isUpgradeModalOpen, setIsUpgradeModalOpen] = useState(false);
+    const upgradeModal = useToggle(false);
 
     // Get current plan details
     const isPro = currentPlanId === 'pro';
@@ -40,7 +40,7 @@ export const useSubscriptionSettings = () => {
         isPro,
         planDisplay,
         recentPayments,
-        isUpgradeModalOpen,
-        setIsUpgradeModalOpen
+        isUpgradeModalOpen: upgradeModal.value,
+        setIsUpgradeModalOpen: upgradeModal.setValue,
     };
 };

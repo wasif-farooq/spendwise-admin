@@ -11,6 +11,8 @@ import {
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import mockData from '@/data/mockData.json';
+import { useSearch } from '@/hooks/useSearch';
+import { useModal } from '@/hooks/useModal';
 
 interface Transaction {
     id: string;
@@ -48,27 +50,23 @@ export const useTransactions = () => {
         }))
     );
 
-    const [searchQuery, setSearchQuery] = useState('');
+    const historyModal = useModal<Transaction>();
     const [selectedCategory, setSelectedCategory] = useState('All');
-    const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
-    const [selectedTransaction, setSelectedTransaction] = useState<Transaction | null>(null);
+
+    const { searchQuery, setSearchQuery, filteredData: searchedTransactions } = useSearch(transactions, ['description', 'category']);
 
     const filteredTransactions = useMemo(() => {
-        return transactions.filter(t => {
-            const matchesSearch = t.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                t.category.toLowerCase().includes(searchQuery.toLowerCase());
-            const matchesCategory = selectedCategory === 'All' || t.category === selectedCategory;
-            return matchesSearch && matchesCategory;
+        return searchedTransactions.filter(t => {
+            return selectedCategory === 'All' || t.category === selectedCategory;
         });
-    }, [transactions, searchQuery, selectedCategory]);
+    }, [searchedTransactions, selectedCategory]);
 
     const categories = useMemo(() =>
         ['All', ...Array.from(new Set(transactions.map((t: Transaction) => t.category)))],
         [transactions]);
 
     const handleTransactionClick = (t: Transaction) => {
-        setSelectedTransaction(t);
-        setIsHistoryModalOpen(true);
+        historyModal.open(t);
     };
 
     const handleBack = () => navigate('/accounts');
@@ -79,9 +77,9 @@ export const useTransactions = () => {
         setSearchQuery,
         selectedCategory,
         setSelectedCategory,
-        isHistoryModalOpen,
-        setIsHistoryModalOpen,
-        selectedTransaction,
+        isHistoryModalOpen: historyModal.isOpen,
+        setIsHistoryModalOpen: (val: boolean) => val ? historyModal.open() : historyModal.close(),
+        selectedTransaction: historyModal.data,
         filteredTransactions,
         categories,
         handleTransactionClick,

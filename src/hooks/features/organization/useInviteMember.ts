@@ -1,5 +1,5 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useToggle } from '@/hooks/useToggle';
 import { useMemberDetails } from './useMemberDetails';
 import { useAccountAccess } from './useAccountAccess';
 import type { InvitationData } from '@/views/Manage/InviteMember/types';
@@ -23,17 +23,17 @@ export const useInviteMember = () => {
     } = useAccountAccess(selectedRoles);
 
     // UI State
-    const [showConfirmation, setShowConfirmation] = useState(false);
-    const [isSubmitting, setIsSubmitting] = useState(false);
+    const showConfirmation = useToggle(false);
+    const isSubmitting = useToggle(false);
 
     const handleInviteClick = () => {
         if (isFormValid) {
-            setShowConfirmation(true);
+            showConfirmation.setTrue();
         }
     };
 
     const processInvite = async () => {
-        setIsSubmitting(true);
+        isSubmitting.setTrue();
         const data: InvitationData = {
             email,
             roles: selectedRoles,
@@ -45,8 +45,8 @@ export const useInviteMember = () => {
         // Simulate API call
         await new Promise(resolve => setTimeout(resolve, 1500));
 
-        setIsSubmitting(false);
-        setShowConfirmation(false);
+        isSubmitting.setFalse();
+        showConfirmation.setFalse();
         navigate('/manage/members', { state: { invitationSent: true, email: data.email } });
     };
 
@@ -62,9 +62,9 @@ export const useInviteMember = () => {
         toggleAccountSelection,
         toggleAccountPermission,
         toggleOverride,
-        showConfirmation,
-        setShowConfirmation, // exposed for modal close
-        isSubmitting,
+        showConfirmation: showConfirmation.value,
+        setShowConfirmation: showConfirmation.setValue, // exposed for modal close
+        isSubmitting: isSubmitting.value,
         handleInviteClick,
         processInvite,
         isFormValid

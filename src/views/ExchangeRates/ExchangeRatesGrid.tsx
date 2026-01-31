@@ -1,32 +1,13 @@
-import { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowUpRight, ArrowDownRight, Filter } from 'lucide-react';
 import { Block, Flex, Grid, Heading, Text } from '@shared';
-import { CURRENCIES } from './types';
 
 interface ExchangeRatesGridProps {
     baseCurrency: string;
-    searchQuery: string;
+    filteredCurrencies: any[];
 }
 
-export const ExchangeRatesGrid = ({ baseCurrency, searchQuery }: ExchangeRatesGridProps) => {
-
-    // Logic extracted from ExchangeRatesPage
-    const baseRate = useMemo(() => {
-        return CURRENCIES.find(c => c.value === baseCurrency)?.rate || 1;
-    }, [baseCurrency]);
-
-    const filteredCurrencies = useMemo(() => {
-        return CURRENCIES.filter(c =>
-            c.value.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            c.label.toLowerCase().includes(searchQuery.toLowerCase())
-        ).map(c => ({
-            ...c,
-            convertedRate: (c.rate / baseRate).toFixed(4),
-            trend: Math.random() > 0.5 ? 'up' : 'down',
-            change: (Math.random() * 2).toFixed(2)
-        }));
-    }, [searchQuery, baseRate]);
+export const ExchangeRatesGrid = ({ baseCurrency, filteredCurrencies }: ExchangeRatesGridProps) => {
 
     return (
         <Block className="lg:col-span-3">

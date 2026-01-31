@@ -1,4 +1,5 @@
-import { usePaginatedData } from '@/hooks/usePaginatedData';
+import { useSearch } from '@/hooks/useSearch';
+import { usePagination } from '@/hooks/usePagination';
 import { AnimatePresence } from 'framer-motion';
 import { Block, Flex, Heading, Text, AnimatedBlock, Inline } from '@shared';
 import { Button, Input } from '@ui';
@@ -23,20 +24,17 @@ export const AccountAccessForm = ({
     toggleOverride,
     canOverridePermissions = false
 }: AccountAccessFormProps) => {
-    // Use usePaginatedData hook
+    const accounts = mockData.accounts;
+    const { searchQuery, setSearchQuery, filteredData: searchedAccounts } = useSearch(accounts, ['name']);
     const {
-        data: paginatedAccounts,
+        paginatedData: paginatedAccounts,
         currentPage,
         totalPages,
-        searchQuery,
-        setSearchQuery,
-        goToNextPage,
-        goToPrevPage
-    } = usePaginatedData({
-        data: mockData.accounts,
-        itemsPerPage: 3,
-        filterFn: (account, query) => account.name.toLowerCase().includes(query.toLowerCase())
-    });
+        setCurrentPage
+    } = usePagination(searchedAccounts, { itemsPerPage: 3 });
+
+    const goToPrevPage = () => setCurrentPage(p => p - 1);
+    const goToNextPage = () => setCurrentPage(p => p + 1);
 
     // Define permission metadata
     const accountPermissions = [
@@ -69,7 +67,7 @@ export const AccountAccessForm = ({
 
             <Block className="space-y-6">
                 {paginatedAccounts.length > 0 ? (
-                    paginatedAccounts.map((account) => {
+                    paginatedAccounts.map((account: any) => {
                         const isSelected = !!accountConfigs[String(account.id)];
                         const config = accountConfigs[String(account.id)];
                         const isOverridden = overriddenAccounts.includes(String(account.id));

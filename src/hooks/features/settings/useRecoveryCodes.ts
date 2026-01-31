@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import { useToggle } from '@/hooks/useToggle';
 import { useModal } from '../../useModal';
 
 export const useRecoveryCodes = () => {
     const regenerateModal = useModal(false);
     const newCodesModal = useModal(false);
-    const [hasCopied, setHasCopied] = useState(false);
+    const hasCopied = useToggle(false); // Replaced useState with useToggle
 
     const recoveryCodes = [
         'ABCD-1234', 'EFGH-5678', 'IJKL-9012', 'MNOP-3456',
@@ -19,8 +19,8 @@ export const useRecoveryCodes = () => {
 
     const copyToClipboard = () => {
         navigator.clipboard.writeText(recoveryCodes.join('\n'));
-        setHasCopied(true);
-        setTimeout(() => setHasCopied(false), 2000);
+        hasCopied.setTrue(); // Updated to use useToggle's setTrue
+        setTimeout(() => hasCopied.setFalse(), 2000); // Updated to use useToggle's setFalse
     };
 
     const downloadCodes = () => {
@@ -35,7 +35,7 @@ export const useRecoveryCodes = () => {
     return {
         regenerateModal,
         newCodesModal,
-        hasCopied,
+        hasCopied: hasCopied.value, // Exposed the value from useToggle
         recoveryCodes,
         handleRegenerateCodes,
         copyToClipboard,

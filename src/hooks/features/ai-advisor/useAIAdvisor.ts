@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useToggle } from '@/hooks/useToggle';
 import type { Message } from '@/views/AIAdvisor/types';
 
 export const SUGGESTED_PROMPTS = [
@@ -18,7 +19,7 @@ export const useAIAdvisor = () => {
         }
     ]);
     const [inputValue, setInputValue] = useState('');
-    const [isTyping, setIsTyping] = useState(false);
+    const isTyping = useToggle(false);
 
     const handleSendMessage = (text: string = inputValue) => {
         if (!text.trim()) return;
@@ -32,7 +33,7 @@ export const useAIAdvisor = () => {
 
         setMessages(prev => [...prev, userMessage]);
         setInputValue('');
-        setIsTyping(true);
+        isTyping.setTrue();
 
         // Simulate AI response
         setTimeout(() => {
@@ -43,7 +44,7 @@ export const useAIAdvisor = () => {
                 timestamp: new Date()
             };
             setMessages(prev => [...prev, aiMessage]);
-            setIsTyping(false);
+            isTyping.setFalse();
         }, 1500);
     };
 
@@ -51,7 +52,7 @@ export const useAIAdvisor = () => {
         messages,
         inputValue,
         setInputValue,
-        isTyping,
+        isTyping: isTyping.value,
         handleSendMessage,
         suggestedPrompts: SUGGESTED_PROMPTS
     };

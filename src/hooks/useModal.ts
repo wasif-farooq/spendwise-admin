@@ -5,11 +5,11 @@ import { useState, useCallback } from 'react';
  * Semantically similar to useToggle but intended for Modals/Dialogs.
  * @param initialOpen Initial open state (default: false)
  */
-export function useModal(initialOpen: boolean = false) {
+export function useModal<T = any>(initialOpen: boolean = false) {
     const [isOpen, setIsOpen] = useState<boolean>(initialOpen);
-    const [data, setData] = useState<any>(null);
+    const [data, setData] = useState<T | null>(null);
 
-    const open = useCallback((modalData?: any) => {
+    const open = useCallback((modalData?: T) => {
         if (modalData) setData(modalData);
         setIsOpen(true);
     }, []);

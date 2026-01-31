@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useToggle } from '@/hooks/useToggle';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
@@ -34,10 +35,11 @@ export const useTwoFactorForm = () => {
     const methods2FA = availableMethods.length > 0 ? availableMethods : locationMethods;
     const token = tempToken || locationTempToken;
 
-    const [resendDisabled, setResendDisabled] = useState(false);
+    const resendDisabled = useToggle(false);
+    const [backupCode, setBackupCode] = useState('');
     const [countdown, setCountdown] = useState(0);
     const [method, setMethod] = useState<AuthMethod>('authenticator');
-    const [useBackupCode, setUseBackupCode] = useState(false);
+    const useBackupCode = useToggle(false);
 
     const {
         register,
@@ -63,8 +65,14 @@ export const useTwoFactorForm = () => {
         if (countdown > 0) {
             const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
             return () => clearTimeout(timer);
+        } else {
+            resendDisabled.setFalse();
         }
-    }, [countdown]);
+    }, [countdown, resendDisabled]);
+
+    const toggleBackupCode = () => {
+        useBackupCode.toggle();
+    };
 
     const onSubmit = async (data: TwoFactorInput) => {
         if (!token) return;
@@ -75,7 +83,7 @@ export const useTwoFactorForm = () => {
             code: data.code,
             method,
             tempToken: token,
-            backupCode: useBackupCode,
+            backupCode: useBackupCode.value,
         }));
 
         if (verify2FAThunk.fulfilled.match(result)) {
@@ -88,16 +96,14 @@ export const useTwoFactorForm = () => {
     };
 
     const handleResendCode = async () => {
-        if (method === 'authenticator' || countdown > 0) return;
+        if (method === 'authenticator' || resendDisabled.value) return;
 
-        setResendDisabled(true);
+        resendDisabled.setTrue();
         const result = await dispatch(resend2FACodeThunk(method));
 
         if (resend2FACodeThunk.fulfilled.match(result)) {
             setCountdown(60);
         }
-
-        setResendDisabled(false);
     };
 
     // Map available methods to UI
@@ -118,12 +124,14 @@ export const useTwoFactorForm = () => {
         loading,
         method,
         setMethod,
-        useBackupCode,
-        setUseBackupCode,
+        useBackupCode: useBackupCode.value,
+        toggleBackupCode,
         countdown,
-        resendDisabled,
+        resendDisabled: resendDisabled.value,
         availableMethodsUI,
         onSubmit,
-        handleResendCode
+        handleResendCode,
+        backupCode,
+        setBackupCode
     };
 };

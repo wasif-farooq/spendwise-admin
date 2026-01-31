@@ -1,8 +1,11 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import { ShieldCheck, Users, Eye, CreditCard, Zap } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import type { Role, RoleFilters } from '@/views/Manage/Roles/types';
 import mockData from '@/data/mockData.json';
+import { usePagination } from '@/hooks/usePagination';
+import { useModal } from '@/hooks/useModal';
+import { useToggle } from '@/hooks/useToggle';
 
 const iconMap: Record<string, LucideIcon> = {
     ShieldCheck,
@@ -13,13 +16,11 @@ const iconMap: Record<string, LucideIcon> = {
 };
 
 export const useRoles = () => {
-    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-    const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
-    const [deletingRole, setDeletingRole] = useState<Role | null>(null);
-    const [isProcessing, setIsProcessing] = useState(false);
+    const deleteModal = useModal<Role>();
+    const filterDrawer = useToggle(false);
+    const isProcessing = useToggle(false);
 
-    // Pagination state
-    const [currentPage, setCurrentPage] = useState(1);
+    // Pagination/Data Source state
     const itemsPerPage = 6;
 
     const [roles, setRoles] = useState<Role[]>(() => {
@@ -54,34 +55,21 @@ export const useRoles = () => {
         });
     }, [roles, searchQuery, filters]);
 
-    const totalPages = Math.ceil(filteredRoles.length / itemsPerPage);
-    const paginatedRoles = useMemo(() => {
-        const start = (currentPage - 1) * itemsPerPage;
-        return filteredRoles.slice(start, start + itemsPerPage);
-    }, [currentPage, filteredRoles]);
-
-    useEffect(() => {
-        setCurrentPage(1);
-    }, [searchQuery, filters]);
-
-    const openDeleteModal = (role: Role) => {
-        setDeletingRole(role);
-        setIsDeleteModalOpen(true);
-    };
-
-    const closeDeleteModal = () => {
-        setIsDeleteModalOpen(false);
-        setDeletingRole(null);
-    };
+    const {
+        paginatedData: paginatedRoles,
+        currentPage,
+        setCurrentPage,
+        totalPages,
+        totalItems: filteredRolesCount
+    } = usePagination(filteredRoles, { itemsPerPage });
 
     const confirmDeleteRole = () => {
-        if (!deletingRole) return;
-        setIsProcessing(true);
+        if (!deleteModal.data) return;
+        isProcessing.setTrue();
         setTimeout(() => {
-            setRoles(prev => prev.filter(r => r.id !== deletingRole.id));
-            setIsProcessing(false);
-            setIsDeleteModalOpen(false);
-            setDeletingRole(null);
+            setRoles(prev => prev.filter(r => r.id !== deleteModal.data?.id));
+            isProcessing.setFalse();
+            deleteModal.close();
         }, 1000);
     };
 
@@ -102,16 +90,16 @@ export const useRoles = () => {
         currentPage,
         setCurrentPage,
         totalPages,
-        filteredRolesCount: filteredRoles.length,
+        filteredRolesCount,
         itemsPerPage,
-        isDeleteModalOpen,
-        openDeleteModal,
-        closeDeleteModal,
-        deletingRole,
+        isDeleteModalOpen: deleteModal.isOpen,
+        openDeleteModal: deleteModal.open,
+        closeDeleteModal: deleteModal.close,
+        deletingRole: deleteModal.data,
         confirmDeleteRole,
-        isProcessing,
-        isFilterDrawerOpen,
-        setIsFilterDrawerOpen,
+        isProcessing: isProcessing.value,
+        isFilterDrawerOpen: filterDrawer.value,
+        setIsFilterDrawerOpen: filterDrawer.setValue,
         clearFilters,
         activeFilterCount
     };

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useToggle } from '@/hooks/useToggle';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Shield, ShieldCheck, Lock, Eye, PlusSquare } from 'lucide-react';
 import { useFeatureAccess } from '@/hooks/useFeatureAccess';
@@ -73,7 +74,7 @@ export const useRoleEditor = () => {
 
     const [roleName, setRoleName] = useState('');
     const [roleDescription, setRoleDescription] = useState('');
-    const [isProcessing, setIsProcessing] = useState(false);
+    const isProcessing = useToggle(false);
     const [feedback, setFeedback] = useState<{ type: 'success' | 'error', message: string } | null>(null);
     const [selectedPermissions, setSelectedPermissions] = useState<any>({});
 
@@ -110,11 +111,11 @@ export const useRoleEditor = () => {
 
     const handleSave = (e: React.FormEvent) => {
         e.preventDefault();
-        setIsProcessing(true);
+        isProcessing.setTrue();
         setFeedback(null);
 
         setTimeout(() => {
-            setIsProcessing(false);
+            isProcessing.setFalse();
             setFeedback({ type: 'success', message: `Role "${roleName}" ${isEditing ? 'updated' : 'created'} successfully!` });
             setTimeout(() => {
                 navigate('/manage/roles');
@@ -134,7 +135,7 @@ export const useRoleEditor = () => {
         setRoleName,
         roleDescription,
         setRoleDescription,
-        isProcessing,
+        isProcessing: isProcessing.value,
         feedback,
         selectedPermissions,
         togglePermission,

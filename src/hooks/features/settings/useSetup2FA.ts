@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useToggle } from '@/hooks/useToggle';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { Smartphone, MessageSquare, Mail } from 'lucide-react';
 
@@ -10,40 +11,44 @@ export const useSetup2FA = () => {
     const [step, setStep] = useState(1);
     const [inputValue, setInputValue] = useState('');
     const [verificationCode, setVerificationCode] = useState('');
-    const [isVerifying, setIsVerifying] = useState(false);
-    const [hasCopied, setHasCopied] = useState(false);
-    const [hasAcknowledged, setHasAcknowledged] = useState(false);
+    const isVerifying = useToggle(false);
+    const hasCopied = useToggle(false);
+    const hasAcknowledged = useToggle(false);
 
     const recoveryCodes = [
         'ABCD-1234', 'EFGH-5678', 'IJKL-9012', 'MNOP-3456',
         'QRST-7890', 'UVWX-1234', 'YZAB-5678', 'CDEF-9012'
     ];
 
+    const handleVerify = async () => {
+        isVerifying.setTrue();
+        // Simulate verification
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        isVerifying.setFalse();
+        setStep(3);
+    };
+
     const handleNextStep = () => {
         if (step === 1) {
-            setIsVerifying(true);
+            isVerifying.setTrue();
             // Simulate sending code
             setTimeout(() => {
-                setIsVerifying(false);
+                isVerifying.setFalse();
                 setStep(2);
             }, 1500);
         } else if (step === 2) {
             // Verify code and move to recovery codes
-            setIsVerifying(true);
-            setTimeout(() => {
-                setIsVerifying(false);
-                setStep(3); // Recovery codes step
-            }, 1500);
+            handleVerify();
         } else {
             // Final step - success
             setStep(4);
         }
     };
 
-    const copyToClipboard = () => {
+    const handleCopyQR = () => {
         navigator.clipboard.writeText(recoveryCodes.join('\n'));
-        setHasCopied(true);
-        setTimeout(() => setHasCopied(false), 2000);
+        hasCopied.setTrue();
+        setTimeout(() => hasCopied.setFalse(), 2000);
     };
 
     const downloadCodes = () => {
@@ -98,15 +103,16 @@ export const useSetup2FA = () => {
         setInputValue,
         verificationCode,
         setVerificationCode,
-        isVerifying,
-        hasCopied,
-        hasAcknowledged,
-        setHasAcknowledged,
+        isVerifying: isVerifying.value,
+        hasCopied: hasCopied.value,
+        hasAcknowledged: hasAcknowledged.value,
+        toggleAcknowledgement: hasAcknowledged.toggle,
         recoveryCodes,
         handleNextStep,
-        copyToClipboard,
+        handleCopyQR,
         downloadCodes,
         details,
-        handleBackToSecurity
+        handleBackToSecurity,
+        handleVerify
     };
 };

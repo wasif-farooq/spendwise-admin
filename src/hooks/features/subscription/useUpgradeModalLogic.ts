@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useToggle } from '@/hooks/useToggle';
 import { useAppDispatch, useAppSelector } from '@/store/redux';
 import { selectPlans, selectCurrentPlan, upgradePlanThunk } from '@/store/slices/subscriptionSlice';
 import { toast } from 'sonner';
@@ -8,10 +9,10 @@ export const useUpgradeModal = (onClose: () => void) => {
     const plans = selectPlans();
     const currentPlan = useAppSelector(selectCurrentPlan);
     const [billingPeriod, setBillingPeriod] = useState<'monthly' | 'yearly'>('monthly');
-    const [loading, setLoading] = useState(false);
+    const loading = useToggle(false);
 
     const handleUpgrade = async (planId: string) => {
-        setLoading(true);
+        loading.setTrue();
         try {
             await dispatch(upgradePlanThunk({ planId, billingPeriod })).unwrap();
             toast.success(`Successfully upgraded to ${planId} plan!`);
@@ -19,7 +20,7 @@ export const useUpgradeModal = (onClose: () => void) => {
         } catch (error) {
             toast.error('Failed to upgrade plan. Please try again.');
         } finally {
-            setLoading(false);
+            loading.setFalse();
         }
     };
 
@@ -28,7 +29,7 @@ export const useUpgradeModal = (onClose: () => void) => {
         currentPlan,
         billingPeriod,
         setBillingPeriod,
-        loading,
+        loading: loading.value,
         handleUpgrade
     };
 };

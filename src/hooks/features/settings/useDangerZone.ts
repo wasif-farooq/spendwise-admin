@@ -1,18 +1,19 @@
-import { useState } from 'react';
+import { useModal } from '@/hooks/useModal';
 
 export const useDangerZone = () => {
-    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const deleteModal = useModal();
 
-    const openDeleteModal = () => setIsDeleteModalOpen(true);
-    const closeDeleteModal = () => setIsDeleteModalOpen(false);
+    const openDeleteModal = () => deleteModal.open();
+    const closeDeleteModal = () => deleteModal.close();
 
     const handleDeleteAccount = () => {
         // TODO: Implement actual account deletion API call
-        setIsDeleteModalOpen(false);
+        deleteModal.close();
     };
 
     return {
-        isDeleteModalOpen,
+        isDeleteModalOpen: deleteModal.isOpen,
+        setIsDeleteModalOpen: (val: boolean) => val ? deleteModal.open() : deleteModal.close(),
         openDeleteModal,
         closeDeleteModal,
         handleDeleteAccount

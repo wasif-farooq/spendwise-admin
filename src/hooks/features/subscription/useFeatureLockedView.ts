@@ -1,13 +1,13 @@
-import { useState } from 'react';
+import { useToggle } from '@/hooks/useToggle';
 
 export const useFeatureLockedView = () => {
-    const [isUpgradeModalOpen, setIsUpgradeModalOpen] = useState(false);
+    const upgradeModal = useToggle(false);
 
-    const openUpgradeModal = () => setIsUpgradeModalOpen(true);
-    const closeUpgradeModal = () => setIsUpgradeModalOpen(false);
+    const openUpgradeModal = () => upgradeModal.setTrue();
+    const closeUpgradeModal = () => upgradeModal.setFalse();
 
     return {
-        isUpgradeModalOpen,
+        isUpgradeModalOpen: upgradeModal.value,
         openUpgradeModal,
         closeUpgradeModal
     };

@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useToggle } from '@/hooks/useToggle';
 import { useMemberDetails } from './useMemberDetails';
 import { useAccountAccess } from './useAccountAccess';
 import type { InvitationData } from '@/views/Manage/InviteMember/types';
@@ -28,14 +29,14 @@ export const useEditMember = (memberId?: string) => {
     } = useAccountAccess(selectedRoles);
 
     // Page-specific UI state
-    const [showConfirmation, setShowConfirmation] = useState(false);
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [isLoading, setIsLoading] = useState(true);
+    const showConfirmation = useToggle(false);
+    const isSubmitting = useToggle(false);
+    const isLoading = useToggle(true);
 
     // Initial data fetch
     useEffect(() => {
         const fetchMember = async () => {
-            setIsLoading(true);
+            isLoading.setTrue();
             await new Promise(resolve => setTimeout(resolve, 600)); // Simulating network
 
             const member = mockData.members.find(m => m.id === Number(memberId));
@@ -53,7 +54,7 @@ export const useEditMember = (memberId?: string) => {
                 setOverriddenAccounts(Object.keys(permissions));
             }
 
-            setIsLoading(false);
+            isLoading.setFalse();
         };
 
         if (memberId) {
@@ -63,12 +64,12 @@ export const useEditMember = (memberId?: string) => {
 
     const handleSaveClick = () => {
         if (isFormValid) {
-            setShowConfirmation(true);
+            showConfirmation.setTrue();
         }
     };
 
     const processUpdate = async () => {
-        setIsSubmitting(true);
+        isSubmitting.setTrue();
         const data: InvitationData = {
             email,
             roles: selectedRoles,
@@ -80,8 +81,8 @@ export const useEditMember = (memberId?: string) => {
         // Simulate API call
         await new Promise(resolve => setTimeout(resolve, 1500));
 
-        setIsSubmitting(false);
-        setShowConfirmation(false);
+        isSubmitting.setFalse();
+        showConfirmation.setFalse();
         navigate('/manage/members');
     };
 
@@ -97,10 +98,10 @@ export const useEditMember = (memberId?: string) => {
         toggleAccountSelection,
         toggleAccountPermission,
         toggleOverride,
-        isLoading,
-        isSubmitting,
-        showConfirmation,
-        setShowConfirmation,
+        isLoading: isLoading.value,
+        isSubmitting: isSubmitting.value,
+        showConfirmation: showConfirmation.value,
+        setShowConfirmation: showConfirmation.setValue,
         handleSaveClick,
         processUpdate,
         isFormValid
