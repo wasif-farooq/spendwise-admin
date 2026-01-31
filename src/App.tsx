@@ -32,11 +32,12 @@ import AnalyticsPage from './pages/AnalyticsPage';
 import AIAdvisorPage from './pages/AIAdvisorPage';
 
 import { LayoutProvider } from './context/LayoutContext';
-import { ToastProvider } from './contexts/ToastContext';
+import { Toaster } from 'sonner';
 
 function App() {
   return (
-    <ToastProvider>
+    <>
+      <Toaster position="top-center" richColors />
       <LayoutProvider>
         <Router>
           <Routes>
@@ -91,7 +92,7 @@ function App() {
           </Routes>
         </Router>
       </LayoutProvider>
-    </ToastProvider>
+    </>
   );
 }
 

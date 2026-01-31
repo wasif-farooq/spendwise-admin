@@ -17,6 +17,11 @@ class MockAdapter {
             return this.handleLogin(config);
         }
 
+        // Special handling for 2FA verification endpoint
+        if (config.url?.includes('/auth/2fa/verify') && config.method?.toUpperCase() === 'POST') {
+            return this.handle2FAVerification(config);
+        }
+
         const mockData = this.findMockData(config.url || '');
 
         if (!mockData) {
@@ -95,6 +100,75 @@ class MockAdapter {
         }
 
         // User doesn't have 2FA, return full auth response
+        const { password: _, twoFactorEnabled, twoFactorMethods, backupCodes, ...userWithoutSensitiveData } = user;
+
+        return {
+            data: {
+                user: userWithoutSensitiveData,
+                token: mockAuthData.token,
+                refreshToken: mockAuthData.refreshToken,
+            },
+            status: 200,
+            statusText: 'OK',
+            headers: {},
+            config: config as any,
+        };
+    }
+
+    private async handle2FAVerification(config: AxiosRequestConfig): Promise<AxiosResponse> {
+        const { code, tempToken, backupCode } = config.data || {};
+
+        // Extract user ID from temp token (format: temp-token-{userId}-{timestamp})
+        // Match everything after 'temp-token-' until the last hyphen
+        const tokenMatch = tempToken?.match(/^temp-token-(.+)-\d+$/);
+        if (!tokenMatch) {
+            const error: any = new Error('Invalid or expired token');
+            error.response = {
+                data: null,
+                status: 401,
+                statusText: 'Unauthorized',
+                headers: {},
+                config: config as any,
+            };
+            error.config = config;
+            throw error;
+        }
+
+        const userId = tokenMatch[1];
+        const user = mockAuthData.users.find((u: any) => u.id === userId);
+
+        if (!user) {
+            const error: any = new Error('User not found');
+            error.response = {
+                data: null,
+                status: 404,
+                statusText: 'Not Found',
+                headers: {},
+                config: config as any,
+            };
+            error.config = config;
+            throw error;
+        }
+
+        // For mock purposes, accept any 6-digit code or valid backup code
+        const isValidCode = backupCode
+            ? user.backupCodes?.includes(code)
+            : /^\d{6}$/.test(code);
+
+        if (!isValidCode) {
+            const error: any = new Error('Invalid verification code');
+            error.response = {
+                data: null,
+                status: 401,
+                statusText: 'Unauthorized',
+                headers: {},
+                config: config as any,
+            };
+            error.config = config;
+            throw error;
+        }
+
+        // Return full auth response
         const { password: _, twoFactorEnabled, twoFactorMethods, backupCodes, ...userWithoutSensitiveData } = user;
 
         return {

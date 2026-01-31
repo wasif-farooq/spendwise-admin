@@ -13,10 +13,11 @@ import {
     Grid
 } from '@shared';
 import { CreditCard, ArrowLeft, Smartphone, MessageSquare, Mail, ShieldCheck } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useAppDispatch } from '@/hooks/redux';
-import { verify2FAThunk, resend2FACodeThunk, selectAuthLoading, selectAuthError, selectAvailableMethods, selectTempToken } from '@/store/slices/authSlice';
+import { verify2FAThunk, resend2FACodeThunk, selectAuthLoading, selectAvailableMethods, selectTempToken } from '@/store/slices/authSlice';
 import { useAppSelector } from '@/hooks/redux';
+import { toast } from 'sonner';
 
 type AuthMethod = 'authenticator' | 'sms' | 'email';
 
@@ -24,10 +25,10 @@ export const TwoFactorForm = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const dispatch = useAppDispatch();
+    const isVerifying = useRef(false); // Track if verification is in progress
 
     // Get 2FA state from Redux
     const loading = useAppSelector(selectAuthLoading);
-    const error = useAppSelector(selectAuthError);
     const availableMethods = useAppSelector(selectAvailableMethods);
     const tempToken = useAppSelector(selectTempToken);
 
@@ -52,10 +53,10 @@ export const TwoFactorForm = () => {
     });
 
     useEffect(() => {
-        // Redirect if no temp token or no available methods
-        if (!token || methods2FA.length === 0) {
+        // Only redirect if no token/methods AND not currently verifying
+        if ((!token || methods2FA.length === 0) && !isVerifying.current) {
             navigate('/login', { replace: true });
-        } else {
+        } else if (token && methods2FA.length > 0) {
             // Set first available method as default
             const firstMethod = methods2FA[0];
             setMethod(firstMethod.type as AuthMethod);
@@ -73,6 +74,9 @@ export const TwoFactorForm = () => {
     const onSubmit = async (data: TwoFactorInput) => {
         if (!token) return;
 
+        // Set flag to prevent redirect during verification
+        isVerifying.current = true;
+
         const result = await dispatch(verify2FAThunk({
             code: data.code,
             method,
@@ -84,6 +88,11 @@ export const TwoFactorForm = () => {
             // Redirect to intended destination or dashboard
             const from = location.state?.from?.pathname || '/dashboard';
             navigate(from, { replace: true });
+        } else if (verify2FAThunk.rejected.match(result)) {
+            // Reset flag on error so user can try again
+            isVerifying.current = false;
+            // Show error toast
+            toast.error(result.payload as string || 'Invalid verification code');
         }
     };
 
@@ -185,12 +194,6 @@ export const TwoFactorForm = () => {
                                 </Text>
                             </Block>
                         </AnimatePresence>
-                    )}
-
-                    {error && (
-                        <Block className="rounded-md bg-red-50 p-4">
-                            <Text size="sm" color="text-red-800">{error}</Text>
-                        </Block>
                     )}
 
                     <Block className="space-y-4">

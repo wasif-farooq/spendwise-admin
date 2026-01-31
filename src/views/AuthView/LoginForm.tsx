@@ -13,43 +13,43 @@ import {
 } from '@shared';
 import { SocialLogin } from './components/SocialLogin';
 import { CreditCard } from 'lucide-react';
-import { authService } from '@/api/services/auth/authService';
-import { useToast } from '@/contexts/ToastContext';
+import { toast } from 'sonner';
+import { useAppDispatch, useAppSelector } from '@/hooks/redux';
+import { loginThunk, selectAuthLoading } from '@/store/slices/authSlice';
 
 export const LoginForm = () => {
     const navigate = useNavigate();
-    const { showToast } = useToast();
+    const dispatch = useAppDispatch();
+    const loading = useAppSelector(selectAuthLoading);
 
     const {
         register,
         handleSubmit,
-        formState: { errors, isSubmitting },
+        formState: { errors },
     } = useForm<LoginInput>({
         resolver: zodResolver(loginSchema),
     });
 
     const onSubmit = async (data: LoginInput) => {
         try {
-            const response = await authService.login(data);
+            const result = await dispatch(loginThunk(data));
 
-            // Check if 2FA is required
-            if (response.requiresTwoFactor) {
-                // Store temp token for 2FA verification
-                if (response.tempToken) {
-                    sessionStorage.setItem('tempToken', response.tempToken);
-                    sessionStorage.setItem('availableMethods', JSON.stringify(response.availableMethods || []));
+            if (loginThunk.fulfilled.match(result)) {
+                // Check if 2FA is required
+                if (result.payload.requiresTwoFactor) {
+                    // Redux state is already updated, just navigate
+                    navigate('/verify-2fa');
+                } else {
+                    // No 2FA required, redirect to dashboard
+                    navigate('/dashboard');
                 }
-                navigate('/verify-2fa');
-            } else {
-                // No 2FA required, redirect to dashboard
-                navigate('/dashboard');
+            } else if (loginThunk.rejected.match(result)) {
+                // Handle error
+                toast.error(result.payload as string || 'Login failed');
             }
         } catch (error: any) {
             console.error('Login error:', error);
-            const errorMessage = error?.response?.status === 401
-                ? 'Invalid email or password'
-                : 'An error occurred during login. Please try again.';
-            showToast(errorMessage, 'error');
+            toast.error('An error occurred during login. Please try again.');
         }
     };
 
@@ -103,8 +103,8 @@ export const LoginForm = () => {
                         </Block>
                     </Block>
 
-                    <Button type="submit" className="w-full py-6 text-lg" disabled={isSubmitting}>
-                        {isSubmitting ? 'Signing in...' : 'Sign in'}
+                    <Button type="submit" className="w-full py-6 text-lg" disabled={loading}>
+                        {loading ? 'Signing in...' : 'Sign in'}
                     </Button>
                 </form>
 
