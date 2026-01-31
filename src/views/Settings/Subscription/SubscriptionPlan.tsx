@@ -14,9 +14,11 @@ interface Plan {
 
 interface SubscriptionPlanProps {
     plan: Plan;
+    onAction?: () => void;
+    actionLabel?: string;
 }
 
-export const SubscriptionPlan = ({ plan }: SubscriptionPlanProps) => {
+export const SubscriptionPlan = ({ plan, onAction, actionLabel = 'Upgrade Plan' }: SubscriptionPlanProps) => {
     return (
         <Block
             as="section"
@@ -49,9 +51,10 @@ export const SubscriptionPlan = ({ plan }: SubscriptionPlanProps) => {
                         </Flex>
                     </Block>
                     <Button
+                        onClick={onAction}
                         className="bg-white text-indigo-600 hover:bg-white/90 px-10 py-4 rounded-2xl font-black shadow-lg shadow-black/10 transition-all active:scale-95"
                     >
-                        Upgrade Plan
+                        {actionLabel}
                     </Button>
                 </Flex>
 

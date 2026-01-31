@@ -233,7 +233,7 @@
     "userSubscriptions": [
         {
             "userId": "user-001",
-            "plan": "free",
+            "plan": "pro",
             "status": "active",
             "startDate": "2024-01-01T00:00:00Z",
             "expiresAt": null,

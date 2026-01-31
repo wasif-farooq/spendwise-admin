@@ -27,7 +27,8 @@ import {
     selectHasAIAdvisorAccess,
     selectHasExchangeRatesAccess,
     fetchSubscriptionThunk,
-    fetchFeatureUsageThunk
+    fetchFeatureUsageThunk,
+    selectSubscriptionPlan
 } from '@/store/slices/subscriptionSlice';
 import { useEffect } from 'react';
 
@@ -40,6 +41,7 @@ export const DashboardLayout = () => {
     const accountType = useSelector((state: RootState) => state.ui.accountType);
     const hasAIAdvisor = useAppSelector(selectHasAIAdvisorAccess);
     const hasExchangeRates = useAppSelector(selectHasExchangeRatesAccess);
+    const currentPlan = useAppSelector(selectSubscriptionPlan);
     const dispatch = useAppDispatch();
 
     useEffect(() => {
@@ -174,12 +176,14 @@ export const DashboardLayout = () => {
             </Flex>
 
             <Flex align="center" gap={6}>
-                {/* Upgrade Button */}
-                <UpgradeButton
-                    size="sm"
-                    className="hidden md:flex"
-                    onClick={() => setIsUpgradeModalOpen(true)}
-                />
+                {/* Upgrade Button - Only show for free plan */}
+                {currentPlan === 'free' && (
+                    <UpgradeButton
+                        size="sm"
+                        className="hidden md:flex"
+                        onClick={() => setIsUpgradeModalOpen(true)}
+                    />
+                )}
 
                 <Button
                     size="sm"

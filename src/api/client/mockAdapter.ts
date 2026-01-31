@@ -5,7 +5,7 @@ import mockSubscriptionData from '../services/subscription/subscriptionMockData.
 class MockAdapter {
     private mockDataRegistry: Map<string, any> = new Map();
     private delay = 300; // Simulate network delay
-    private currentUserId = 'user-002'; // DEBUG: Default to user-002 for testing
+    private currentUserId = 'user-001'; // Default to user-001
 
     registerMockData(endpoint: string, data: any) {
         this.mockDataRegistry.set(endpoint, data);
