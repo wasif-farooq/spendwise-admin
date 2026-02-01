@@ -21,25 +21,55 @@ import { Block, Flex, Text } from '@shared';
 import { Badge } from '@/components/ui/Badge';
 import { useStaffRolesList } from '@/hooks/features/admin/useStaffRolesList';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useState } from 'react';
+import { ConfirmationModal } from '@/components/ui/ConfirmationModal';
+import { toast } from 'sonner';
 
 export const StaffRolesListPage = () => {
     const {
         roles,
         loading,
-        error,
         searchQuery,
         setSearchQuery,
         currentPage,
         setCurrentPage,
         totalPages,
         clearFilters,
-        totalCount,
         getIconComponent,
-        navigate
+        navigate,
+        deleteRole
     } = useStaffRolesList();
+
+    const [deleteId, setDeleteId] = useState<number | null>(null);
+    const [actionLoading, setActionLoading] = useState(false);
+
+    const handleDelete = async () => {
+        if (!deleteId) return;
+        setActionLoading(true);
+        try {
+            await deleteRole(deleteId);
+            toast.success('Role deleted successfully');
+            setDeleteId(null);
+        } catch (error) {
+            toast.error('Failed to delete role');
+        } finally {
+            setActionLoading(false);
+        }
+    };
 
     return (
         <Block className="space-y-6">
+            <ConfirmationModal
+                isOpen={!!deleteId}
+                onClose={() => setDeleteId(null)}
+                onConfirm={handleDelete}
+                title="Delete Role"
+                description="Are you sure you want to delete this role? This action cannot be undone."
+                confirmText="Delete Role"
+                variant="danger"
+                loading={actionLoading}
+            />
+
             <Flex justify="between" align="center" className="pb-6 border-b border-gray-100">
                 <Block>
                     <Text as="h1" className="text-3xl font-black text-gray-900 tracking-tight">Staff Roles & Permissions</Text>
@@ -47,7 +77,7 @@ export const StaffRolesListPage = () => {
                 </Block>
                 <Button
                     className="gap-2 rounded-xl"
-                    onClick={() => navigate('/staff-roles/new')}
+                    onClick={() => navigate('/admin/staff-roles/new')}
                 >
                     <Plus size={18} />
                     Create Staff Role
@@ -130,7 +160,7 @@ export const StaffRolesListPage = () => {
                                                     variant="ghost"
                                                     size="sm"
                                                     className="h-8 w-8 p-0 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg"
-                                                    onClick={() => navigate(`/staff-roles/${role.id}`)}
+                                                    onClick={() => navigate(`/admin/staff-roles/${role.id}/edit`)}
                                                 >
                                                     <Edit3 className="h-4 w-4" />
                                                 </Button>
@@ -139,6 +169,7 @@ export const StaffRolesListPage = () => {
                                                         variant="ghost"
                                                         size="sm"
                                                         className="h-8 w-8 p-0 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg"
+                                                        onClick={() => setDeleteId(role.id)}
                                                     >
                                                         <Trash2 className="h-4 w-4" />
                                                     </Button>

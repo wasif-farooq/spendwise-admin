@@ -13,19 +13,26 @@ import { Toaster } from 'sonner';
 import { AdminLayout } from './components/shared/layout/AdminLayout';
 import { UsersListPage } from './pages/admin/UsersListPage';
 import { OrganizationsListPage } from './pages/admin/OrganizationsListPage';
+import { OrganizationFormPage } from './pages/admin/OrganizationFormPage';
+import { OrganizationDetailsPage } from './pages/admin/OrganizationDetailsPage';
 import { AccountsListPage } from './pages/admin/AccountsListPage';
+import { AccountFormPage } from './pages/admin/AccountFormPage';
 import { AdminDashboard } from './pages/admin/AdminDashboard';
 import { UserDetailDashboard } from './pages/admin/UserDetailDashboard';
 import { UserFormPage } from './pages/admin/UserFormPage';
 import { FeatureFlagsPage } from './pages/admin/FeatureFlagsPage';
 import { AdminSettingsPage } from './pages/admin/AdminSettingsPage';
 import { TransactionsListPage } from './pages/admin/TransactionsListPage';
+import { TransactionFormPage } from './pages/admin/TransactionFormPage';
 import { SubscriptionsListPage } from './pages/admin/SubscriptionsListPage';
 import { CouponsListPage } from './pages/admin/CouponsListPage';
+import { CouponFormPage } from './pages/admin/CouponFormPage';
 import { StaffListPage } from './pages/admin/StaffListPage';
 import { StaffDetailsPage } from './pages/admin/StaffDetailsPage';
+import { StaffFormPage } from './pages/admin/StaffFormPage';
 import { StaffRolesListPage } from './pages/admin/StaffRolesListPage';
 import { StaffRoleDetailsPage } from './pages/admin/StaffRoleDetailsPage';
+import { RoleFormPage } from './pages/admin/RoleFormPage';
 
 import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from './store/redux';
@@ -72,15 +79,32 @@ function App() {
 
                 {/* Staff Management Routes */}
                 <Route path="staff" element={<StaffListPage />} />
+                <Route path="staff/new" element={<StaffFormPage />} />
                 <Route path="staff/:id" element={<StaffDetailsPage />} />
+                <Route path="staff/:id/edit" element={<StaffFormPage />} />
+
                 <Route path="staff-roles" element={<StaffRolesListPage />} />
-                <Route path="staff-roles/new" element={<StaffRoleDetailsPage />} />
+                <Route path="admin/staff-roles/new" element={<RoleFormPage />} />
+                <Route path="admin/staff-roles/:id/edit" element={<RoleFormPage />} />
                 <Route path="staff-roles/:id" element={<StaffRoleDetailsPage />} />
+
                 <Route path="transactions" element={<TransactionsListPage />} />
+                <Route path="transactions/new" element={<TransactionFormPage />} />
+                <Route path="transactions/:id/edit" element={<TransactionFormPage />} />
                 <Route path="subscriptions" element={<SubscriptionsListPage />} />
                 <Route path="coupons" element={<CouponsListPage />} />
+                <Route path="coupons/new" element={<CouponFormPage />} />
+                <Route path="coupons/:id/edit" element={<CouponFormPage />} />
+
                 <Route path="organizations" element={<OrganizationsListPage />} />
+                <Route path="organizations/new" element={<OrganizationFormPage />} />
+                <Route path="organizations/:id/edit" element={<OrganizationFormPage />} />
+                <Route path="organizations/:id" element={<OrganizationDetailsPage />} />
+
                 <Route path="accounts" element={<AccountsListPage />} />
+                <Route path="accounts/new" element={<AccountFormPage />} />
+                <Route path="accounts/:id/edit" element={<AccountFormPage />} />
+
                 <Route path="feature-flags" element={<FeatureFlagsPage />} />
                 <Route path="settings" element={<AdminSettingsPage />} />
               </Route>

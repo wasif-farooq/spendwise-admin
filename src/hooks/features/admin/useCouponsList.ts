@@ -1,8 +1,10 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { useAdminCoupons } from '@/hooks/features/admin/useAdminCoupons';
 
 export const useCouponsList = () => {
+    const navigate = useNavigate();
     const {
         coupons,
         loading,
@@ -15,7 +17,12 @@ export const useCouponsList = () => {
         filters,
         setFilter,
         clearFilters,
-        totalCount
+        totalCount,
+        getCouponById,
+        createCoupon,
+        updateCoupon,
+        deleteCoupon,
+        refresh
     } = useAdminCoupons();
 
     const [showFilters, setShowFilters] = useState(false);
@@ -40,6 +47,18 @@ export const useCouponsList = () => {
         totalCount,
         showFilters,
         setShowFilters,
-        handleCopyCode
+        handleCopyCode,
+        getCouponById,
+        createCoupon,
+        updateCoupon,
+        deleteCoupon,
+        refresh,
+        handleCopyCode,
+        getCouponById,
+        createCoupon,
+        updateCoupon,
+        deleteCoupon,
+        refresh,
+        navigate
     };
 };

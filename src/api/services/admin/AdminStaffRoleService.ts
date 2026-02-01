@@ -21,6 +21,11 @@ export const AdminStaffRoleService = {
         await apiClient.put(`/admin/staff-roles/${id}/permissions`, { permissions });
     },
 
+    update: async (id: number, data: Partial<StaffRole>): Promise<StaffRole> => {
+        const response = await apiClient.put<StaffRole>(`/admin/staff-roles/${id}`, data);
+        return response.data;
+    },
+
     delete: async (id: number): Promise<void> => {
         await apiClient.delete(`/admin/staff-roles/${id}`);
     }

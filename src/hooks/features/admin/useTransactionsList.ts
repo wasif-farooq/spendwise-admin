@@ -1,7 +1,9 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAdminTransactions } from '@/hooks/features/admin/useAdminTransactions';
 
 export const useTransactionsList = () => {
+    const navigate = useNavigate();
     const {
         transactions,
         loading,
@@ -14,7 +16,12 @@ export const useTransactionsList = () => {
         filters,
         setFilter,
         clearFilters,
-        totalCount
+        totalCount,
+        createTransaction,
+        updateTransaction,
+        deleteTransaction,
+        getTransactionById,
+        refresh
     } = useAdminTransactions();
 
     const [showFilters, setShowFilters] = useState(false);
@@ -41,6 +48,12 @@ export const useTransactionsList = () => {
         totalCount,
         showFilters,
         setShowFilters,
-        formatCurrency
+        formatCurrency,
+        createTransaction,
+        updateTransaction,
+        deleteTransaction,
+        getTransactionById,
+        refresh,
+        navigate
     };
 };

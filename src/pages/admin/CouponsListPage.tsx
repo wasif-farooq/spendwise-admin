@@ -5,7 +5,8 @@ import {
     Ticket,
     Copy,
     Trash2,
-    Plus
+    Plus,
+    Edit2
 } from 'lucide-react';
 import {
     Table,
@@ -23,6 +24,9 @@ import { Badge } from '@/components/ui/Badge';
 import { CustomSelect } from '@/components/ui/CustomSelect';
 import { useCouponsList } from '@/hooks/features/admin/useCouponsList';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useState } from 'react';
+import { ConfirmationModal } from '@/components/ui/ConfirmationModal';
+import { toast } from 'sonner';
 
 export const CouponsListPage = () => {
     const {
@@ -40,8 +44,27 @@ export const CouponsListPage = () => {
         totalCount,
         showFilters,
         setShowFilters,
-        handleCopyCode
+        handleCopyCode,
+        navigate,
+        deleteCoupon
     } = useCouponsList();
+
+    const [deleteId, setDeleteId] = useState<string | null>(null);
+    const [actionLoading, setActionLoading] = useState(false);
+
+    const handleDelete = async () => {
+        if (!deleteId) return;
+        setActionLoading(true);
+        try {
+            await deleteCoupon(deleteId);
+            toast.success('Coupon deleted successfully');
+            setDeleteId(null);
+        } catch (error) {
+            toast.error('Failed to delete coupon');
+        } finally {
+            setActionLoading(false);
+        }
+    };
 
     if (loading && coupons.length === 0) {
         return <Block className="p-8 h-64 flex items-center justify-center"><Text className="animate-pulse text-gray-400">Loading coupons...</Text></Block>;
@@ -53,12 +76,26 @@ export const CouponsListPage = () => {
 
     return (
         <Block className="space-y-6">
+            <ConfirmationModal
+                isOpen={!!deleteId}
+                onClose={() => setDeleteId(null)}
+                onConfirm={handleDelete}
+                title="Delete Coupon"
+                description="Are you sure you want to delete this coupon? Users will no longer be able to redeem it."
+                confirmText="Delete Coupon"
+                variant="danger"
+                loading={actionLoading}
+            />
+
             <Flex justify="between" align="end" className="flex-wrap gap-4">
                 <Block>
                     <Text as="h1" className="text-3xl font-black text-gray-900 tracking-tight">Coupons</Text>
                     <Text className="text-gray-500 font-medium">Manage {totalCount} discount codes</Text>
                 </Block>
-                <Button className="gap-2 rounded-xl">
+                <Button
+                    className="gap-2 rounded-xl"
+                    onClick={() => navigate('/admin/coupons/new')}
+                >
                     <Plus size={18} />
                     Create Coupon
                 </Button>
@@ -197,7 +234,17 @@ export const CouponsListPage = () => {
                                             <Button
                                                 variant="ghost"
                                                 size="sm"
+                                                className="text-gray-400 hover:text-blue-600 hover:bg-blue-50"
+                                                onClick={() => navigate(`/admin/coupons/${coupon.id}/edit`)}
+                                                title="Edit"
+                                            >
+                                                <Edit2 size={16} />
+                                            </Button>
+                                            <Button
+                                                variant="ghost"
+                                                size="sm"
                                                 className="text-gray-400 hover:text-red-500 hover:bg-red-50"
+                                                onClick={() => setDeleteId(coupon.id)}
                                                 title="Delete"
                                             >
                                                 <Trash2 size={16} />

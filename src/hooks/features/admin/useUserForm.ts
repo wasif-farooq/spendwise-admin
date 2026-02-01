@@ -12,7 +12,8 @@ export const useUserForm = (id?: string) => {
         name: '',
         email: '',
         role: 'user',
-        status: 'active'
+        status: 'active',
+        subscriptionPlan: 'free'
     });
     const [loading, setLoading] = useState(false);
 
@@ -20,12 +21,17 @@ export const useUserForm = (id?: string) => {
         if (isEditing && id) {
             const fetchUser = async () => {
                 const user = await getUserById(id);
+                // Mock subscription data since API might not return it yet
+                // in real app this would come from user object
+                const mockPlan = (user as any).subscription?.plan || 'free';
+
                 if (user) {
                     setFormData({
                         name: user.name,
                         email: user.email,
                         role: user.role,
-                        status: user.status
+                        status: user.status,
+                        subscriptionPlan: mockPlan
                     });
                 }
             };

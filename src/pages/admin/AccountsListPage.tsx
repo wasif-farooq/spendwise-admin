@@ -5,7 +5,10 @@ import {
     AlertCircle,
     Search,
     Filter,
-    XCircle
+    XCircle,
+    Plus,
+    Edit2,
+    Trash2
 } from 'lucide-react';
 import {
     Table,
@@ -23,6 +26,9 @@ import { Badge } from '@/components/ui/Badge';
 import { CustomSelect } from '@/components/ui/CustomSelect';
 import { useAccountsList } from '@/hooks/features/admin/useAccountsList';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useState } from 'react';
+import { ConfirmationModal } from '@/components/ui/ConfirmationModal';
+import { toast } from 'sonner';
 
 export const AccountsListPage = () => {
     const {
@@ -38,12 +44,31 @@ export const AccountsListPage = () => {
         setFilter,
         clearFilters,
         handleFlagAccount,
+        deleteAccount,
         totalLiquid,
         totalLiability,
         totalCount,
         showFilters,
-        setShowFilters
+        setShowFilters,
+        navigate
     } = useAccountsList();
+
+    const [deleteId, setDeleteId] = useState<string | null>(null);
+    const [actionLoading, setActionLoading] = useState(false);
+
+    const handleDelete = async () => {
+        if (!deleteId) return;
+        setActionLoading(true);
+        try {
+            await deleteAccount(deleteId);
+            toast.success('Account deleted successfully');
+            setDeleteId(null);
+        } catch (error) {
+            toast.error('Failed to delete account');
+        } finally {
+            setActionLoading(false);
+        }
+    };
 
     if (loading && accounts.length === 0) {
         return <Block className="p-8 h-64 flex items-center justify-center"><Text className="animate-pulse text-gray-400">Loading accounts...</Text></Block>;
@@ -55,22 +80,42 @@ export const AccountsListPage = () => {
 
     return (
         <Block className="space-y-6">
+            <ConfirmationModal
+                isOpen={!!deleteId}
+                onClose={() => setDeleteId(null)}
+                onConfirm={handleDelete}
+                title="Delete Account"
+                description="Are you sure you want to delete this account? This action cannot be undone."
+                confirmText="Delete Account"
+                variant="danger"
+                loading={actionLoading}
+            />
+
             <Flex justify="between" align="end" className="flex-wrap gap-4">
                 <Block>
                     <Text as="h1" className="text-3xl font-black text-gray-900 tracking-tight">Financial Accounts</Text>
                     <Text className="text-gray-500 font-medium">Monitoring {totalCount} total financial entities</Text>
                 </Block>
-                <Block className="bg-white/80 backdrop-blur-md p-4 rounded-3xl border border-gray-100 shadow-sm flex items-center gap-6">
-                    <Block>
-                        <Text className="text-[10px] text-gray-400 uppercase font-black tracking-widest mb-1">Total Liquid</Text>
-                        <Text className="font-bold text-xl text-green-600">${totalLiquid.toLocaleString()}</Text>
+                <Flex gap={4}>
+                    <Block className="bg-white/80 backdrop-blur-md p-4 rounded-3xl border border-gray-100 shadow-sm flex items-center gap-6">
+                        <Block>
+                            <Text className="text-[10px] text-gray-400 uppercase font-black tracking-widest mb-1">Total Liquid</Text>
+                            <Text className="font-bold text-xl text-green-600">${totalLiquid.toLocaleString()}</Text>
+                        </Block>
+                        <Block className="w-[1px] h-10 bg-gray-100" />
+                        <Block>
+                            <Text className="text-[10px] text-gray-400 uppercase font-black tracking-widest mb-1">Total Liability</Text>
+                            <Text className="font-bold text-xl text-red-600">${totalLiability.toLocaleString()}</Text>
+                        </Block>
                     </Block>
-                    <Block className="w-[1px] h-10 bg-gray-100" />
-                    <Block>
-                        <Text className="text-[10px] text-gray-400 uppercase font-black tracking-widest mb-1">Total Liability</Text>
-                        <Text className="font-bold text-xl text-red-600">${totalLiability.toLocaleString()}</Text>
-                    </Block>
-                </Block>
+                    <Button
+                        className="gap-2 rounded-xl h-[88px]"
+                        onClick={() => navigate('/admin/accounts/new')}
+                    >
+                        <Plus size={18} />
+                        <span className="hidden md:inline">Add Account</span>
+                    </Button>
+                </Flex>
             </Flex>
 
             <Block className="bg-white p-4 rounded-3xl shadow-sm border border-gray-100 space-y-4">
@@ -223,8 +268,21 @@ export const AccountsListPage = () => {
                                             >
                                                 <AlertCircle size={16} />
                                             </Button>
-                                            <Button variant="ghost" size="sm" className="text-gray-400">
-                                                <MoreVertical size={16} />
+                                            <Button
+                                                variant="ghost"
+                                                size="sm"
+                                                className="text-gray-400 hover:text-blue-600 hover:bg-blue-50"
+                                                onClick={() => navigate(`/admin/accounts/${account.id}/edit`)}
+                                            >
+                                                <Edit2 size={16} />
+                                            </Button>
+                                            <Button
+                                                variant="ghost"
+                                                size="sm"
+                                                className="text-gray-400 hover:text-red-600 hover:bg-red-50"
+                                                onClick={() => setDeleteId(account.id)}
+                                            >
+                                                <Trash2 size={16} />
                                             </Button>
                                         </Flex>
                                     </TableCell>

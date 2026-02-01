@@ -5,9 +5,9 @@ import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import { Card } from '@/components/ui/Card';
 import { CustomSelect } from '@/components/ui/CustomSelect';
-import { useUserForm } from '@/hooks/features/admin/useUserForm';
+import { useOrganizationForm } from '@/hooks/features/admin/useOrganizationForm';
 
-export const UserFormPage = () => {
+export const OrganizationFormPage = () => {
     const { id } = useParams();
     const {
         formData,
@@ -16,20 +16,20 @@ export const UserFormPage = () => {
         handleChange,
         handleSubmit,
         navigate
-    } = useUserForm(id);
+    } = useOrganizationForm(id);
 
     return (
         <Block className="space-y-6 max-w-2xl mx-auto">
             <Flex align="center" gap={4}>
-                <Button variant="ghost" onClick={() => navigate('/users')} className="p-2">
+                <Button variant="ghost" onClick={() => navigate('/admin/organizations')} className="p-2">
                     <ArrowLeft size={20} />
                 </Button>
                 <Block>
                     <Text as="h1" className="text-2xl font-bold text-gray-900">
-                        {isEditing ? 'Edit User' : 'Create New User'}
+                        {isEditing ? 'Edit Organization' : 'Create Organization'}
                     </Text>
                     <Text className="text-gray-500">
-                        {isEditing ? 'Update user details and permissions' : 'Add a new user to the platform'}
+                        {isEditing ? 'Update organization details and plan' : 'Register a new organization'}
                     </Text>
                 </Block>
             </Flex>
@@ -37,17 +37,17 @@ export const UserFormPage = () => {
             <Card className="p-6">
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <Input
-                        label="Full Name"
-                        placeholder="e.g. John Doe"
+                        label="Organization Name"
+                        placeholder="e.g. Acme Corp"
                         value={formData.name}
                         onChange={(e) => handleChange('name', e.target.value)}
                         required
                     />
 
                     <Input
-                        label="Email Address"
+                        label="Owner Email"
                         type="email"
-                        placeholder="e.g. john@example.com"
+                        placeholder="e.g. admin@acme.com"
                         value={formData.email}
                         onChange={(e) => handleChange('email', e.target.value)}
                         required
@@ -55,13 +55,13 @@ export const UserFormPage = () => {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <CustomSelect
-                            label="Role"
-                            value={formData.role}
-                            onChange={(val) => handleChange('role', val)}
+                            label="Subscription Plan"
+                            value={formData.plan}
+                            onChange={(val) => handleChange('plan', val)}
                             options={[
-                                { label: 'User', value: 'user' },
-                                { label: 'Admin', value: 'admin' },
-                                { label: 'Staff', value: 'staff' }
+                                { label: 'Free', value: 'free' },
+                                { label: 'Pro', value: 'pro' },
+                                { label: 'Enterprise', value: 'enterprise' }
                             ]}
                         />
 
@@ -74,24 +74,13 @@ export const UserFormPage = () => {
                                 { label: 'Suspended', value: 'suspended' }
                             ]}
                         />
-
-                        <CustomSelect
-                            label="Subscription Plan"
-                            value={(formData as any).subscriptionPlan}
-                            onChange={(val) => handleChange('subscriptionPlan', val)}
-                            options={[
-                                { label: 'Free Tier', value: 'free' },
-                                { label: 'Pro Plan', value: 'pro' },
-                                { label: 'Enterprise', value: 'enterprise' }
-                            ]}
-                        />
                     </div>
 
                     <Flex justify="end" gap={3} className="pt-4 border-t border-gray-100 mt-6">
                         <Button
                             type="button"
                             variant="ghost"
-                            onClick={() => navigate('/users')}
+                            onClick={() => navigate('/admin/organizations')}
                         >
                             Cancel
                         </Button>
@@ -102,7 +91,7 @@ export const UserFormPage = () => {
                             className="gap-2"
                         >
                             <Save size={18} />
-                            {loading ? 'Saving...' : 'Save User'}
+                            {loading ? 'Saving...' : 'Save Organization'}
                         </Button>
                     </Flex>
                 </form>

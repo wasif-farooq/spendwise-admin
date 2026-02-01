@@ -16,7 +16,12 @@ export const AdminStaffService = {
         await apiClient.put(`/admin/staff/${staffId}/roles`, { roleIds });
     },
 
-    invite: async (data: { email: string; roleId: number }): Promise<void> => {
+    update: async (id: string, data: Partial<Staff>): Promise<Staff> => {
+        const response = await apiClient.put<Staff>(`/admin/staff/${id}`, data);
+        return response.data;
+    },
+
+    invite: async (data: { email: string; roleId: number, name?: string }): Promise<void> => {
         await apiClient.post('/admin/staff/invite', data);
     },
 

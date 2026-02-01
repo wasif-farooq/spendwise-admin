@@ -5,9 +5,9 @@ import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import { Card } from '@/components/ui/Card';
 import { CustomSelect } from '@/components/ui/CustomSelect';
-import { useUserForm } from '@/hooks/features/admin/useUserForm';
+import { useStaffForm } from '@/hooks/features/admin/useStaffForm';
 
-export const UserFormPage = () => {
+export const StaffFormPage = () => {
     const { id } = useParams();
     const {
         formData,
@@ -16,20 +16,20 @@ export const UserFormPage = () => {
         handleChange,
         handleSubmit,
         navigate
-    } = useUserForm(id);
+    } = useStaffForm(id);
 
     return (
         <Block className="space-y-6 max-w-2xl mx-auto">
             <Flex align="center" gap={4}>
-                <Button variant="ghost" onClick={() => navigate('/users')} className="p-2">
+                <Button variant="ghost" onClick={() => navigate('/admin/staff')} className="p-2">
                     <ArrowLeft size={20} />
                 </Button>
                 <Block>
                     <Text as="h1" className="text-2xl font-bold text-gray-900">
-                        {isEditing ? 'Edit User' : 'Create New User'}
+                        {isEditing ? 'Edit Staff Member' : 'Invite Staff Member'}
                     </Text>
                     <Text className="text-gray-500">
-                        {isEditing ? 'Update user details and permissions' : 'Add a new user to the platform'}
+                        {isEditing ? 'Update staff details and roles' : 'Add a new member to the admin team'}
                     </Text>
                 </Block>
             </Flex>
@@ -38,7 +38,7 @@ export const UserFormPage = () => {
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <Input
                         label="Full Name"
-                        placeholder="e.g. John Doe"
+                        placeholder="e.g. Alice Smith"
                         value={formData.name}
                         onChange={(e) => handleChange('name', e.target.value)}
                         required
@@ -47,7 +47,7 @@ export const UserFormPage = () => {
                     <Input
                         label="Email Address"
                         type="email"
-                        placeholder="e.g. john@example.com"
+                        placeholder="e.g. alice@spendwise.com"
                         value={formData.email}
                         onChange={(e) => handleChange('email', e.target.value)}
                         required
@@ -55,43 +55,35 @@ export const UserFormPage = () => {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <CustomSelect
-                            label="Role"
-                            value={formData.role}
-                            onChange={(val) => handleChange('role', val)}
+                            label="Primary Role"
+                            value={formData.roleId}
+                            onChange={(val) => handleChange('roleId', Number(val))}
                             options={[
-                                { label: 'User', value: 'user' },
-                                { label: 'Admin', value: 'admin' },
-                                { label: 'Staff', value: 'staff' }
+                                { label: 'Admin', value: 1 },
+                                { label: 'Manager', value: 2 },
+                                { label: 'Support', value: 3 },
+                                { label: 'Analyst', value: 4 }
                             ]}
                         />
 
-                        <CustomSelect
-                            label="Status"
-                            value={formData.status}
-                            onChange={(val) => handleChange('status', val)}
-                            options={[
-                                { label: 'Active', value: 'active' },
-                                { label: 'Suspended', value: 'suspended' }
-                            ]}
-                        />
-
-                        <CustomSelect
-                            label="Subscription Plan"
-                            value={(formData as any).subscriptionPlan}
-                            onChange={(val) => handleChange('subscriptionPlan', val)}
-                            options={[
-                                { label: 'Free Tier', value: 'free' },
-                                { label: 'Pro Plan', value: 'pro' },
-                                { label: 'Enterprise', value: 'enterprise' }
-                            ]}
-                        />
+                        {isEditing && (
+                            <CustomSelect
+                                label="Status"
+                                value={formData.status}
+                                onChange={(val) => handleChange('status', val)}
+                                options={[
+                                    { label: 'Active', value: 'active' },
+                                    { label: 'Inactive', value: 'inactive' }
+                                ]}
+                            />
+                        )}
                     </div>
 
                     <Flex justify="end" gap={3} className="pt-4 border-t border-gray-100 mt-6">
                         <Button
                             type="button"
                             variant="ghost"
-                            onClick={() => navigate('/users')}
+                            onClick={() => navigate('/admin/staff')}
                         >
                             Cancel
                         </Button>
@@ -102,7 +94,7 @@ export const UserFormPage = () => {
                             className="gap-2"
                         >
                             <Save size={18} />
-                            {loading ? 'Saving...' : 'Save User'}
+                            {loading ? 'Sending...' : (isEditing ? 'Save Changes' : 'Send Invitation')}
                         </Button>
                     </Flex>
                 </form>

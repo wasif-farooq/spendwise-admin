@@ -39,7 +39,9 @@ export const useStaffRolesList = () => {
         setCurrentPage,
         totalPages,
         clearFilters,
-        totalCount
+        totalCount,
+        deleteRole,
+        refresh
     } = useAdminStaffRoles();
 
     const renderIcon = (iconName: string, className?: string) => {
@@ -64,6 +66,8 @@ export const useStaffRolesList = () => {
         clearFilters,
         totalCount,
         getIconComponent,
-        navigate
+        navigate,
+        deleteRole,
+        refresh
     };
 };

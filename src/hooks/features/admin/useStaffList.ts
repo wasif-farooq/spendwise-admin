@@ -14,7 +14,9 @@ export const useStaffList = () => {
         setCurrentPage,
         totalPages,
         clearFilters,
-        totalCount
+        totalCount,
+        deleteStaff,
+        refresh
     } = useAdminStaff();
 
     const { roles: staffRoles } = useAdminStaffRoles();
@@ -39,6 +41,8 @@ export const useStaffList = () => {
         clearFilters,
         totalCount,
         getRoleNames,
-        navigate
+        navigate,
+        deleteStaff,
+        refresh
     };
 };

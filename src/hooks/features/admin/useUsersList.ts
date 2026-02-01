@@ -17,7 +17,8 @@ export const useUsersList = () => {
         filters,
         setFilter,
         clearFilters,
-        totalCount
+        totalCount,
+        deleteUser
     } = useAdminUsers();
 
     const [showFilters, setShowFilters] = useState(false);
@@ -38,6 +39,7 @@ export const useUsersList = () => {
         totalCount,
         showFilters,
         setShowFilters,
-        navigate
+        navigate,
+        deleteUser
     };
 };

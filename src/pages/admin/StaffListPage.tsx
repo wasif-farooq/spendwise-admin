@@ -5,7 +5,9 @@ import {
     XCircle,
     MoreVertical,
     Mail,
-    Shield
+    Shield,
+    Edit2,
+    Trash2
 } from 'lucide-react';
 import {
     Table,
@@ -22,6 +24,9 @@ import { Block, Flex, Text } from '@shared';
 import { Badge } from '@/components/ui/Badge';
 import { useStaffList } from '@/hooks/features/admin/useStaffList';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useState } from 'react';
+import { ConfirmationModal } from '@/components/ui/ConfirmationModal';
+import { toast } from 'sonner';
 
 export const StaffListPage = () => {
     const {
@@ -36,11 +41,42 @@ export const StaffListPage = () => {
         clearFilters,
         totalCount,
         getRoleNames,
-        navigate
+        navigate,
+        deleteStaff,
+        refresh
     } = useStaffList();
+
+    const [deleteId, setDeleteId] = useState<string | null>(null);
+    const [actionLoading, setActionLoading] = useState(false);
+
+    const handleDelete = async () => {
+        if (!deleteId) return;
+        setActionLoading(true);
+        try {
+            await deleteStaff(deleteId);
+            toast.success('Staff member removed successfully');
+            setDeleteId(null);
+            refresh();
+        } catch (error) {
+            toast.error('Failed to remove staff member');
+        } finally {
+            setActionLoading(false);
+        }
+    };
 
     return (
         <Block className="space-y-6">
+            <ConfirmationModal
+                isOpen={!!deleteId}
+                onClose={() => setDeleteId(null)}
+                onConfirm={handleDelete}
+                title="Remove Staff Member"
+                description="Are you sure you want to remove this staff member? They will lose access to the admin panel immediately."
+                confirmText="Remove Member"
+                variant="danger"
+                loading={actionLoading}
+            />
+
             <Flex justify="between" align="center" className="pb-6 border-b border-gray-100">
                 <Block>
                     <Text as="h1" className="text-3xl font-black text-gray-900 tracking-tight">Staff Management</Text>
@@ -48,8 +84,7 @@ export const StaffListPage = () => {
                 </Block>
                 <Button
                     className="gap-2 rounded-xl"
-                    // onClick={() => navigate('/staff/invite')} // Future implementation
-                    disabled
+                    onClick={() => navigate('/admin/staff/new')}
                 >
                     <UserPlus size={18} />
                     Invite Staff
@@ -139,9 +174,23 @@ export const StaffListPage = () => {
                                             </Badge>
                                         </TableCell>
                                         <TableCell className="text-right">
-                                            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                                                <MoreVertical className="h-4 w-4 text-gray-400" />
-                                            </Button>
+                                            <Flex justify="end" gap={2}>
+                                                <Button
+                                                    variant="ghost"
+                                                    size="sm"
+                                                    onClick={() => navigate(`/admin/staff/${member.id}/edit`)}
+                                                >
+                                                    <Edit2 size={16} className="text-gray-500" />
+                                                </Button>
+                                                <Button
+                                                    variant="ghost"
+                                                    size="sm"
+                                                    className="text-red-500 hover:bg-red-50"
+                                                    onClick={() => setDeleteId(member.id.toString())}
+                                                >
+                                                    <Trash2 size={16} />
+                                                </Button>
+                                            </Flex>
                                         </TableCell>
                                     </motion.tr>
                                 ))

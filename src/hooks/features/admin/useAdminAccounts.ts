@@ -4,6 +4,8 @@ import { fetchAllAccountsThunk, flagAccountThunk } from '@/store/slices/adminAcc
 import { useTable } from '@/hooks/useTable';
 import type { AdminAccount } from '@/store/types/admin.types';
 
+import { adminAccountService } from '@/api/services/admin/adminAccountService';
+
 export const useAdminAccounts = () => {
     const dispatch = useAppDispatch();
     const { accounts, loading, error } = useAppSelector(state => state.adminAccounts);
@@ -29,6 +31,43 @@ export const useAdminAccounts = () => {
         dispatch(flagAccountThunk(id));
     };
 
+    const createAccount = async (data: any) => {
+        try {
+            await adminAccountService.create(data);
+            dispatch(fetchAllAccountsThunk());
+            return true;
+        } catch (err) {
+            console.error('Failed to create account', err);
+            throw err;
+        }
+    };
+
+    const updateAccount = async (id: string, data: any) => {
+        try {
+            await adminAccountService.update(id, data);
+            dispatch(fetchAllAccountsThunk());
+            return true;
+        } catch (err) {
+            console.error('Failed to update account', err);
+            throw err;
+        }
+    };
+
+    const deleteAccount = async (id: string) => {
+        try {
+            await adminAccountService.delete(id);
+            dispatch(fetchAllAccountsThunk());
+            return true;
+        } catch (err) {
+            console.error('Failed to delete account', err);
+            throw err;
+        }
+    };
+
+    const getAccountById = async (id: string) => {
+        return adminAccountService.getById(id);
+    };
+
     // Calculate totals using all filtered records (not just the current page)
     const totalLiquid = filteredAccounts.reduce((sum, acc) => acc.balance > 0 ? sum + acc.balance : sum, 0);
     const totalLiability = filteredAccounts.reduce((sum, acc) => acc.balance < 0 ? sum + Math.abs(acc.balance) : sum, 0);
@@ -47,6 +86,10 @@ export const useAdminAccounts = () => {
         setFilter,
         clearFilters,
         handleFlagAccount,
+        createAccount,
+        updateAccount,
+        deleteAccount,
+        getAccountById,
         totalLiquid,
         totalLiability,
         refresh: () => dispatch(fetchAllAccountsThunk())

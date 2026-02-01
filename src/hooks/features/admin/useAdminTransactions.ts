@@ -1,37 +1,28 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { useTable } from '@/hooks/useTable';
-import mockData from '@/data/mockData.json';
-
-export interface Transaction {
-    id: string;
-    date: string;
-    description: string;
-    category: string;
-    amount: number;
-    type: 'income' | 'expense';
-    status: 'completed' | 'pending' | 'failed';
-    iconName: string;
-    color: string;
-}
+import { transactionsService } from '@/api/services/transactions/transactionsService';
+import type { Transaction } from '@/store/types/transactions.types';
 
 export const useAdminTransactions = () => {
     const [transactions, setTransactions] = useState<Transaction[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    useEffect(() => {
-        const fetchTransactions = async () => {
-            try {
-                // Simulate API call
-                await new Promise(resolve => setTimeout(resolve, 800));
-                setTransactions(mockData.transactions as Transaction[]);
-                setLoading(false);
-            } catch (err) {
-                setError('Failed to fetch transactions');
-                setLoading(false);
-            }
-        };
+    const fetchTransactions = async () => {
+        setLoading(true);
+        try {
+            const data = await transactionsService.getTransactions();
+            setTransactions(data);
+            setError(null);
+        } catch (err) {
+            setError('Failed to fetch transactions');
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
+    };
 
+    useEffect(() => {
         fetchTransactions();
     }, []);
 
@@ -48,6 +39,43 @@ export const useAdminTransactions = () => {
         totalCount
     } = useTable<Transaction>(transactions, ['description', 'category', 'status']);
 
+    const createTransaction = async (data: any) => {
+        try {
+            await transactionsService.createTransaction(data);
+            await fetchTransactions();
+            return true;
+        } catch (err) {
+            console.error('Failed to create transaction', err);
+            throw err;
+        }
+    };
+
+    const updateTransaction = async (id: string, data: any) => {
+        try {
+            await transactionsService.updateTransaction(id, data);
+            await fetchTransactions();
+            return true;
+        } catch (err) {
+            console.error('Failed to update transaction', err);
+            throw err;
+        }
+    };
+
+    const deleteTransaction = async (id: string) => {
+        try {
+            await transactionsService.deleteTransaction(id);
+            await fetchTransactions();
+            return true;
+        } catch (err) {
+            console.error('Failed to delete transaction', err);
+            throw err;
+        }
+    };
+
+    const getTransactionById = async (id: string) => {
+        return transactionsService.getTransactionById(id);
+    };
+
     return {
         transactions: paginatedTransactions,
         totalCount,
@@ -61,9 +89,10 @@ export const useAdminTransactions = () => {
         filters,
         setFilter,
         clearFilters,
-        refresh: () => {
-            setLoading(true);
-            setTimeout(() => setLoading(false), 800);
-        }
+        createTransaction,
+        updateTransaction,
+        deleteTransaction,
+        getTransactionById,
+        refresh: fetchTransactions
     };
 };

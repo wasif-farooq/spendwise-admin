@@ -59,6 +59,40 @@ class MockAdapter {
         // Pattern match
         for (const [pattern, data] of this.mockDataRegistry.entries()) {
             if (cleanUrl.includes(pattern)) {
+                // Determine if it's a sub-resource request (e.g. /v1/users/123 containing /users)
+                // We strictly look for the pattern followed by a slash OR end of string.
+                // However, since 'includes' is loose, we must be careful.
+                // A better approach with 'includes' is checking if it matches the ID pattern AFTER the pattern.
+
+                // Let's find where the pattern matches
+                const matchIndex = cleanUrl.indexOf(pattern);
+                const suffix = cleanUrl.slice(matchIndex + pattern.length);
+
+                // If suffix is empty, it's an exact match on this segment pattern, so return data.
+                if (!suffix) return data;
+
+                // If suffix starts with /, it might be an ID
+                if (suffix.startsWith('/')) {
+                    const remainingPath = suffix.slice(1);
+                    const parts = remainingPath.split('/');
+
+                    // If data is array and only one path segment remains (the ID), try to find it
+                    if (Array.isArray(data) && parts.length === 1 && parts[0]) {
+                        const id = parts[0];
+                        const item = data.find((d: any) => String(d.id) === id);
+                        if (item) return item;
+
+                        // If we are looking for an ID but didn't find it in the array,
+                        // we should NOT return the whole array, as that causes the UI crash.
+                        // We return null implies 404 behavior which is correct.
+                        return null;
+                    }
+                }
+
+                // If we are here, it matches the pattern but didn't resolve as a specific sub-resource ID.
+                // Return original data (legacy behavior), UNLESS it looked like an ID request against an array.
+                // If suffix was /123 and data was array, we already returned null above.
+                // So this fallback is for non-array data or other paths.
                 return data;
             }
         }

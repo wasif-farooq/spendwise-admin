@@ -9,7 +9,10 @@ import {
     UserCheck,
     ArrowLeft,
     ChevronRight,
-    Wallet
+    Wallet,
+    Trash2,
+    AlertTriangle,
+    CreditCard
 } from 'lucide-react';
 import { Block, Flex, Text } from '@shared';
 import Button from '@/components/ui/Button';
@@ -24,13 +27,40 @@ import {
     TableHead,
     TableCell
 } from '@/components/ui/Table';
-import { Link } from 'react-router-dom';
 import { useUserDetail } from '@/hooks/features/admin/useUserDetail';
+import { ConfirmationModal } from '@/components/ui/ConfirmationModal';
+import { useState } from 'react';
+import { CustomSelect } from '@/components/ui/CustomSelect';
 
 export const UserDetailDashboard = () => {
     const navigate = useNavigate();
     const { id } = useParams();
-    const { user, loading } = useUserDetail(id);
+    const {
+        user,
+        loading,
+        actionLoading,
+        handleStatusChange,
+        handleDeleteUser,
+        handleUpdateSubscription,
+        handleDeleteOrg,
+        handleFlagAccount,
+        handleDeleteAccount,
+        handleDeleteTransaction
+    } = useUserDetail(id);
+
+    // Modal States
+    const [modals, setModals] = useState({
+        suspend: false,
+        activate: false,
+        deleteUser: false,
+        deleteOrg: null as string | null,
+        deleteAccount: null as string | null,
+        subUpgrade: false
+    });
+
+    const toggleModal = (key: keyof typeof modals, value: any) => {
+        setModals(prev => ({ ...prev, [key]: value }));
+    };
 
     if (loading || !user) {
         return <Block className="p-10 text-center text-gray-400">Loading profile...</Block>;
@@ -38,6 +68,46 @@ export const UserDetailDashboard = () => {
 
     return (
         <Block className="space-y-8">
+            {/* Confirmation Modals */}
+            <ConfirmationModal
+                isOpen={modals.suspend}
+                onClose={() => toggleModal('suspend', false)}
+                onConfirm={() => {
+                    handleStatusChange('suspended');
+                    toggleModal('suspend', false);
+                }}
+                title="Suspend User Access"
+                description="Are you sure you want to suspend this user? They will no longer be able to log in or access any organization resources."
+                confirmText="Suspend User"
+                variant="warning"
+                loading={actionLoading}
+            />
+
+            <ConfirmationModal
+                isOpen={modals.activate}
+                onClose={() => toggleModal('activate', false)}
+                onConfirm={() => {
+                    handleStatusChange('active');
+                    toggleModal('activate', false);
+                }}
+                title="Reactivate User"
+                description="This will restore full access for the user. Continue?"
+                confirmText="Reactivate"
+                variant="info"
+                loading={actionLoading}
+            />
+
+            <ConfirmationModal
+                isOpen={modals.deleteUser}
+                onClose={() => toggleModal('deleteUser', false)}
+                onConfirm={handleDeleteUser}
+                title="Delete User Permanently"
+                description="This action cannot be undone. All user data, including personal settings and logs, will be erased. Organization memberships will be revoked."
+                confirmText="Delete User"
+                variant="danger"
+                loading={actionLoading}
+            />
+
             <Flex align="center" gap={4}>
                 <Button variant="ghost" onClick={() => navigate('/users')} className="p-2">
                     <ArrowLeft size={20} />
@@ -48,22 +118,31 @@ export const UserDetailDashboard = () => {
                 </Block>
                 <Flex gap={2} className="ml-auto">
                     {user.status === 'active' ? (
-                        <Button variant="outline" className="text-red-600 border-red-200 hover:bg-red-50 gap-2">
+                        <Button
+                            variant="outline"
+                            className="text-red-600 border-red-200 hover:bg-red-50 gap-2"
+                            onClick={() => toggleModal('suspend', true)}
+                        >
                             <UserX size={18} />
                             Suspend User
                         </Button>
                     ) : (
-                        <Button variant="outline" className="text-green-600 border-green-200 hover:bg-green-50 gap-2">
+                        <Button
+                            variant="outline"
+                            className="text-green-600 border-green-200 hover:bg-green-50 gap-2"
+                            onClick={() => toggleModal('activate', true)}
+                        >
                             <UserCheck size={18} />
                             Reactivate User
                         </Button>
                     )}
                     <Button
-                        className="gap-2"
-                        onClick={() => navigate(`/users/${user.id}/edit`)}
+                        variant="ghost"
+                        className="text-red-500 hover:bg-red-50 hover:text-red-600 gap-2"
+                        onClick={() => toggleModal('deleteUser', true)}
                     >
-                        <Settings size={18} />
-                        Edit Profile
+                        <Trash2 size={18} />
+                        Delete
                     </Button>
                 </Flex>
             </Flex>
@@ -72,7 +151,12 @@ export const UserDetailDashboard = () => {
                 {/* Left Column: Basic Info & Stats */}
                 <Block className="space-y-6">
                     <Card className="p-6">
-                        <Text className="font-bold text-gray-900 mb-4 block">Profile Overview</Text>
+                        <Flex justify="between" align="center" className="mb-4">
+                            <Text className="font-bold text-gray-900">Profile Overview</Text>
+                            <Button size="sm" variant="ghost" onClick={() => navigate(`/users/${user.id}/edit`)}>
+                                <Settings size={14} />
+                            </Button>
+                        </Flex>
                         <Flex direction="col" gap={4}>
                             <Flex align="center" gap={3}>
                                 <Mail size={16} className="text-gray-400" />
@@ -100,11 +184,16 @@ export const UserDetailDashboard = () => {
                                 <Text className="text-sm text-gray-500">Status</Text>
                                 <Text className="text-sm font-bold text-green-600 capitalize">{user.subscription.status}</Text>
                             </Flex>
-                            <Flex justify="between" align="center">
-                                <Text className="text-sm text-gray-500">Next Billing</Text>
-                                <Text className="text-sm font-bold">{user.subscription.nextBilling}</Text>
-                            </Flex>
-                            <Button variant="outline" className="w-full mt-2 text-xs">Direct Plan Override</Button>
+                            <CustomSelect
+                                label="Change Plan"
+                                value={user.subscription.plan}
+                                onChange={(val) => handleUpdateSubscription(val)}
+                                options={[
+                                    { label: 'Free Tier', value: 'free' },
+                                    { label: 'Pro Plan', value: 'pro' },
+                                    { label: 'Enterprise', value: 'enterprise' }
+                                ]}
+                            />
                         </Block>
                     </Card>
                 </Block>
@@ -122,13 +211,12 @@ export const UserDetailDashboard = () => {
                             <TableHeader>
                                 <TableRow className="bg-gray-50/50">
                                     <TableHead>Organization</TableHead>
-                                    <TableHead>Joined At</TableHead>
                                     <TableHead>Role</TableHead>
-                                    <TableHead className="text-right"></TableHead>
+                                    <TableHead className="text-right">Actions</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {user.organizations.map(org => (
+                                {user.organizations.map((org: any) => (
                                     <TableRow key={org.id}>
                                         <TableCell>
                                             <Flex align="center" gap={3}>
@@ -139,13 +227,20 @@ export const UserDetailDashboard = () => {
                                             </Flex>
                                         </TableCell>
                                         <TableCell>
-                                            <Text className="text-xs text-gray-500">{org.joinedAt}</Text>
-                                        </TableCell>
-                                        <TableCell>
                                             <Badge variant="secondary" size="sm" className="capitalize">{org.role}</Badge>
                                         </TableCell>
                                         <TableCell className="text-right">
-                                            <ChevronRight size={16} className="text-gray-300 inline-block" />
+                                            <Flex justify="end" gap={2}>
+                                                <Button size="sm" variant="ghost">Edit</Button>
+                                                <Button
+                                                    size="sm"
+                                                    variant="ghost"
+                                                    className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                                                    onClick={() => handleDeleteOrg(org.id)}
+                                                >
+                                                    <Trash2 size={14} />
+                                                </Button>
+                                            </Flex>
                                         </TableCell>
                                     </TableRow>
                                 ))}
@@ -164,52 +259,55 @@ export const UserDetailDashboard = () => {
                             <TableHeader>
                                 <TableRow className="bg-gray-50/50">
                                     <TableHead>Account</TableHead>
-                                    <TableHead>Type</TableHead>
-                                    <TableHead className="text-right">Balance</TableHead>
+                                    <TableHead>Status</TableHead>
+                                    <TableHead className="text-right">Actions</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {user.accounts.map(account => (
+                                {user.accounts.map((account: any) => (
                                     <TableRow key={account.id}>
                                         <TableCell>
                                             <Flex align="center" gap={3}>
                                                 <Block className="bg-green-50 p-2 rounded-lg">
                                                     <Wallet size={16} className="text-green-600" />
                                                 </Block>
-                                                <Text className="font-bold text-sm text-gray-900">{account.name}</Text>
+                                                <Block>
+                                                    <Text className="font-bold text-sm text-gray-900">{account.name}</Text>
+                                                    <Text className="text-xs text-gray-500 font-mono">${account.balance.toLocaleString()}</Text>
+                                                </Block>
                                             </Flex>
                                         </TableCell>
                                         <TableCell>
-                                            <Text className="text-xs text-gray-500 uppercase">{account.type}</Text>
+                                            <Badge variant={account.status === 'flagged' ? 'warning' : 'success'} size="sm">
+                                                {account.status || 'Active'}
+                                            </Badge>
                                         </TableCell>
                                         <TableCell className="text-right">
-                                            <Text className="font-bold text-sm text-gray-900">${account.balance.toLocaleString()}</Text>
-                                            <Text className="text-[10px] text-gray-400 block">USD</Text>
+                                            <Flex justify="end" gap={2}>
+                                                <Button
+                                                    size="sm"
+                                                    variant="ghost"
+                                                    title="Flag Account"
+                                                    onClick={() => handleFlagAccount(account.id)}
+                                                    className="text-amber-500 hover:bg-amber-50"
+                                                >
+                                                    <AlertTriangle size={14} />
+                                                </Button>
+                                                <Button size="sm" variant="ghost">Edit</Button>
+                                                <Button
+                                                    size="sm"
+                                                    variant="ghost"
+                                                    className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                                                    onClick={() => handleDeleteAccount(account.id)}
+                                                >
+                                                    <Trash2 size={14} />
+                                                </Button>
+                                            </Flex>
                                         </TableCell>
                                     </TableRow>
                                 ))}
                             </TableBody>
                         </Table>
-                    </Card>
-
-                    <Card className="p-6">
-                        <Flex align="center" gap={2} className="mb-4">
-                            <History size={20} className="text-gray-400" />
-                            <Text className="font-bold text-gray-900">Recent Admin Audit Log</Text>
-                        </Flex>
-                        <Block className="space-y-4">
-                            {[1, 2].map(i => (
-                                <Flex key={i} gap={4} className="border-l-2 border-gray-100 pl-4 py-1">
-                                    <Block className="w-[120px] shrink-0">
-                                        <Text className="text-xs text-gray-400">Feb 1, 2026 10:00</Text>
-                                    </Block>
-                                    <Text className="text-sm text-gray-600">
-                                        <span className="font-bold text-gray-900">System</span> triggered
-                                        <span className="mx-1 px-1 bg-gray-100 rounded">RECURRING_BILLING_SUCCESS</span>
-                                    </Text>
-                                </Flex>
-                            ))}
-                        </Block>
                     </Card>
                 </Block>
             </Block>

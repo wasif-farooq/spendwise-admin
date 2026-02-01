@@ -5,9 +5,9 @@ import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import { Card } from '@/components/ui/Card';
 import { CustomSelect } from '@/components/ui/CustomSelect';
-import { useUserForm } from '@/hooks/features/admin/useUserForm';
+import { useAccountForm } from '@/hooks/features/admin/useAccountForm';
 
-export const UserFormPage = () => {
+export const AccountFormPage = () => {
     const { id } = useParams();
     const {
         formData,
@@ -16,20 +16,20 @@ export const UserFormPage = () => {
         handleChange,
         handleSubmit,
         navigate
-    } = useUserForm(id);
+    } = useAccountForm(id);
 
     return (
         <Block className="space-y-6 max-w-2xl mx-auto">
             <Flex align="center" gap={4}>
-                <Button variant="ghost" onClick={() => navigate('/users')} className="p-2">
+                <Button variant="ghost" onClick={() => navigate('/admin/accounts')} className="p-2">
                     <ArrowLeft size={20} />
                 </Button>
                 <Block>
                     <Text as="h1" className="text-2xl font-bold text-gray-900">
-                        {isEditing ? 'Edit User' : 'Create New User'}
+                        {isEditing ? 'Edit Account' : 'Create Account'}
                     </Text>
                     <Text className="text-gray-500">
-                        {isEditing ? 'Update user details and permissions' : 'Add a new user to the platform'}
+                        {isEditing ? 'Update account details' : 'Register a new financial account'}
                     </Text>
                 </Block>
             </Flex>
@@ -37,32 +37,49 @@ export const UserFormPage = () => {
             <Card className="p-6">
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <Input
-                        label="Full Name"
-                        placeholder="e.g. John Doe"
+                        label="Account Name"
+                        placeholder="e.g. Main Operations"
                         value={formData.name}
                         onChange={(e) => handleChange('name', e.target.value)}
                         required
                     />
 
                     <Input
-                        label="Email Address"
-                        type="email"
-                        placeholder="e.g. john@example.com"
-                        value={formData.email}
-                        onChange={(e) => handleChange('email', e.target.value)}
+                        label="Organization"
+                        placeholder="Organization Name"
+                        value={formData.organization}
+                        onChange={(e) => handleChange('organization', e.target.value)}
                         required
                     />
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <Input
+                            label="Owner Email"
+                            type="email"
+                            placeholder="e.g. finance@acme.com"
+                            value={formData.ownerEmail}
+                            onChange={(e) => handleChange('ownerEmail', e.target.value)}
+                        />
+
                         <CustomSelect
-                            label="Role"
-                            value={formData.role}
-                            onChange={(val) => handleChange('role', val)}
+                            label="Account Type"
+                            value={formData.type}
+                            onChange={(val) => handleChange('type', val)}
                             options={[
-                                { label: 'User', value: 'user' },
-                                { label: 'Admin', value: 'admin' },
-                                { label: 'Staff', value: 'staff' }
+                                { label: 'Checking', value: 'checking' },
+                                { label: 'Savings', value: 'savings' },
+                                { label: 'Investment', value: 'investment' } // Check types
                             ]}
+                        />
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <Input
+                            label="Initial Balance"
+                            type="number"
+                            placeholder="0.00"
+                            value={formData.balance}
+                            onChange={(e) => handleChange('balance', parseFloat(e.target.value))}
                         />
 
                         <CustomSelect
@@ -71,18 +88,8 @@ export const UserFormPage = () => {
                             onChange={(val) => handleChange('status', val)}
                             options={[
                                 { label: 'Active', value: 'active' },
-                                { label: 'Suspended', value: 'suspended' }
-                            ]}
-                        />
-
-                        <CustomSelect
-                            label="Subscription Plan"
-                            value={(formData as any).subscriptionPlan}
-                            onChange={(val) => handleChange('subscriptionPlan', val)}
-                            options={[
-                                { label: 'Free Tier', value: 'free' },
-                                { label: 'Pro Plan', value: 'pro' },
-                                { label: 'Enterprise', value: 'enterprise' }
+                                { label: 'Flagged', value: 'flagged' },
+                                { label: 'Closed', value: 'closed' }
                             ]}
                         />
                     </div>
@@ -91,7 +98,7 @@ export const UserFormPage = () => {
                         <Button
                             type="button"
                             variant="ghost"
-                            onClick={() => navigate('/users')}
+                            onClick={() => navigate('/admin/accounts')}
                         >
                             Cancel
                         </Button>
@@ -102,7 +109,7 @@ export const UserFormPage = () => {
                             className="gap-2"
                         >
                             <Save size={18} />
-                            {loading ? 'Saving...' : 'Save User'}
+                            {loading ? 'Saving...' : 'Save Account'}
                         </Button>
                     </Flex>
                 </form>

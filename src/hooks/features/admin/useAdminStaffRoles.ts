@@ -67,6 +67,28 @@ export const useAdminStaffRoles = () => {
         }
     };
 
+    const updateRole = async (id: number, data: Partial<StaffRole>) => {
+        try {
+            await AdminStaffRoleService.update(id, data);
+            await fetchRoles();
+            return true;
+        } catch (err) {
+            console.error('Failed to update role', err);
+            throw err;
+        }
+    };
+
+    const deleteRole = async (id: number) => {
+        try {
+            await AdminStaffRoleService.delete(id);
+            await fetchRoles();
+            return true;
+        } catch (err) {
+            console.error('Failed to delete role', err);
+            throw err;
+        }
+    };
+
     return {
         roles: paginatedRoles,
         allRoles: roles,
@@ -83,7 +105,9 @@ export const useAdminStaffRoles = () => {
         clearFilters,
         getRoleById,
         updateRolePermissions,
+        updateRole,
         createRole,
+        deleteRole,
         refresh: fetchRoles
     };
 };

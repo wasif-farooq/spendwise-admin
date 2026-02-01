@@ -7,7 +7,10 @@ import {
     Unlock,
     Search,
     Filter,
-    XCircle
+    XCircle,
+    Plus,
+    Edit2,
+    Trash2
 } from 'lucide-react';
 import {
     Table,
@@ -25,6 +28,9 @@ import { Badge } from '@/components/ui/Badge';
 import { CustomSelect } from '@/components/ui/CustomSelect';
 import { useOrganizationsList } from '@/hooks/features/admin/useOrganizationsList';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useState } from 'react';
+import { ConfirmationModal } from '@/components/ui/ConfirmationModal';
+import { toast } from 'sonner';
 
 export const OrganizationsListPage = () => {
     const {
@@ -42,8 +48,29 @@ export const OrganizationsListPage = () => {
         clearFilters,
         totalCount,
         showFilters,
-        setShowFilters
+        setShowFilters,
+        navigate,
+        deleteOrg,
+        refresh
     } = useOrganizationsList();
+
+    const [deleteId, setDeleteId] = useState<string | null>(null);
+    const [actionLoading, setActionLoading] = useState(false);
+
+    const handleDelete = async () => {
+        if (!deleteId) return;
+        setActionLoading(true);
+        try {
+            await deleteOrg(deleteId);
+            toast.success('Organization deleted successfully');
+            setDeleteId(null);
+            refresh();
+        } catch (error) {
+            toast.error('Failed to delete organization');
+        } finally {
+            setActionLoading(false);
+        }
+    };
 
     if (loading && organizations.length === 0) {
         return <Block className="p-8 h-64 flex items-center justify-center"><Text className="animate-pulse text-gray-400">Loading organizations...</Text></Block>;
@@ -55,10 +82,30 @@ export const OrganizationsListPage = () => {
 
     return (
         <Block className="space-y-6">
-            <Block>
-                <Text as="h1" className="text-3xl font-black text-gray-900 tracking-tight">Organizations Management</Text>
-                <Text className="text-gray-500 font-medium">Oversee {totalCount} active organizations</Text>
-            </Block>
+            <ConfirmationModal
+                isOpen={!!deleteId}
+                onClose={() => setDeleteId(null)}
+                onConfirm={handleDelete}
+                title="Delete Organization"
+                description="Are you sure you want to delete this organization? This action cannot be undone and will remove all associated data."
+                confirmText="Delete Organization"
+                variant="danger"
+                loading={actionLoading}
+            />
+
+            <Flex justify="between" align="center" className="pb-6 border-b border-gray-100">
+                <Block>
+                    <Text as="h1" className="text-3xl font-black text-gray-900 tracking-tight">Organizations Management</Text>
+                    <Text className="text-gray-500 font-medium">Oversee {totalCount} active organizations</Text>
+                </Block>
+                <Button
+                    className="gap-2 rounded-xl"
+                    onClick={() => navigate('/admin/organizations/new')}
+                >
+                    <Plus size={18} />
+                    Add Organization
+                </Button>
+            </Flex>
 
             <Block className="bg-white p-4 rounded-3xl shadow-sm border border-gray-100 space-y-4">
                 <Flex gap={4} align="center" className="flex-wrap md:flex-nowrap">
@@ -193,8 +240,21 @@ export const OrganizationsListPage = () => {
                                             >
                                                 {org.status === 'active' ? <Lock size={16} /> : <Unlock size={16} />}
                                             </Button>
-                                            <Button variant="ghost" size="sm" className="text-gray-400">
-                                                <MoreVertical size={16} />
+                                            <Button
+                                                variant="ghost"
+                                                size="sm"
+                                                className="text-gray-400 hover:text-blue-600 hover:bg-blue-50"
+                                                onClick={() => navigate(`/admin/organizations/${org.id}/edit`)}
+                                            >
+                                                <Edit2 size={16} />
+                                            </Button>
+                                            <Button
+                                                variant="ghost"
+                                                size="sm"
+                                                className="text-gray-400 hover:text-red-600 hover:bg-red-50"
+                                                onClick={() => setDeleteId(org.id)}
+                                            >
+                                                <Trash2 size={16} />
                                             </Button>
                                         </Flex>
                                     </TableCell>

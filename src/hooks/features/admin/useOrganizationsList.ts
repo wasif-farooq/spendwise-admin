@@ -11,6 +11,11 @@ export const useOrganizationsList = () => {
         searchQuery,
         setSearchQuery,
         handleToggleStatus,
+        createOrg,
+        updateOrg,
+        deleteOrg,
+        getOrgById,
+        refresh,
         currentPage,
         setCurrentPage,
         totalPages,
@@ -38,6 +43,11 @@ export const useOrganizationsList = () => {
         totalCount,
         showFilters,
         setShowFilters,
-        navigate
+        navigate,
+        createOrg,
+        updateOrg,
+        deleteOrg,
+        getOrgById,
+        refresh
     };
 };

@@ -59,3 +59,14 @@ export interface Staff {
     joinedDate: string;
     avatar?: string;
 }
+
+export interface Coupon {
+    id: string;
+    code: string;
+    discount: number;
+    type: 'percentage' | 'fixed';
+    status: 'active' | 'expired' | 'disabled';
+    uses: number;
+    maxUses: number;
+    expiryDate: string;
+}

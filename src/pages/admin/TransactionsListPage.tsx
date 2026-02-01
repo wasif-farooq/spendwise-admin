@@ -5,7 +5,10 @@ import {
     ArrowUpRight,
     ArrowDownLeft,
     Download,
-    Eye
+    Eye,
+    Plus,
+    Edit2,
+    Trash2
 } from 'lucide-react';
 import {
     Table,
@@ -23,6 +26,9 @@ import { Badge } from '@/components/ui/Badge';
 import { CustomSelect } from '@/components/ui/CustomSelect';
 import { useTransactionsList } from '@/hooks/features/admin/useTransactionsList';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useState } from 'react';
+import { ConfirmationModal } from '@/components/ui/ConfirmationModal';
+import { toast } from 'sonner';
 
 export const TransactionsListPage = () => {
     const {
@@ -38,15 +44,56 @@ export const TransactionsListPage = () => {
         totalCount,
         showFilters,
         setShowFilters,
-        formatCurrency
+        formatCurrency,
+        deleteTransaction,
+        navigate
     } = useTransactionsList();
+
+    const [deleteId, setDeleteId] = useState<string | null>(null);
+    const [actionLoading, setActionLoading] = useState(false);
+
+    const handleDelete = async () => {
+        if (!deleteId) return;
+        setActionLoading(true);
+        try {
+            await deleteTransaction(deleteId);
+            toast.success('Transaction deleted successfully');
+            setDeleteId(null);
+        } catch (error) {
+            toast.error('Failed to delete transaction');
+        } finally {
+            setActionLoading(false);
+        }
+    };
 
     return (
         <Block className="space-y-6">
-            <Block>
-                <Text as="h1" className="text-3xl font-black text-gray-900 tracking-tight">Transactions</Text>
-                <Text className="text-gray-500 font-medium">Monitor {totalCount} financial activities across the platform</Text>
-            </Block>
+            <ConfirmationModal
+                isOpen={!!deleteId}
+                onClose={() => setDeleteId(null)}
+                onConfirm={handleDelete}
+                title="Delete Transaction"
+                description="Are you sure you want to delete this transaction? This action cannot be undone."
+                confirmText="Delete Transaction"
+                variant="danger"
+                loading={actionLoading}
+            />
+
+            <Flex justify="between" align="end" className="flex-wrap gap-4">
+                <Block>
+                    <Text as="h1" className="text-3xl font-black text-gray-900 tracking-tight">Transactions</Text>
+                    <Text className="text-gray-500 font-medium">Monitor {totalCount} financial activities across the platform</Text>
+                </Block>
+                <Flex gap={4}>
+                    <Button
+                        className="gap-2 rounded-xl h-[52px]"
+                        onClick={() => navigate('/admin/transactions/new')}
+                    >
+                        <Plus size={18} />
+                        <span className="hidden md:inline">Add Transaction</span>
+                    </Button>
+                </Flex>
+            </Flex>
 
             <Block className="bg-white p-4 rounded-3xl shadow-sm border border-gray-100 space-y-4">
                 <Flex gap={4} align="center" className="flex-wrap md:flex-nowrap">
@@ -177,9 +224,24 @@ export const TransactionsListPage = () => {
                                         </Badge>
                                     </TableCell>
                                     <TableCell className="text-right pr-6">
-                                        <Button variant="ghost" size="sm" className="text-gray-400 hover:text-primary">
-                                            <Eye size={16} />
-                                        </Button>
+                                        <Flex justify="end" gap={2}>
+                                            <Button
+                                                variant="ghost"
+                                                size="sm"
+                                                className="text-gray-400 hover:text-blue-600 hover:bg-blue-50"
+                                                onClick={() => navigate(`/admin/transactions/${transaction.id}/edit`)}
+                                            >
+                                                <Edit2 size={16} />
+                                            </Button>
+                                            <Button
+                                                variant="ghost"
+                                                size="sm"
+                                                className="text-gray-400 hover:text-red-600 hover:bg-red-50"
+                                                onClick={() => setDeleteId(transaction.id)}
+                                            >
+                                                <Trash2 size={16} />
+                                            </Button>
+                                        </Flex>
                                     </TableCell>
                                 </motion.tr>
                             ))}

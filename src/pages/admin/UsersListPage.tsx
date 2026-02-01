@@ -6,8 +6,11 @@ import {
     Shield,
     Search,
     Filter,
-    XCircle
+    XCircle,
+    Edit2,
+    Trash2
 } from 'lucide-react';
+import { useState } from 'react';
 import {
     Table,
     TableBody,
@@ -24,6 +27,8 @@ import { Badge } from '@/components/ui/Badge';
 import { CustomSelect } from '@/components/ui/CustomSelect';
 import { useUsersList } from '@/hooks/features/admin/useUsersList';
 import { motion, AnimatePresence } from 'framer-motion';
+import { toast } from 'sonner';
+import { ConfirmationModal } from '@/components/ui/ConfirmationModal';
 
 export const UsersListPage = () => {
     const {
@@ -42,8 +47,26 @@ export const UsersListPage = () => {
         totalCount,
         showFilters,
         setShowFilters,
-        navigate
+        navigate,
+        deleteUser
     } = useUsersList();
+
+    const [deleteId, setDeleteId] = useState<string | null>(null);
+    const [actionLoading, setActionLoading] = useState(false);
+
+    const handleDelete = async () => {
+        if (!deleteId) return;
+        setActionLoading(true);
+        try {
+            await deleteUser(deleteId);
+            toast.success('User deleted successfully');
+            setDeleteId(null);
+        } catch (error) {
+            toast.error('Failed to delete user');
+        } finally {
+            setActionLoading(false);
+        }
+    };
 
     if (loading && users.length === 0) {
         return <Block className="p-8 h-64 flex items-center justify-center"><Text className="animate-pulse text-gray-400">Loading users...</Text></Block>;
@@ -55,6 +78,17 @@ export const UsersListPage = () => {
 
     return (
         <Block className="space-y-6">
+            <ConfirmationModal
+                isOpen={!!deleteId}
+                onClose={() => setDeleteId(null)}
+                onConfirm={handleDelete}
+                title="Delete User"
+                description="Are you sure you want to delete this user? This action cannot be undone."
+                confirmText="Delete User"
+                variant="danger"
+                loading={actionLoading}
+            />
+
             <Block>
                 <Text as="h1" className="text-3xl font-black text-gray-900 tracking-tight">Users Management</Text>
                 <Flex justify="between" align="center">
@@ -194,8 +228,27 @@ export const UsersListPage = () => {
                                             <Button
                                                 variant="ghost"
                                                 size="sm"
+                                                className="text-gray-400 hover:text-blue-600 hover:bg-blue-50"
+                                                onClick={() => navigate(`/users/${user.id}/edit`)}
+                                                title="Edit"
+                                            >
+                                                <Edit2 size={16} />
+                                            </Button>
+                                            <Button
+                                                variant="ghost"
+                                                size="sm"
+                                                className="text-gray-400 hover:text-red-600 hover:bg-red-50"
+                                                onClick={() => setDeleteId(user.id)}
+                                                title="Delete"
+                                            >
+                                                <Trash2 size={16} />
+                                            </Button>
+                                            <Button
+                                                variant="ghost"
+                                                size="sm"
                                                 className="text-gray-400"
                                                 onClick={() => navigate(`/users/${user.id}`)}
+                                                title="View Details"
                                             >
                                                 <MoreVertical size={16} />
                                             </Button>
@@ -220,6 +273,6 @@ export const UsersListPage = () => {
                 totalPages={totalPages}
                 onPageChange={setCurrentPage}
             />
-        </Block >
+        </Block>
     );
 };

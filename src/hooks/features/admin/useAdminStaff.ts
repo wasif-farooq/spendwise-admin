@@ -57,6 +57,39 @@ export const useAdminStaff = () => {
         }
     };
 
+    const createStaff = async (data: any) => {
+        try {
+            await AdminStaffService.invite(data);
+            await fetchStaff();
+            return true;
+        } catch (err) {
+            console.error('Failed to invite staff', err);
+            throw err;
+        }
+    };
+
+    const updateStaff = async (id: string, data: Partial<Staff>) => {
+        try {
+            await AdminStaffService.update(id, data);
+            await fetchStaff();
+            return true;
+        } catch (err) {
+            console.error('Failed to update staff', err);
+            throw err;
+        }
+    };
+
+    const deleteStaff = async (id: string) => {
+        try {
+            await AdminStaffService.remove(id);
+            await fetchStaff();
+            return true;
+        } catch (err) {
+            console.error('Failed to delete staff', err);
+            throw err;
+        }
+    };
+
     return {
         staff: paginatedStaff,
         allStaff: staff,
@@ -73,6 +106,9 @@ export const useAdminStaff = () => {
         clearFilters,
         getStaffById,
         updateStaffRoles,
+        createStaff,
+        updateStaff,
+        deleteStaff,
         refresh: fetchStaff
     };
 };

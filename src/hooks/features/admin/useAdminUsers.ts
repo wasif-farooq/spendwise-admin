@@ -79,6 +79,17 @@ export const useAdminUsers = () => {
         }
     };
 
+    const deleteUser = async (id: string) => {
+        try {
+            await AdminUserService.delete(id);
+            await fetchUsers();
+            return true;
+        } catch (err) {
+            console.error('Failed to delete user', err);
+            throw err;
+        }
+    };
+
     return {
         users: paginatedUsers,
         totalCount,
@@ -96,6 +107,7 @@ export const useAdminUsers = () => {
         getUserById,
         createUser,
         updateUser,
+        deleteUser,
         refresh: fetchUsers
     };
 };

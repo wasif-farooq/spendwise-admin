@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from '@/store/redux';
 import { fetchAllOrgsThunk, toggleOrgStatusThunk } from '@/store/slices/adminOrganizationSlice';
 import { useTable } from '@/hooks/useTable';
 import type { AdminOrganization } from '@/store/types/admin.types';
+import { adminOrganizationService } from '@/api/services/admin/adminOrganizationService';
 
 export const useAdminOrganizations = () => {
     const dispatch = useAppDispatch();
@@ -29,6 +30,43 @@ export const useAdminOrganizations = () => {
         dispatch(toggleOrgStatusThunk(id));
     };
 
+    const createOrg = async (data: any) => {
+        try {
+            await adminOrganizationService.create(data);
+            dispatch(fetchAllOrgsThunk());
+            return true;
+        } catch (err) {
+            console.error('Failed to create organization', err);
+            throw err;
+        }
+    };
+
+    const updateOrg = async (id: string, data: any) => {
+        try {
+            await adminOrganizationService.update(id, data);
+            dispatch(fetchAllOrgsThunk());
+            return true;
+        } catch (err) {
+            console.error('Failed to update organization', err);
+            throw err;
+        }
+    };
+
+    const deleteOrg = async (id: string) => {
+        try {
+            await adminOrganizationService.delete(id);
+            dispatch(fetchAllOrgsThunk());
+            return true;
+        } catch (err) {
+            console.error('Failed to delete organization', err);
+            throw err;
+        }
+    };
+
+    const getOrgById = async (id: string) => {
+        return adminOrganizationService.getById(id);
+    };
+
     return {
         organizations: paginatedOrgs,
         totalCount,
@@ -43,6 +81,10 @@ export const useAdminOrganizations = () => {
         setFilter,
         clearFilters,
         handleToggleStatus,
+        createOrg,
+        updateOrg,
+        deleteOrg,
+        getOrgById,
         refresh: () => dispatch(fetchAllOrgsThunk())
     };
 };
