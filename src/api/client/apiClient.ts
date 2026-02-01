@@ -8,7 +8,12 @@ class ApiClient {
     public mockMode: boolean;
 
     constructor() {
-        const baseURL = import.meta.env.VITE_API_URL || '/api';
+        const rawBaseURL = import.meta.env.VITE_API_URL || '/api';
+        // Add /admin prefix to separate from user APIs
+        const baseURL = rawBaseURL.endsWith('/')
+            ? `${rawBaseURL}admin`
+            : `${rawBaseURL}/admin`;
+
         this.mockMode = import.meta.env.VITE_MOCK_MODE === 'true';
 
         this.client = axios.create({
@@ -56,37 +61,45 @@ class ApiClient {
 
     async get<T>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
         if (this.mockMode) {
-            return mockAdapter.handleRequest({ ...config, url, method: 'GET' });
+            return mockAdapter.handleRequest({ ...config, url: this.getFullUrl(url), method: 'GET' });
         }
         return this.client.get<T>(url, config);
     }
 
     async post<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
         if (this.mockMode) {
-            return mockAdapter.handleRequest({ ...config, url, method: 'POST', data });
+            return mockAdapter.handleRequest({ ...config, url: this.getFullUrl(url), method: 'POST', data });
         }
         return this.client.post<T>(url, data, config);
     }
 
     async put<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
         if (this.mockMode) {
-            return mockAdapter.handleRequest({ ...config, url, method: 'PUT', data });
+            return mockAdapter.handleRequest({ ...config, url: this.getFullUrl(url), method: 'PUT', data });
         }
         return this.client.put<T>(url, data, config);
     }
 
     async patch<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
         if (this.mockMode) {
-            return mockAdapter.handleRequest({ ...config, url, method: 'PATCH', data });
+            return mockAdapter.handleRequest({ ...config, url: this.getFullUrl(url), method: 'PATCH', data });
         }
         return this.client.patch<T>(url, data, config);
     }
 
     async delete<T>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
         if (this.mockMode) {
-            return mockAdapter.handleRequest({ ...config, url, method: 'DELETE' });
+            return mockAdapter.handleRequest({ ...config, url: this.getFullUrl(url), method: 'DELETE' });
         }
         return this.client.delete<T>(url, config);
+    }
+
+    private getFullUrl(url: string): string {
+        const baseURL = this.client.defaults.baseURL || '';
+        if (url.startsWith('http')) return url;
+        const cleanBase = baseURL.endsWith('/') ? baseURL.slice(0, -1) : baseURL;
+        const cleanUrl = url.startsWith('/') ? url : `/${url}`;
+        return `${cleanBase}${cleanUrl}`;
     }
 }
 

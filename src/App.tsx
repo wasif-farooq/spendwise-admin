@@ -1,43 +1,55 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { MainLayout } from './components/shared/layout/MainLayout';
 import { AuthLayout } from './components/shared/layout/AuthLayout';
-import { DashboardLayout } from './components/shared/layout/DashboardLayout';
-import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
-import RegisterPage from './pages/RegisterPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
 import TwoFactorPage from './pages/TwoFactorPage';
 import CheckEmailPage from './pages/CheckEmailPage';
 import ConfirmEmailPage from './pages/ConfirmEmailPage';
-import DashboardPage from './pages/DashboardPage';
-import SettingsPage from './pages/SettingsPage';
-import Profile from './pages/SettingsPage/Profile';
-import Preferences from './pages/SettingsPage/Preferences';
-import Security from './pages/SettingsPage/Security';
-import Setup2FAPage from './pages/SettingsPage/Setup2FAPage';
-import SettingsSubscription from './pages/SettingsPage/Subscription';
-import ManagePage from './pages/ManagePage';
-import ManageGeneral from './pages/ManagePage/General';
-import ManageMembers from './pages/ManagePage/Members';
-import InviteMemberPage from './pages/ManagePage/InviteMemberPage';
-import EditMemberPage from './pages/ManagePage/EditMemberPage';
-import ManageBilling from './pages/ManagePage/Billing';
-import ManageRoles from './pages/ManagePage/Roles';
-import RoleEditor from './pages/ManagePage/RoleEditor';
-import ExchangeRatesPage from './pages/ExchangeRatesPage';
-import AccountsPage from './pages/AccountsPage';
-import TransactionsPage from './pages/TransactionsPage';
-import AnalyticsPage from './pages/AnalyticsPage';
-import AIAdvisorPage from './pages/AIAdvisorPage';
-
-
-
 import { LayoutProvider } from './context/LayoutContext';
 import { FeatureFlagProvider } from './context/FeatureFlagContext';
 import { Toaster } from 'sonner';
 
+import { AdminLayout } from './components/shared/layout/AdminLayout';
+import { UsersListPage } from './pages/admin/UsersListPage';
+import { OrganizationsListPage } from './pages/admin/OrganizationsListPage';
+import { AccountsListPage } from './pages/admin/AccountsListPage';
+import { AdminDashboard } from './pages/admin/AdminDashboard';
+import { UserDetailDashboard } from './pages/admin/UserDetailDashboard';
+import { FeatureFlagsPage } from './pages/admin/FeatureFlagsPage';
+import { AdminSettingsPage } from './pages/admin/AdminSettingsPage';
+import { MembersListPage } from './pages/admin/MembersListPage';
+import { MemberDetailsPage } from './pages/admin/MemberDetailsPage';
+import { RolesListPage } from './pages/admin/RolesListPage';
+import { RoleDetailsPage } from './pages/admin/RoleDetailsPage';
+import { TransactionsListPage } from './pages/admin/TransactionsListPage';
+import { SubscriptionsListPage } from './pages/admin/SubscriptionsListPage';
+import { CouponsListPage } from './pages/admin/CouponsListPage';
+
+import { useEffect } from 'react';
+import { useAppDispatch, useAppSelector } from './store/redux';
+import { getCurrentUserThunk, selectIsInitialized } from './store/slices/authSlice';
+import { Block, Text, Flex } from '@shared';
+
 function App() {
+  const dispatch = useAppDispatch();
+  const isInitialized = useAppSelector(selectIsInitialized);
+
+  useEffect(() => {
+    dispatch(getCurrentUserThunk());
+  }, [dispatch]);
+
+  if (!isInitialized) {
+    return (
+      <Flex align="center" justify="center" className="min-h-screen bg-gray-50">
+        <Block className="text-center space-y-4">
+          <Block className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto" />
+          <Text className="text-gray-500 font-medium">Initializing SpendWise Admin...</Text>
+        </Block>
+      </Flex>
+    );
+  }
+
   return (
     <>
       <Toaster position="top-center" richColors />
@@ -45,55 +57,39 @@ function App() {
         <FeatureFlagProvider>
           <Router>
             <Routes>
-              {/* Main Layout Routes (Public) */}
-              <Route element={<MainLayout />}>
-                <Route path="/" element={<HomePage />} />
-              </Route>
+              <Route path="/" element={<Navigate to="/login" replace />} />
 
-              {/* Dashboard Layout Routes (Authenticated) */}
-              <Route element={<DashboardLayout />}>
-                <Route path="/dashboard" element={<DashboardPage />} />
-                <Route path="/analytics" element={<AnalyticsPage />} />
-                <Route path="/ai-advisor" element={<AIAdvisorPage />} />
-
-                <Route path="/exchange-rates" element={<ExchangeRatesPage />} />
-                <Route path="/accounts" element={<AccountsPage />} />
-                <Route path="/accounts/:id/transactions" element={<TransactionsPage />} />
-
-                {/* Manage Nested Routes */}
-                <Route path="manage" element={<ManagePage />}>
-                  <Route index element={<Navigate to="general" replace />} />
-                  <Route path="general" element={<ManageGeneral />} />
-                  <Route path="members" element={<ManageMembers />} />
-                  <Route path="members/invite" element={<InviteMemberPage />} />
-                  <Route path="members/:id/edit" element={<EditMemberPage />} />
-                  <Route path="roles" element={<ManageRoles />} />
-                  <Route path="roles/new" element={<RoleEditor />} />
-                  <Route path="roles/:id/edit" element={<RoleEditor />} />
-                  <Route path="billing" element={<ManageBilling />} />
-                </Route>
-
-                {/* Settings Nested Routes */}
-                <Route path="/settings" element={<SettingsPage />}>
-                  <Route index element={<Navigate to="profile" replace />} />
-                  <Route path="profile" element={<Profile />} />
-                  <Route path="preferences" element={<Preferences />} />
-                  <Route path="security" element={<Security />} />
-                  <Route path="security/setup-2fa" element={<Setup2FAPage />} />
-                  <Route path="subscription" element={<SettingsSubscription />} />
-                </Route>
+              {/* Standalone Admin Routes */}
+              <Route element={<AdminLayout />}>
+                <Route path="dashboard" element={<AdminDashboard />} />
+                <Route path="users" element={<UsersListPage />} />
+                <Route path="users/:id" element={<UserDetailDashboard />} />
+                <Route path="members" element={<MembersListPage />} />
+                <Route path="members/:id" element={<MemberDetailsPage />} />
+                <Route path="roles" element={<RolesListPage />} />
+                <Route path="roles/new" element={<RoleDetailsPage />} />
+                <Route path="roles/:id" element={<RoleDetailsPage />} />
+                <Route path="transactions" element={<TransactionsListPage />} />
+                <Route path="subscriptions" element={<SubscriptionsListPage />} />
+                <Route path="coupons" element={<CouponsListPage />} />
+                <Route path="organizations" element={<OrganizationsListPage />} />
+                <Route path="accounts" element={<AccountsListPage />} />
+                <Route path="feature-flags" element={<FeatureFlagsPage />} />
+                <Route path="settings" element={<AdminSettingsPage />} />
               </Route>
 
               {/* Auth Layout Routes (Auth Flows) */}
               <Route element={<AuthLayout />}>
                 <Route path="/login" element={<LoginPage />} />
-                <Route path="/register" element={<RegisterPage />} />
                 <Route path="/forgot-password" element={<ForgotPasswordPage />} />
                 <Route path="/reset-password" element={<ResetPasswordPage />} />
                 <Route path="/verify-2fa" element={<TwoFactorPage />} />
                 <Route path="/check-email" element={<CheckEmailPage />} />
                 <Route path="/confirm-email" element={<ConfirmEmailPage />} />
               </Route>
+
+              {/* Redirect any other route to login */}
+              <Route path="*" element={<Navigate to="/login" replace />} />
             </Routes>
           </Router>
         </FeatureFlagProvider>

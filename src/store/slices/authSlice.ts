@@ -15,6 +15,7 @@ const initialState: AuthState = {
     availableMethods: [],
     tempToken: null,
     twoFactorVerified: false,
+    isInitialized: false,
 };
 
 // Async thunks
@@ -178,6 +179,7 @@ const authSlice = createSlice({
                     state.twoFactorVerified = false;
                 }
                 state.error = null;
+                state.isInitialized = true;
             })
             .addCase(loginThunk.rejected, (state, action) => {
                 state.loading = false;
@@ -253,11 +255,13 @@ const authSlice = createSlice({
                 state.loading = false;
                 state.user = action.payload;
                 state.isAuthenticated = true;
+                state.isInitialized = true;
                 state.error = null;
             })
             .addCase(getCurrentUserThunk.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload as string;
+                state.isInitialized = true;
             });
 
         // Forgot Password
@@ -344,6 +348,7 @@ export const selectRequiresTwoFactor = (state: RootState) => state.auth.requires
 export const selectAvailableMethods = (state: RootState) => state.auth.availableMethods;
 export const selectTempToken = (state: RootState) => state.auth.tempToken;
 export const selectTwoFactorVerified = (state: RootState) => state.auth.twoFactorVerified;
+export const selectIsInitialized = (state: RootState) => state.auth.isInitialized;
 
 // Reducer
 export default authSlice.reducer;

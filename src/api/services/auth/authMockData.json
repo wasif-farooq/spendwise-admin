@@ -4,7 +4,7 @@
         "email": "john@example.com",
         "name": "John Doe",
         "avatar": "https://ui-avatars.com/api/?name=John+Doe&background=4F46E5&color=fff",
-        "role": "Admin",
+        "role": "admin",
         "accountType": "organization",
         "organizationId": "org-001",
         "organizationName": "Acme Corporation",
@@ -20,7 +20,7 @@
             "password": "password123",
             "name": "Alice Johnson",
             "avatar": "https://ui-avatars.com/api/?name=Alice+Johnson&background=4F46E5&color=fff",
-            "role": "Admin",
+            "role": "admin",
             "accountType": "organization",
             "organizationId": "org-001",
             "createdAt": "2023-10-01T10:00:00Z",
@@ -33,7 +33,7 @@
             "password": "password123",
             "name": "Bob Smith",
             "avatar": "https://ui-avatars.com/api/?name=Bob+Smith&background=10B981&color=fff",
-            "role": "Member",
+            "role": "user",
             "accountType": "personal",
             "createdAt": "2023-11-15T10:00:00Z",
             "twoFactorEnabled": true,
@@ -58,7 +58,7 @@
             "password": "password123",
             "name": "Charlie Davis",
             "avatar": "https://ui-avatars.com/api/?name=Charlie+Davis&background=F59E0B&color=fff",
-            "role": "Member",
+            "role": "user",
             "accountType": "personal",
             "createdAt": "2024-01-01T10:00:00Z",
             "twoFactorEnabled": true,
@@ -89,7 +89,7 @@
             "password": "password123",
             "name": "Diana Martinez",
             "avatar": "https://ui-avatars.com/api/?name=Diana+Martinez&background=EC4899&color=fff",
-            "role": "Viewer",
+            "role": "user",
             "accountType": "personal",
             "createdAt": "2024-02-15T10:00:00Z",
             "twoFactorEnabled": true,
@@ -113,6 +113,18 @@
                 "EMAIL004",
                 "EMAIL005"
             ]
+        },
+        {
+            "id": "admin-001",
+            "email": "admin@spendwise.com",
+            "password": "admin123",
+            "name": "Super Admin",
+            "avatar": "https://ui-avatars.com/api/?name=Super+Admin&background=000000&color=fff",
+            "role": "SUPER_ADMIN",
+            "accountType": "personal",
+            "createdAt": "2023-01-01T10:00:00Z",
+            "twoFactorEnabled": false,
+            "twoFactorMethods": []
         }
     ]
 }

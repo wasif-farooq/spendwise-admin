@@ -3,7 +3,8 @@ export interface User {
     email: string;
     name: string;
     avatar?: string;
-    role: string;
+    role: 'user' | 'admin' | 'staff' | 'SUPER_ADMIN';
+    permissions?: string[];
     accountType: 'personal' | 'organization';
     organizationId?: string;
     createdAt: string;
@@ -75,4 +76,5 @@ export interface AuthState {
     availableMethods: TwoFactorMethod[];
     tempToken: string | null;
     twoFactorVerified: boolean;
+    isInitialized: boolean;
 }

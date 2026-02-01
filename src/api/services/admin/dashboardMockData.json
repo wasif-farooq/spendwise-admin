@@ -1,0 +1,34 @@
+{
+    "totalUsers": 1542,
+    "activeOrganizations": 84,
+    "monthlyRevenue": 12450.00,
+    "conversionRate": 15.4,
+    "userGrowth": [
+        {
+            "date": "2025-01-01",
+            "value": 1200
+        },
+        {
+            "date": "2025-01-15",
+            "value": 1350
+        },
+        {
+            "date": "2025-02-01",
+            "value": 1542
+        }
+    ],
+    "revenueGrowth": [
+        {
+            "date": "2025-01-01",
+            "value": 8000
+        },
+        {
+            "date": "2025-01-15",
+            "value": 10500
+        },
+        {
+            "date": "2025-02-01",
+            "value": 12450
+        }
+    ]
+}

@@ -25,7 +25,8 @@
             "role": "Admin",
             "accountType": "organization",
             "organizationId": "org-001",
-            "createdAt": "2023-10-01T10:00:00Z"
+            "createdAt": "2023-10-01T10:00:00Z",
+            "joinedOrgsCount": 3
         },
         {
             "id": "user-002",
@@ -35,7 +36,8 @@
             "avatar": "https://ui-avatars.com/api/?name=Jane+Smith&background=10B981&color=fff",
             "role": "Member",
             "accountType": "personal",
-            "createdAt": "2023-11-15T10:00:00Z"
+            "createdAt": "2023-11-15T10:00:00Z",
+            "joinedOrgsCount": 1
         },
         {
             "id": "user-003",
@@ -45,7 +47,8 @@
             "avatar": "https://ui-avatars.com/api/?name=Demo+User&background=F59E0B&color=fff",
             "role": "Viewer",
             "accountType": "personal",
-            "createdAt": "2024-01-01T10:00:00Z"
+            "createdAt": "2024-01-01T10:00:00Z",
+            "joinedOrgsCount": 0
         }
     ],
     "members": [
@@ -643,5 +646,37 @@
                 "iconName": "Globe"
             }
         ]
-    }
+    },
+    "coupons": [
+        {
+            "id": "cpn_1",
+            "code": "WELCOME20",
+            "discount": 20,
+            "type": "percentage",
+            "status": "active",
+            "uses": 150,
+            "maxUses": 500,
+            "expiryDate": "2026-12-31"
+        },
+        {
+            "id": "cpn_2",
+            "code": "Save10",
+            "discount": 10,
+            "type": "fixed",
+            "status": "active",
+            "uses": 45,
+            "maxUses": 100,
+            "expiryDate": "2026-06-30"
+        },
+        {
+            "id": "cpn_3",
+            "code": "BLACKFRIDAY",
+            "discount": 50,
+            "type": "percentage",
+            "status": "expired",
+            "uses": 1000,
+            "maxUses": 1000,
+            "expiryDate": "2025-11-29"
+        }
+    ]
 }

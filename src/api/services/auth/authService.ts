@@ -4,22 +4,22 @@ import mockData from './authMockData.json';
 import type { User, LoginCredentials, RegisterData, AuthResponse, ResetPasswordData, UpdatePasswordData } from '@/store/types/auth.types';
 
 // Register mock data
-mockAdapter.registerMockData('/auth/login', {
+mockAdapter.registerMockData('/admin/auth/login', {
     user: mockData.currentUser,
     token: mockData.token,
     refreshToken: mockData.refreshToken,
 });
 
-mockAdapter.registerMockData('/auth/register', {
+mockAdapter.registerMockData('/admin/auth/register', {
     user: mockData.currentUser,
     token: mockData.token,
     refreshToken: mockData.refreshToken,
 });
 
-mockAdapter.registerMockData('/auth/me', mockData.currentUser);
-mockAdapter.registerMockData('/auth/logout', { success: true });
-mockAdapter.registerMockData('/auth/forgot-password', { success: true, message: 'Password reset email sent' });
-mockAdapter.registerMockData('/auth/reset-password', { success: true, message: 'Password reset successfully' });
+mockAdapter.registerMockData('/admin/auth/me', mockData.currentUser);
+mockAdapter.registerMockData('/admin/auth/logout', { success: true });
+mockAdapter.registerMockData('/admin/auth/forgot-password', { success: true, message: 'Password reset email sent' });
+mockAdapter.registerMockData('/admin/auth/reset-password', { success: true, message: 'Password reset successfully' });
 
 class AuthService {
     async login(credentials: LoginCredentials): Promise<AuthResponse> {

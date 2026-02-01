@@ -21,3 +21,4 @@ export { default as Badge } from './Badge';
 export { default as Alert, AlertTitle, AlertDescription } from './Alert';
 export { default as Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from './Card';
 export { default as Table, TableHeader, TableBody, TableFooter, TableRow, TableHead, TableCell, TableCaption } from './Table';
+export { default as Pagination } from './Pagination';

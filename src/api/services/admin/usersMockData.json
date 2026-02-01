@@ -1,0 +1,38 @@
+[
+    {
+        "id": "1",
+        "name": "Jane Cooper",
+        "email": "jane@example.com",
+        "role": "Admin",
+        "status": "active",
+        "lastActive": "2024-03-20T10:00:00Z",
+        "avatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+    },
+    {
+        "id": "2",
+        "name": "Cody Fisher",
+        "email": "cody@example.com",
+        "role": "Staff",
+        "status": "active",
+        "lastActive": "2024-03-19T15:30:00Z",
+        "avatar": "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+    },
+    {
+        "id": "3",
+        "name": "Esther Howard",
+        "email": "esther@example.com",
+        "role": "Staff",
+        "status": "suspended",
+        "lastActive": "2024-03-15T09:15:00Z",
+        "avatar": "https://images.unsplash.com/photo-1527980965255-d3b416303d12?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+    },
+    {
+        "id": "4",
+        "name": "Jenny Wilson",
+        "email": "jenny@example.com",
+        "role": "Admin",
+        "status": "active",
+        "lastActive": "2024-03-20T11:45:00Z",
+        "avatar": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+    }
+]

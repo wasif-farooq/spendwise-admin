@@ -1,0 +1,46 @@
+[
+    {
+        "id": "1",
+        "name": "Tech Solutions",
+        "plan": "enterprise",
+        "status": "active",
+        "membersCount": 154,
+        "accountsCount": 12,
+        "revenue": 54200.00,
+        "owner": "john@techsolutions.com",
+        "createdAt": "2024-01-10T00:00:00Z"
+    },
+    {
+        "id": "2",
+        "name": "Amazon",
+        "plan": "enterprise",
+        "status": "active",
+        "membersCount": 1200,
+        "accountsCount": 45,
+        "revenue": 120500.00,
+        "owner": "jeff@amazon.com",
+        "createdAt": "2023-05-15T00:00:00Z"
+    },
+    {
+        "id": "3",
+        "name": "Startup Inc",
+        "plan": "free",
+        "status": "suspended",
+        "membersCount": 5,
+        "accountsCount": 2,
+        "revenue": 0.00,
+        "owner": "founder@startup.io",
+        "createdAt": "2024-03-01T00:00:00Z"
+    },
+    {
+        "id": "4",
+        "name": "Personal",
+        "plan": "pro",
+        "status": "active",
+        "membersCount": 1,
+        "accountsCount": 5,
+        "revenue": 150.00,
+        "owner": "me@example.com",
+        "createdAt": "2024-02-20T00:00:00Z"
+    }
+]

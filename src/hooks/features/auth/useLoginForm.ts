@@ -29,7 +29,7 @@ export const useLoginForm = () => {
                     // Redux state is already updated, just navigate
                     navigate('/verify-2fa');
                 } else {
-                    // No 2FA required, redirect to dashboard
+                    // Redirect to dashboard
                     navigate('/dashboard');
                 }
             } else if (loginThunk.rejected.match(result)) {

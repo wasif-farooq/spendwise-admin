@@ -6,7 +6,7 @@ import {
     CreditCard,
     Menu,
     X,
-    User,
+    User as UserIcon,
     Globe,
     Wallet,
     Plus,
@@ -32,6 +32,7 @@ import {
     fetchFeatureUsageThunk,
     selectSubscriptionPlan
 } from '@/store/slices/subscriptionSlice';
+import { selectUser } from '@/store/slices/authSlice';
 import { useEffect } from 'react';
 
 export const DashboardLayout = () => {
@@ -56,11 +57,20 @@ export const DashboardLayout = () => {
     const isTeamManagementEnabled = useFeatureFlag('teamManagement');
     const isTransactionsEnabled = useFeatureFlag('transactions');
 
+    const user = useAppSelector(selectUser);
+
     useEffect(() => {
         // Fetch subscription data on layout mount
         dispatch(fetchSubscriptionThunk());
         dispatch(fetchFeatureUsageThunk());
     }, [dispatch]);
+
+    // Admin Access Guard
+    useEffect(() => {
+        if (user && (user.role === 'admin' || user.role === 'staff' || user.role === 'SUPER_ADMIN')) {
+            navigate('/admin/dashboard');
+        }
+    }, [user, navigate]);
 
     const navItems = [
         { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
@@ -75,7 +85,7 @@ export const DashboardLayout = () => {
         ...(isTeamManagementEnabled ? [
             { name: 'Manage', path: '/manage/general', icon: LayoutDashboard },
             ...(accountType === 'organization' ? [
-                { name: 'Members', path: '/manage/members', icon: User },
+                { name: 'Members', path: '/manage/members', icon: UserIcon },
                 { name: 'Roles', path: '/manage/roles', icon: Settings },
             ] : []),
         ] : []),
@@ -223,7 +233,7 @@ export const DashboardLayout = () => {
                         </Flex>
                     </Block>
                     <Block className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center border border-primary/20">
-                        <User className="h-5 w-5 text-primary" />
+                        <UserIcon className="h-5 w-5 text-primary" />
                     </Block>
                     {layout === 'minimal' && (
                         <Button variant="ghost" onClick={handleLogout} className="p-2 text-gray-400 hover:text-red-600 transition-colors">
