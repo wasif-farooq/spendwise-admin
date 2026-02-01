@@ -38,6 +38,8 @@ import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from './store/redux';
 import { getCurrentUserThunk, selectIsInitialized } from './store/slices/authSlice';
 import { Block, Text, Flex } from '@shared';
+import { RequirePermission } from './components/shared/RequirePermission';
+import { RESOURCES, ACTIONS } from './constants/permissions';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -69,44 +71,163 @@ function App() {
 
               {/* Standalone Admin Routes */}
               <Route element={<AdminLayout />}>
-                <Route path="dashboard" element={<AdminDashboard />} />
-                <Route path="users" element={<UsersListPage />} />
-                <Route path="users" element={<UsersListPage />} />
-                <Route path="users/new" element={<UserFormPage />} />
-                <Route path="users/:id" element={<UserDetailDashboard />} />
-                <Route path="users/:id/edit" element={<UserFormPage />} />
+                {/* Stats & Analytics - usually open to all staff or dashboard specific */}
+                <Route path="dashboard" element={
+                  <RequirePermission resource={RESOURCES.ANALYTICS} action={ACTIONS.READ}>
+                    <AdminDashboard />
+                  </RequirePermission>
+                } />
+
+                <Route path="users" element={
+                  <RequirePermission resource={RESOURCES.USERS} action={ACTIONS.READ}>
+                    <UsersListPage />
+                  </RequirePermission>
+                } />
+                <Route path="users/new" element={
+                  <RequirePermission resource={RESOURCES.USERS} action={ACTIONS.CREATE}>
+                    <UserFormPage />
+                  </RequirePermission>
+                } />
+                <Route path="users/:id" element={
+                  <RequirePermission resource={RESOURCES.USERS} action={ACTIONS.READ}>
+                    <UserDetailDashboard />
+                  </RequirePermission>
+                } />
+                <Route path="users/:id/edit" element={
+                  <RequirePermission resource={RESOURCES.USERS} action={ACTIONS.UPDATE}>
+                    <UserFormPage />
+                  </RequirePermission>
+                } />
 
 
                 {/* Staff Management Routes */}
-                <Route path="staff" element={<StaffListPage />} />
-                <Route path="staff/new" element={<StaffFormPage />} />
-                <Route path="staff/:id" element={<StaffDetailsPage />} />
-                <Route path="staff/:id/edit" element={<StaffFormPage />} />
+                <Route path="staff" element={
+                  <RequirePermission resource={RESOURCES.STAFF} action={ACTIONS.READ}>
+                    <StaffListPage />
+                  </RequirePermission>
+                } />
+                <Route path="staff/new" element={
+                  <RequirePermission resource={RESOURCES.STAFF} action={ACTIONS.CREATE}>
+                    <StaffFormPage />
+                  </RequirePermission>
+                } />
+                <Route path="staff/:id" element={
+                  <RequirePermission resource={RESOURCES.STAFF} action={ACTIONS.READ}>
+                    <StaffDetailsPage />
+                  </RequirePermission>
+                } />
+                <Route path="staff/:id/edit" element={
+                  <RequirePermission resource={RESOURCES.STAFF} action={ACTIONS.UPDATE}>
+                    <StaffFormPage />
+                  </RequirePermission>
+                } />
 
-                <Route path="staff-roles" element={<StaffRolesListPage />} />
-                <Route path="admin/staff-roles/new" element={<RoleFormPage />} />
-                <Route path="admin/staff-roles/:id/edit" element={<RoleFormPage />} />
-                <Route path="staff-roles/:id" element={<StaffRoleDetailsPage />} />
+                <Route path="staff-roles" element={
+                  <RequirePermission resource={RESOURCES.STAFF_ROLES} action={ACTIONS.READ}>
+                    <StaffRolesListPage />
+                  </RequirePermission>
+                } />
+                <Route path="admin/staff-roles/new" element={
+                  <RequirePermission resource={RESOURCES.STAFF_ROLES} action={ACTIONS.CREATE}>
+                    <RoleFormPage />
+                  </RequirePermission>
+                } />
+                <Route path="admin/staff-roles/:id/edit" element={
+                  <RequirePermission resource={RESOURCES.STAFF_ROLES} action={ACTIONS.UPDATE}>
+                    <RoleFormPage />
+                  </RequirePermission>
+                } />
+                <Route path="staff-roles/:id" element={
+                  <RequirePermission resource={RESOURCES.STAFF_ROLES} action={ACTIONS.READ}>
+                    <StaffRoleDetailsPage />
+                  </RequirePermission>
+                } />
 
-                <Route path="transactions" element={<TransactionsListPage />} />
-                <Route path="transactions/new" element={<TransactionFormPage />} />
-                <Route path="transactions/:id/edit" element={<TransactionFormPage />} />
-                <Route path="subscriptions" element={<SubscriptionsListPage />} />
-                <Route path="coupons" element={<CouponsListPage />} />
-                <Route path="coupons/new" element={<CouponFormPage />} />
-                <Route path="coupons/:id/edit" element={<CouponFormPage />} />
+                <Route path="transactions" element={
+                  <RequirePermission resource={RESOURCES.TRANSACTIONS} action={ACTIONS.READ}>
+                    <TransactionsListPage />
+                  </RequirePermission>
+                } />
+                <Route path="transactions/new" element={
+                  <RequirePermission resource={RESOURCES.TRANSACTIONS} action={ACTIONS.CREATE}>
+                    <TransactionFormPage />
+                  </RequirePermission>
+                } />
+                <Route path="transactions/:id/edit" element={
+                  <RequirePermission resource={RESOURCES.TRANSACTIONS} action={ACTIONS.UPDATE}>
+                    <TransactionFormPage />
+                  </RequirePermission>
+                } />
 
-                <Route path="organizations" element={<OrganizationsListPage />} />
-                <Route path="organizations/new" element={<OrganizationFormPage />} />
-                <Route path="organizations/:id/edit" element={<OrganizationFormPage />} />
-                <Route path="organizations/:id" element={<OrganizationDetailsPage />} />
+                <Route path="subscriptions" element={
+                  <RequirePermission resource={RESOURCES.SUBSCRIPTIONS} action={ACTIONS.READ}>
+                    <SubscriptionsListPage />
+                  </RequirePermission>
+                } />
 
-                <Route path="accounts" element={<AccountsListPage />} />
-                <Route path="accounts/new" element={<AccountFormPage />} />
-                <Route path="accounts/:id/edit" element={<AccountFormPage />} />
+                <Route path="coupons" element={
+                  <RequirePermission resource={RESOURCES.COUPONS} action={ACTIONS.READ}>
+                    <CouponsListPage />
+                  </RequirePermission>
+                } />
+                <Route path="coupons/new" element={
+                  <RequirePermission resource={RESOURCES.COUPONS} action={ACTIONS.CREATE}>
+                    <CouponFormPage />
+                  </RequirePermission>
+                } />
+                <Route path="coupons/:id/edit" element={
+                  <RequirePermission resource={RESOURCES.COUPONS} action={ACTIONS.UPDATE}>
+                    <CouponFormPage />
+                  </RequirePermission>
+                } />
 
-                <Route path="feature-flags" element={<FeatureFlagsPage />} />
-                <Route path="settings" element={<AdminSettingsPage />} />
+                <Route path="organizations" element={
+                  <RequirePermission resource={RESOURCES.ORGANIZATIONS} action={ACTIONS.READ}>
+                    <OrganizationsListPage />
+                  </RequirePermission>
+                } />
+                <Route path="organizations/new" element={
+                  <RequirePermission resource={RESOURCES.ORGANIZATIONS} action={ACTIONS.CREATE}>
+                    <OrganizationFormPage />
+                  </RequirePermission>
+                } />
+                <Route path="organizations/:id/edit" element={
+                  <RequirePermission resource={RESOURCES.ORGANIZATIONS} action={ACTIONS.UPDATE}>
+                    <OrganizationFormPage />
+                  </RequirePermission>
+                } />
+                <Route path="organizations/:id" element={
+                  <RequirePermission resource={RESOURCES.ORGANIZATIONS} action={ACTIONS.READ}>
+                    <OrganizationDetailsPage />
+                  </RequirePermission>
+                } />
+
+                <Route path="accounts" element={
+                  <RequirePermission resource={RESOURCES.ACCOUNTS} action={ACTIONS.READ}>
+                    <AccountsListPage />
+                  </RequirePermission>
+                } />
+                <Route path="accounts/new" element={
+                  <RequirePermission resource={RESOURCES.ACCOUNTS} action={ACTIONS.CREATE}>
+                    <AccountFormPage />
+                  </RequirePermission>
+                } />
+                <Route path="accounts/:id/edit" element={
+                  <RequirePermission resource={RESOURCES.ACCOUNTS} action={ACTIONS.UPDATE}>
+                    <AccountFormPage />
+                  </RequirePermission>
+                } />
+
+                <Route path="feature-flags" element={
+                  <RequirePermission resource={RESOURCES.SETTINGS} action={ACTIONS.MANAGE}>
+                    <FeatureFlagsPage />
+                  </RequirePermission>
+                } />
+                <Route path="settings" element={
+                  <RequirePermission resource={RESOURCES.SETTINGS} action={ACTIONS.READ}>
+                    <AdminSettingsPage />
+                  </RequirePermission>
+                } />
               </Route>
 
               {/* Auth Layout Routes (Auth Flows) */}

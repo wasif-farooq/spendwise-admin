@@ -5,7 +5,6 @@ import {
     ArrowUpRight,
     ArrowDownLeft,
     Download,
-    Eye,
     Plus,
     Edit2,
     Trash2
@@ -29,6 +28,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
 import { ConfirmationModal } from '@/components/ui/ConfirmationModal';
 import { toast } from 'sonner';
+import { PermissionGuard } from '@/components/shared/PermissionGuard';
+import { RESOURCES, ACTIONS } from '@/constants/permissions';
 
 export const TransactionsListPage = () => {
     const {
@@ -85,13 +86,15 @@ export const TransactionsListPage = () => {
                     <Text className="text-gray-500 font-medium">Monitor {totalCount} financial activities across the platform</Text>
                 </Block>
                 <Flex gap={4}>
-                    <Button
-                        className="gap-2 rounded-xl h-[52px]"
-                        onClick={() => navigate('/admin/transactions/new')}
-                    >
-                        <Plus size={18} />
-                        <span className="hidden md:inline">Add Transaction</span>
-                    </Button>
+                    <PermissionGuard resource={RESOURCES.TRANSACTIONS} action={ACTIONS.CREATE}>
+                        <Button
+                            className="gap-2 rounded-xl h-[52px]"
+                            onClick={() => navigate('/admin/transactions/new')}
+                        >
+                            <Plus size={18} />
+                            <span className="hidden md:inline">Add Transaction</span>
+                        </Button>
+                    </PermissionGuard>
                 </Flex>
             </Flex>
 
@@ -225,22 +228,26 @@ export const TransactionsListPage = () => {
                                     </TableCell>
                                     <TableCell className="text-right pr-6">
                                         <Flex justify="end" gap={2}>
-                                            <Button
-                                                variant="ghost"
-                                                size="sm"
-                                                className="text-gray-400 hover:text-blue-600 hover:bg-blue-50"
-                                                onClick={() => navigate(`/admin/transactions/${transaction.id}/edit`)}
-                                            >
-                                                <Edit2 size={16} />
-                                            </Button>
-                                            <Button
-                                                variant="ghost"
-                                                size="sm"
-                                                className="text-gray-400 hover:text-red-600 hover:bg-red-50"
-                                                onClick={() => setDeleteId(transaction.id)}
-                                            >
-                                                <Trash2 size={16} />
-                                            </Button>
+                                            <PermissionGuard resource={RESOURCES.TRANSACTIONS} action={ACTIONS.UPDATE}>
+                                                <Button
+                                                    variant="ghost"
+                                                    size="sm"
+                                                    className="text-gray-400 hover:text-blue-600 hover:bg-blue-50"
+                                                    onClick={() => navigate(`/admin/transactions/${transaction.id}/edit`)}
+                                                >
+                                                    <Edit2 size={16} />
+                                                </Button>
+                                            </PermissionGuard>
+                                            <PermissionGuard resource={RESOURCES.TRANSACTIONS} action={ACTIONS.DELETE}>
+                                                <Button
+                                                    variant="ghost"
+                                                    size="sm"
+                                                    className="text-gray-400 hover:text-red-600 hover:bg-red-50"
+                                                    onClick={() => setDeleteId(transaction.id)}
+                                                >
+                                                    <Trash2 size={16} />
+                                                </Button>
+                                            </PermissionGuard>
                                         </Flex>
                                     </TableCell>
                                 </motion.tr>

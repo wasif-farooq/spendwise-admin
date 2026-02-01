@@ -6,6 +6,7 @@ import Input from '@/components/ui/Input';
 import { Card } from '@/components/ui/Card';
 import { CustomSelect } from '@/components/ui/CustomSelect';
 import { useRoleForm } from '@/hooks/features/admin/useRoleForm';
+import { RESOURCES, ACTIONS } from '@/constants/permissions';
 
 export const RoleFormPage = () => {
     const { id } = useParams();
@@ -55,7 +56,7 @@ export const RoleFormPage = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <CustomSelect
                             label="Color Theme"
-                            value={formData.color}
+                            value={formData.color || ''}
                             onChange={(val) => handleChange('color', val)}
                             options={[
                                 { label: 'Blue', value: 'from-blue-500 to-blue-600' },
@@ -69,7 +70,7 @@ export const RoleFormPage = () => {
 
                         <CustomSelect
                             label="Icon"
-                            value={formData.iconName}
+                            value={formData.iconName || ''}
                             onChange={(val) => handleChange('iconName', val)}
                             options={[
                                 { label: 'Shield', value: 'Shield' },
@@ -84,6 +85,45 @@ export const RoleFormPage = () => {
                             ]}
                         />
                     </div>
+
+                    <Block className="bg-gray-50 p-6 rounded-2xl border border-gray-100">
+                        <Text className="font-semibold text-gray-900 mb-4 block">Permissions</Text>
+                        <Block className="space-y-4">
+                            {Object.values(RESOURCES).map((resource) => (
+                                <Block key={resource} className="bg-white p-4 rounded-xl border border-gray-100">
+                                    <Text className="font-medium text-gray-800 mb-3 capitalize">{resource.replace('_', ' ')} Management</Text>
+                                    <Flex gap={4} className="flex-wrap">
+                                        {Object.values(ACTIONS).map((action) => (
+                                            <label key={`${resource}-${action}`} className="flex items-center gap-2 cursor-pointer p-2 hover:bg-gray-50 rounded-lg transition-colors">
+                                                <input
+                                                    type="checkbox"
+                                                    className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary"
+                                                    checked={formData.permissions?.[resource]?.includes(action) || false}
+                                                    onChange={(e) => {
+                                                        const currentPermissions = formData.permissions || {};
+                                                        const resourcePermissions = currentPermissions[resource] || [];
+
+                                                        let newResourcePermissions;
+                                                        if (e.target.checked) {
+                                                            newResourcePermissions = [...resourcePermissions, action];
+                                                        } else {
+                                                            newResourcePermissions = resourcePermissions.filter(p => p !== action);
+                                                        }
+
+                                                        handleChange('permissions', {
+                                                            ...currentPermissions,
+                                                            [resource]: newResourcePermissions
+                                                        });
+                                                    }}
+                                                />
+                                                <span className="text-sm text-gray-600 capitalize">{action}</span>
+                                            </label>
+                                        ))}
+                                    </Flex>
+                                </Block>
+                            ))}
+                        </Block>
+                    </Block>
 
                     <Flex justify="end" gap={3} className="pt-4 border-t border-gray-100 mt-6">
                         <Button

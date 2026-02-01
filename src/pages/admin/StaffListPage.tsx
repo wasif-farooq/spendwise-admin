@@ -1,9 +1,7 @@
-import { useNavigate } from 'react-router-dom';
 import {
     Search,
     UserPlus,
     XCircle,
-    MoreVertical,
     Mail,
     Shield,
     Edit2,
@@ -27,6 +25,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
 import { ConfirmationModal } from '@/components/ui/ConfirmationModal';
 import { toast } from 'sonner';
+import { PermissionGuard } from '@/components/shared/PermissionGuard';
+import { RESOURCES, ACTIONS } from '@/constants/permissions';
 
 export const StaffListPage = () => {
     const {
@@ -82,13 +82,15 @@ export const StaffListPage = () => {
                     <Text as="h1" className="text-3xl font-black text-gray-900 tracking-tight">Staff Management</Text>
                     <Text className="text-gray-500 font-medium">Manage internal team members and their access</Text>
                 </Block>
-                <Button
-                    className="gap-2 rounded-xl"
-                    onClick={() => navigate('/admin/staff/new')}
-                >
-                    <UserPlus size={18} />
-                    Invite Staff
-                </Button>
+                <PermissionGuard resource={RESOURCES.STAFF} action={ACTIONS.CREATE}>
+                    <Button
+                        className="gap-2 rounded-xl"
+                        onClick={() => navigate('/admin/staff/new')}
+                    >
+                        <UserPlus size={18} />
+                        Invite Staff
+                    </Button>
+                </PermissionGuard>
             </Flex>
 
             {/* Filters Row */}
@@ -175,21 +177,25 @@ export const StaffListPage = () => {
                                         </TableCell>
                                         <TableCell className="text-right">
                                             <Flex justify="end" gap={2}>
-                                                <Button
-                                                    variant="ghost"
-                                                    size="sm"
-                                                    onClick={() => navigate(`/admin/staff/${member.id}/edit`)}
-                                                >
-                                                    <Edit2 size={16} className="text-gray-500" />
-                                                </Button>
-                                                <Button
-                                                    variant="ghost"
-                                                    size="sm"
-                                                    className="text-red-500 hover:bg-red-50"
-                                                    onClick={() => setDeleteId(member.id.toString())}
-                                                >
-                                                    <Trash2 size={16} />
-                                                </Button>
+                                                <PermissionGuard resource={RESOURCES.STAFF} action={ACTIONS.UPDATE}>
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        onClick={() => navigate(`/admin/staff/${member.id}/edit`)}
+                                                    >
+                                                        <Edit2 size={16} className="text-gray-500" />
+                                                    </Button>
+                                                </PermissionGuard>
+                                                <PermissionGuard resource={RESOURCES.STAFF} action={ACTIONS.DELETE}>
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        className="text-red-500 hover:bg-red-50"
+                                                        onClick={() => setDeleteId(member.id.toString())}
+                                                    >
+                                                        <Trash2 size={16} />
+                                                    </Button>
+                                                </PermissionGuard>
                                             </Flex>
                                         </TableCell>
                                     </motion.tr>

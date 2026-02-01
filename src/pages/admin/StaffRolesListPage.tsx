@@ -24,6 +24,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
 import { ConfirmationModal } from '@/components/ui/ConfirmationModal';
 import { toast } from 'sonner';
+import { PermissionGuard } from '@/components/shared/PermissionGuard';
+import { RESOURCES, ACTIONS } from '@/constants/permissions';
 
 export const StaffRolesListPage = () => {
     const {
@@ -75,13 +77,15 @@ export const StaffRolesListPage = () => {
                     <Text as="h1" className="text-3xl font-black text-gray-900 tracking-tight">Staff Roles & Permissions</Text>
                     <Text className="text-gray-500 font-medium">Manage access levels for internal staff</Text>
                 </Block>
-                <Button
-                    className="gap-2 rounded-xl"
-                    onClick={() => navigate('/admin/staff-roles/new')}
-                >
-                    <Plus size={18} />
-                    Create Staff Role
-                </Button>
+                <PermissionGuard resource={RESOURCES.STAFF_ROLES} action={ACTIONS.CREATE}>
+                    <Button
+                        className="gap-2 rounded-xl"
+                        onClick={() => navigate('/admin/staff-roles/new')}
+                    >
+                        <Plus size={18} />
+                        Create Staff Role
+                    </Button>
+                </PermissionGuard>
             </Flex>
 
             {/* Filters Row */}
@@ -149,30 +153,34 @@ export const StaffRolesListPage = () => {
                                                     System Locked
                                                 </Badge>
                                             ) : (
-                                                <Badge variant="outline" className="text-blue-600 bg-blue-50 border-blue-100">
+                                                <Badge variant="secondary" className="text-blue-600 bg-blue-50 border-blue-100">
                                                     Custom Role
                                                 </Badge>
                                             )}
                                         </TableCell>
                                         <TableCell className="text-right">
                                             <Flex align="center" justify="end" gap={2}>
-                                                <Button
-                                                    variant="ghost"
-                                                    size="sm"
-                                                    className="h-8 w-8 p-0 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg"
-                                                    onClick={() => navigate(`/admin/staff-roles/${role.id}/edit`)}
-                                                >
-                                                    <Edit3 className="h-4 w-4" />
-                                                </Button>
-                                                {!role.isDefault && (
+                                                <PermissionGuard resource={RESOURCES.STAFF_ROLES} action={ACTIONS.UPDATE}>
                                                     <Button
                                                         variant="ghost"
                                                         size="sm"
-                                                        className="h-8 w-8 p-0 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg"
-                                                        onClick={() => setDeleteId(role.id)}
+                                                        className="h-8 w-8 p-0 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg"
+                                                        onClick={() => navigate(`/admin/staff-roles/${role.id}/edit`)}
                                                     >
-                                                        <Trash2 className="h-4 w-4" />
+                                                        <Edit3 className="h-4 w-4" />
                                                     </Button>
+                                                </PermissionGuard>
+                                                {!role.isDefault && (
+                                                    <PermissionGuard resource={RESOURCES.STAFF_ROLES} action={ACTIONS.DELETE}>
+                                                        <Button
+                                                            variant="ghost"
+                                                            size="sm"
+                                                            className="h-8 w-8 p-0 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg"
+                                                            onClick={() => setDeleteId(role.id)}
+                                                        >
+                                                            <Trash2 className="h-4 w-4" />
+                                                        </Button>
+                                                    </PermissionGuard>
                                                 )}
                                             </Flex>
                                         </TableCell>
@@ -184,7 +192,7 @@ export const StaffRolesListPage = () => {
                                         <Flex direction="col" align="center" gap={2}>
                                             <XCircle className="h-8 w-8 text-gray-300" />
                                             <Text>No roles found matching "{searchQuery}"</Text>
-                                            <Button variant="link" onClick={clearFilters} className="text-primary">
+                                            <Button variant="ghost" onClick={clearFilters} className="text-primary hover:bg-primary/5">
                                                 Clear filters
                                             </Button>
                                         </Flex>

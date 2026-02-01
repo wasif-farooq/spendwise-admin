@@ -14,7 +14,8 @@ export const useRoleForm = (id?: string) => {
         description: '',
         color: 'from-blue-500 to-blue-600',
         iconName: 'Shield',
-        isDefault: false
+        isDefault: false,
+        permissions: {}
     });
     const [loading, setLoading] = useState(false);
 
@@ -30,7 +31,8 @@ export const useRoleForm = (id?: string) => {
                             description: role.description,
                             color: role.color,
                             iconName: role.iconName,
-                            isDefault: role.isDefault
+                            isDefault: role.isDefault,
+                            permissions: role.permissions || {}
                         });
                     }
                 }

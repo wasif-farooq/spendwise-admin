@@ -24,6 +24,8 @@ import { useAppSelector } from '@/store/redux';
 import { useToggle } from '@/hooks/useToggle';
 import { selectUser, selectIsInitialized } from '@/store/slices/authSlice';
 import { useEffect } from 'react';
+import { usePermissions } from '@/hooks/usePermissions';
+import { RESOURCES, ACTIONS } from '@/constants/permissions';
 
 export const AdminLayout = () => {
     const { value: isSidebarOpen, toggle: toggleSidebar } = useToggle(true);
@@ -39,46 +41,56 @@ export const AdminLayout = () => {
         }
     }, [user, isInitialized, navigate]);
 
+    const { hasPermission } = usePermissions();
+
     const navGroups = [
         {
             title: 'Overview',
             items: [
-                { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
+                { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard, resource: null, action: null },
             ]
         },
         {
             title: 'Management',
             items: [
-                { name: 'Users', path: '/users', icon: Users },
-                { name: 'Roles', path: '/roles', icon: ShieldCheck },
-                { name: 'Members', path: '/members', icon: User },
-                { name: 'Organizations', path: '/organizations', icon: Building2 },
-                { name: 'Accounts', path: '/accounts', icon: Wallet },
+                { name: 'Users', path: '/users', icon: Users, resource: RESOURCES.USERS, action: ACTIONS.READ },
+                { name: 'Roles', path: '/roles', icon: ShieldCheck, resource: RESOURCES.STAFF_ROLES, action: ACTIONS.READ },
+                { name: 'Members', path: '/members', icon: User, resource: RESOURCES.STAFF, action: ACTIONS.READ },
+                { name: 'Organizations', path: '/organizations', icon: Building2, resource: RESOURCES.ORGANIZATIONS, action: ACTIONS.READ },
+                { name: 'Accounts', path: '/accounts', icon: Wallet, resource: RESOURCES.ACCOUNTS, action: ACTIONS.READ },
             ]
         },
         {
             title: 'Staff',
             items: [
-                { name: 'Staff', path: '/staff', icon: Shield },
-                { name: 'Staff Roles', path: '/staff-roles', icon: Lock },
+                { name: 'Staff', path: '/staff', icon: Shield, resource: RESOURCES.STAFF, action: ACTIONS.READ },
+                { name: 'Staff Roles', path: '/staff-roles', icon: Lock, resource: RESOURCES.STAFF_ROLES, action: ACTIONS.READ },
             ]
         },
         {
             title: 'Commerce',
             items: [
-                { name: 'Transactions', path: '/transactions', icon: Wallet },
-                { name: 'Subscriptions', path: '/subscriptions', icon: CreditCard },
-                { name: 'Coupons', path: '/coupons', icon: Ticket },
+                { name: 'Transactions', path: '/transactions', icon: Wallet, resource: RESOURCES.TRANSACTIONS, action: ACTIONS.READ },
+                { name: 'Subscriptions', path: '/subscriptions', icon: CreditCard, resource: RESOURCES.SUBSCRIPTIONS, action: ACTIONS.READ },
+                { name: 'Coupons', path: '/coupons', icon: Ticket, resource: RESOURCES.COUPONS, action: ACTIONS.READ },
             ]
         },
         {
             title: 'System',
             items: [
-                { name: 'Feature Flags', path: '/feature-flags', icon: Flag },
-                { name: 'Settings', path: '/settings', icon: Settings },
+                { name: 'Feature Flags', path: '/feature-flags', icon: Flag, resource: 'feature_flags', action: ACTIONS.READ },
+                { name: 'Settings', path: '/settings', icon: Settings, resource: RESOURCES.SETTINGS, action: ACTIONS.READ },
             ]
         }
     ];
+
+    const filteredNavGroups = navGroups.map(group => ({
+        ...group,
+        items: group.items.filter(item => {
+            if (!item.resource) return true;
+            return hasPermission(item.resource as any, item.action as any);
+        })
+    })).filter(group => group.items.length > 0);
 
     const handleLogout = () => {
         navigate('/login');
@@ -116,7 +128,7 @@ export const AdminLayout = () => {
             </Flex>
 
             <Block as="nav" className="flex-grow px-4 space-y-4 mt-4 overflow-y-auto custom-scrollbar pb-6">
-                {navGroups.map((group, groupIndex) => (
+                {filteredNavGroups.map((group, groupIndex) => (
                     <Block key={group.title} className="space-y-1">
                         {isSidebarOpen ? (
                             <Text className="text-xs font-bold text-gray-500 uppercase tracking-wider px-4 mb-2">

@@ -29,6 +29,8 @@ import { useUsersList } from '@/hooks/features/admin/useUsersList';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
 import { ConfirmationModal } from '@/components/ui/ConfirmationModal';
+import { PermissionGuard } from '@/components/shared/PermissionGuard';
+import { RESOURCES, ACTIONS } from '@/constants/permissions';
 
 export const UsersListPage = () => {
     const {
@@ -93,10 +95,12 @@ export const UsersListPage = () => {
                 <Text as="h1" className="text-3xl font-black text-gray-900 tracking-tight">Users Management</Text>
                 <Flex justify="between" align="center">
                     <Text className="text-gray-500 font-medium">Manage {totalCount} registered users across the platform</Text>
-                    <Button className="gap-2" onClick={() => navigate('/users/new')}>
-                        <UserCheck size={18} />
-                        Add User
-                    </Button>
+                    <PermissionGuard resource={RESOURCES.USERS} action={ACTIONS.CREATE}>
+                        <Button className="gap-2" onClick={() => navigate('/users/new')}>
+                            <UserCheck size={18} />
+                            Add User
+                        </Button>
+                    </PermissionGuard>
                 </Flex>
             </Block>
 
@@ -216,33 +220,37 @@ export const UsersListPage = () => {
                                     </TableCell>
                                     <TableCell className="text-right pr-6">
                                         <Flex justify="end" gap={2}>
-                                            <Button
-                                                variant="ghost"
-                                                size="sm"
-                                                onClick={() => handleToggleStatus(user.id)}
-                                                title={user.status === 'active' ? 'Suspend' : 'Activate'}
-                                                className={user.status === 'active' ? 'text-gray-400 hover:text-red-500 hover:bg-red-50' : 'text-gray-400 hover:text-green-500 hover:bg-green-50'}
-                                            >
-                                                {user.status === 'active' ? <UserX size={16} /> : <UserCheck size={16} />}
-                                            </Button>
-                                            <Button
-                                                variant="ghost"
-                                                size="sm"
-                                                className="text-gray-400 hover:text-blue-600 hover:bg-blue-50"
-                                                onClick={() => navigate(`/users/${user.id}/edit`)}
-                                                title="Edit"
-                                            >
-                                                <Edit2 size={16} />
-                                            </Button>
-                                            <Button
-                                                variant="ghost"
-                                                size="sm"
-                                                className="text-gray-400 hover:text-red-600 hover:bg-red-50"
-                                                onClick={() => setDeleteId(user.id)}
-                                                title="Delete"
-                                            >
-                                                <Trash2 size={16} />
-                                            </Button>
+                                            <PermissionGuard resource={RESOURCES.USERS} action={ACTIONS.UPDATE}>
+                                                <Button
+                                                    variant="ghost"
+                                                    size="sm"
+                                                    onClick={() => handleToggleStatus(user.id)}
+                                                    title={user.status === 'active' ? 'Suspend' : 'Activate'}
+                                                    className={user.status === 'active' ? 'text-gray-400 hover:text-red-500 hover:bg-red-50' : 'text-gray-400 hover:text-green-500 hover:bg-green-50'}
+                                                >
+                                                    {user.status === 'active' ? <UserX size={16} /> : <UserCheck size={16} />}
+                                                </Button>
+                                                <Button
+                                                    variant="ghost"
+                                                    size="sm"
+                                                    className="text-gray-400 hover:text-blue-600 hover:bg-blue-50"
+                                                    onClick={() => navigate(`/users/${user.id}/edit`)}
+                                                    title="Edit"
+                                                >
+                                                    <Edit2 size={16} />
+                                                </Button>
+                                            </PermissionGuard>
+                                            <PermissionGuard resource={RESOURCES.USERS} action={ACTIONS.DELETE}>
+                                                <Button
+                                                    variant="ghost"
+                                                    size="sm"
+                                                    className="text-gray-400 hover:text-red-600 hover:bg-red-50"
+                                                    onClick={() => setDeleteId(user.id)}
+                                                    title="Delete"
+                                                >
+                                                    <Trash2 size={16} />
+                                                </Button>
+                                            </PermissionGuard>
                                             <Button
                                                 variant="ghost"
                                                 size="sm"

@@ -27,6 +27,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
 import { ConfirmationModal } from '@/components/ui/ConfirmationModal';
 import { toast } from 'sonner';
+import { PermissionGuard } from '@/components/shared/PermissionGuard';
+import { RESOURCES, ACTIONS } from '@/constants/permissions';
 
 export const CouponsListPage = () => {
     const {
@@ -92,13 +94,15 @@ export const CouponsListPage = () => {
                     <Text as="h1" className="text-3xl font-black text-gray-900 tracking-tight">Coupons</Text>
                     <Text className="text-gray-500 font-medium">Manage {totalCount} discount codes</Text>
                 </Block>
-                <Button
-                    className="gap-2 rounded-xl"
-                    onClick={() => navigate('/admin/coupons/new')}
-                >
-                    <Plus size={18} />
-                    Create Coupon
-                </Button>
+                <PermissionGuard resource={RESOURCES.COUPONS} action={ACTIONS.CREATE}>
+                    <Button
+                        className="gap-2 rounded-xl"
+                        onClick={() => navigate('/admin/coupons/new')}
+                    >
+                        <Plus size={18} />
+                        Create Coupon
+                    </Button>
+                </PermissionGuard>
             </Flex>
 
             <Block className="bg-white p-4 rounded-3xl shadow-sm border border-gray-100 space-y-4">
@@ -231,24 +235,28 @@ export const CouponsListPage = () => {
                                             >
                                                 <Copy size={16} />
                                             </Button>
-                                            <Button
-                                                variant="ghost"
-                                                size="sm"
-                                                className="text-gray-400 hover:text-blue-600 hover:bg-blue-50"
-                                                onClick={() => navigate(`/admin/coupons/${coupon.id}/edit`)}
-                                                title="Edit"
-                                            >
-                                                <Edit2 size={16} />
-                                            </Button>
-                                            <Button
-                                                variant="ghost"
-                                                size="sm"
-                                                className="text-gray-400 hover:text-red-500 hover:bg-red-50"
-                                                onClick={() => setDeleteId(coupon.id)}
-                                                title="Delete"
-                                            >
-                                                <Trash2 size={16} />
-                                            </Button>
+                                            <PermissionGuard resource={RESOURCES.COUPONS} action={ACTIONS.UPDATE}>
+                                                <Button
+                                                    variant="ghost"
+                                                    size="sm"
+                                                    className="text-gray-400 hover:text-blue-600 hover:bg-blue-50"
+                                                    onClick={() => navigate(`/admin/coupons/${coupon.id}/edit`)}
+                                                    title="Edit"
+                                                >
+                                                    <Edit2 size={16} />
+                                                </Button>
+                                            </PermissionGuard>
+                                            <PermissionGuard resource={RESOURCES.COUPONS} action={ACTIONS.DELETE}>
+                                                <Button
+                                                    variant="ghost"
+                                                    size="sm"
+                                                    className="text-gray-400 hover:text-red-500 hover:bg-red-50"
+                                                    onClick={() => setDeleteId(coupon.id)}
+                                                    title="Delete"
+                                                >
+                                                    <Trash2 size={16} />
+                                                </Button>
+                                            </PermissionGuard>
                                         </Flex>
                                     </TableCell>
                                 </motion.tr>

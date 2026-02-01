@@ -1,7 +1,6 @@
 import {
     Wallet,
     Building2,
-    MoreVertical,
     AlertCircle,
     Search,
     Filter,
@@ -29,6 +28,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
 import { ConfirmationModal } from '@/components/ui/ConfirmationModal';
 import { toast } from 'sonner';
+import { PermissionGuard } from '@/components/shared/PermissionGuard';
+import { RESOURCES, ACTIONS } from '@/constants/permissions';
 
 export const AccountsListPage = () => {
     const {
@@ -108,13 +109,15 @@ export const AccountsListPage = () => {
                             <Text className="font-bold text-xl text-red-600">${totalLiability.toLocaleString()}</Text>
                         </Block>
                     </Block>
-                    <Button
-                        className="gap-2 rounded-xl h-[88px]"
-                        onClick={() => navigate('/admin/accounts/new')}
-                    >
-                        <Plus size={18} />
-                        <span className="hidden md:inline">Add Account</span>
-                    </Button>
+                    <PermissionGuard resource={RESOURCES.ACCOUNTS} action={ACTIONS.CREATE}>
+                        <Button
+                            className="gap-2 rounded-xl h-[88px]"
+                            onClick={() => navigate('/admin/accounts/new')}
+                        >
+                            <Plus size={18} />
+                            <span className="hidden md:inline">Add Account</span>
+                        </Button>
+                    </PermissionGuard>
                 </Flex>
             </Flex>
 
@@ -259,31 +262,35 @@ export const AccountsListPage = () => {
                                     </TableCell>
                                     <TableCell className="text-right pr-6">
                                         <Flex justify="end" gap={2}>
-                                            <Button
-                                                variant="ghost"
-                                                size="sm"
-                                                onClick={() => handleFlagAccount(account.id)}
-                                                title="Flag Account"
-                                                className={account.status === 'flagged' ? 'text-orange-500 bg-orange-50' : 'text-gray-400'}
-                                            >
-                                                <AlertCircle size={16} />
-                                            </Button>
-                                            <Button
-                                                variant="ghost"
-                                                size="sm"
-                                                className="text-gray-400 hover:text-blue-600 hover:bg-blue-50"
-                                                onClick={() => navigate(`/admin/accounts/${account.id}/edit`)}
-                                            >
-                                                <Edit2 size={16} />
-                                            </Button>
-                                            <Button
-                                                variant="ghost"
-                                                size="sm"
-                                                className="text-gray-400 hover:text-red-600 hover:bg-red-50"
-                                                onClick={() => setDeleteId(account.id)}
-                                            >
-                                                <Trash2 size={16} />
-                                            </Button>
+                                            <PermissionGuard resource={RESOURCES.ACCOUNTS} action={ACTIONS.UPDATE}>
+                                                <Button
+                                                    variant="ghost"
+                                                    size="sm"
+                                                    onClick={() => handleFlagAccount(account.id)}
+                                                    title="Flag Account"
+                                                    className={account.status === 'flagged' ? 'text-orange-500 bg-orange-50' : 'text-gray-400'}
+                                                >
+                                                    <AlertCircle size={16} />
+                                                </Button>
+                                                <Button
+                                                    variant="ghost"
+                                                    size="sm"
+                                                    className="text-gray-400 hover:text-blue-600 hover:bg-blue-50"
+                                                    onClick={() => navigate(`/admin/accounts/${account.id}/edit`)}
+                                                >
+                                                    <Edit2 size={16} />
+                                                </Button>
+                                            </PermissionGuard>
+                                            <PermissionGuard resource={RESOURCES.ACCOUNTS} action={ACTIONS.DELETE}>
+                                                <Button
+                                                    variant="ghost"
+                                                    size="sm"
+                                                    className="text-gray-400 hover:text-red-600 hover:bg-red-50"
+                                                    onClick={() => setDeleteId(account.id)}
+                                                >
+                                                    <Trash2 size={16} />
+                                                </Button>
+                                            </PermissionGuard>
                                         </Flex>
                                     </TableCell>
                                 </motion.tr>

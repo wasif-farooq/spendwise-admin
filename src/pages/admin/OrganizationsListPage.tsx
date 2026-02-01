@@ -2,7 +2,6 @@ import {
     Building2,
     Users,
     CreditCard,
-    MoreVertical,
     Lock,
     Unlock,
     Search,
@@ -31,6 +30,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
 import { ConfirmationModal } from '@/components/ui/ConfirmationModal';
 import { toast } from 'sonner';
+import { PermissionGuard } from '@/components/shared/PermissionGuard';
+import { RESOURCES, ACTIONS } from '@/constants/permissions';
 
 export const OrganizationsListPage = () => {
     const {
@@ -98,13 +99,15 @@ export const OrganizationsListPage = () => {
                     <Text as="h1" className="text-3xl font-black text-gray-900 tracking-tight">Organizations Management</Text>
                     <Text className="text-gray-500 font-medium">Oversee {totalCount} active organizations</Text>
                 </Block>
-                <Button
-                    className="gap-2 rounded-xl"
-                    onClick={() => navigate('/admin/organizations/new')}
-                >
-                    <Plus size={18} />
-                    Add Organization
-                </Button>
+                <PermissionGuard resource={RESOURCES.ORGANIZATIONS} action={ACTIONS.CREATE}>
+                    <Button
+                        className="gap-2 rounded-xl"
+                        onClick={() => navigate('/admin/organizations/new')}
+                    >
+                        <Plus size={18} />
+                        Add Organization
+                    </Button>
+                </PermissionGuard>
             </Flex>
 
             <Block className="bg-white p-4 rounded-3xl shadow-sm border border-gray-100 space-y-4">
@@ -231,31 +234,35 @@ export const OrganizationsListPage = () => {
                                     </TableCell>
                                     <TableCell className="text-right pr-6">
                                         <Flex justify="end" gap={2}>
-                                            <Button
-                                                variant="ghost"
-                                                size="sm"
-                                                onClick={() => handleToggleStatus(org.id)}
-                                                title={org.status === 'active' ? 'Suspend' : 'Activate'}
-                                                className={org.status === 'active' ? 'text-gray-400 hover:text-red-500 hover:bg-red-50' : 'text-gray-400 hover:text-green-500 hover:bg-green-50'}
-                                            >
-                                                {org.status === 'active' ? <Lock size={16} /> : <Unlock size={16} />}
-                                            </Button>
-                                            <Button
-                                                variant="ghost"
-                                                size="sm"
-                                                className="text-gray-400 hover:text-blue-600 hover:bg-blue-50"
-                                                onClick={() => navigate(`/admin/organizations/${org.id}/edit`)}
-                                            >
-                                                <Edit2 size={16} />
-                                            </Button>
-                                            <Button
-                                                variant="ghost"
-                                                size="sm"
-                                                className="text-gray-400 hover:text-red-600 hover:bg-red-50"
-                                                onClick={() => setDeleteId(org.id)}
-                                            >
-                                                <Trash2 size={16} />
-                                            </Button>
+                                            <PermissionGuard resource={RESOURCES.ORGANIZATIONS} action={ACTIONS.UPDATE}>
+                                                <Button
+                                                    variant="ghost"
+                                                    size="sm"
+                                                    onClick={() => handleToggleStatus(org.id)}
+                                                    title={org.status === 'active' ? 'Suspend' : 'Activate'}
+                                                    className={org.status === 'active' ? 'text-gray-400 hover:text-red-500 hover:bg-red-50' : 'text-gray-400 hover:text-green-500 hover:bg-green-50'}
+                                                >
+                                                    {org.status === 'active' ? <Lock size={16} /> : <Unlock size={16} />}
+                                                </Button>
+                                                <Button
+                                                    variant="ghost"
+                                                    size="sm"
+                                                    className="text-gray-400 hover:text-blue-600 hover:bg-blue-50"
+                                                    onClick={() => navigate(`/admin/organizations/${org.id}/edit`)}
+                                                >
+                                                    <Edit2 size={16} />
+                                                </Button>
+                                            </PermissionGuard>
+                                            <PermissionGuard resource={RESOURCES.ORGANIZATIONS} action={ACTIONS.DELETE}>
+                                                <Button
+                                                    variant="ghost"
+                                                    size="sm"
+                                                    className="text-gray-400 hover:text-red-600 hover:bg-red-50"
+                                                    onClick={() => setDeleteId(org.id)}
+                                                >
+                                                    <Trash2 size={16} />
+                                                </Button>
+                                            </PermissionGuard>
                                         </Flex>
                                     </TableCell>
                                 </motion.tr>

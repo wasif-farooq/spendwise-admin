@@ -1,34 +1,49 @@
 import { useAppSelector } from '@/store/redux';
 import { selectUser } from '@/store/slices/authSlice';
+import type { Resource, Action } from '@/constants/permissions';
+import { ACTIONS } from '@/constants/permissions';
 
 export const usePermissions = () => {
     const user = useAppSelector(selectUser);
 
-    const hasPermission = (permission: string): boolean => {
+    const hasPermission = (resource: Resource, action: Action): boolean => {
         if (!user) return false;
 
-        // Admin role has all permissions
-        if (user.role === 'admin' || user.permissions?.includes('*')) {
+        // Super Admin or Admin has all permissions
+        if (user.role === 'admin' || user.role === 'SUPER_ADMIN') {
             return true;
         }
 
-        return user.permissions?.includes(permission) || false;
-    };
+        if (!user.permissions) return false;
 
-    const hasAnyPermission = (permissions: string[]): boolean => {
-        return permissions.some(p => hasPermission(p));
-    };
+        // Check for specific permission "resource:action"
+        if (user.permissions.includes(`${resource}:${action}`)) {
+            return true;
+        }
 
-    const hasAllPermissions = (permissions: string[]): boolean => {
-        return permissions.every(p => hasPermission(p));
+        // Check for manage permission "resource:manage"
+        if (user.permissions.includes(`${resource}:${ACTIONS.MANAGE}`)) {
+            return true;
+        }
+
+        // Check for wildcard permission "resource:*"
+        if (user.permissions.includes(`${resource}:*`)) {
+            return true;
+        }
+
+        // Check for global wildcard "*"
+        if (user.permissions.includes('*')) {
+            return true;
+        }
+
+        return false;
     };
 
     return {
         hasPermission,
-        hasAnyPermission,
-        hasAllPermissions,
+        user,
         role: user?.role,
-        isAdmin: user?.role === 'admin',
+        isAdmin: user?.role === 'admin' || user?.role === 'SUPER_ADMIN',
         isStaff: user?.role === 'staff',
     };
 };
