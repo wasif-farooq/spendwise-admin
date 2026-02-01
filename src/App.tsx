@@ -25,6 +25,9 @@ import { RoleDetailsPage } from './pages/admin/RoleDetailsPage';
 import { TransactionsListPage } from './pages/admin/TransactionsListPage';
 import { SubscriptionsListPage } from './pages/admin/SubscriptionsListPage';
 import { CouponsListPage } from './pages/admin/CouponsListPage';
+import { StaffListPage } from './pages/admin/StaffListPage';
+import { StaffRolesListPage } from './pages/admin/StaffRolesListPage';
+import { StaffRoleDetailsPage } from './pages/admin/StaffRoleDetailsPage';
 
 import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from './store/redux';
@@ -64,11 +67,19 @@ function App() {
                 <Route path="dashboard" element={<AdminDashboard />} />
                 <Route path="users" element={<UsersListPage />} />
                 <Route path="users/:id" element={<UserDetailDashboard />} />
+
+
                 <Route path="members" element={<MembersListPage />} />
                 <Route path="members/:id" element={<MemberDetailsPage />} />
                 <Route path="roles" element={<RolesListPage />} />
                 <Route path="roles/new" element={<RoleDetailsPage />} />
                 <Route path="roles/:id" element={<RoleDetailsPage />} />
+
+                {/* Staff Management Routes */}
+                <Route path="staff" element={<StaffListPage />} />
+                <Route path="staff-roles" element={<StaffRolesListPage />} />
+                <Route path="staff-roles/new" element={<StaffRoleDetailsPage />} />
+                <Route path="staff-roles/:id" element={<StaffRoleDetailsPage />} />
                 <Route path="transactions" element={<TransactionsListPage />} />
                 <Route path="subscriptions" element={<SubscriptionsListPage />} />
                 <Route path="coupons" element={<CouponsListPage />} />

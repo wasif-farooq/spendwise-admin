@@ -13,7 +13,9 @@ import {
     User,
     ShieldCheck,
     CreditCard,
-    Ticket
+    Ticket,
+    Shield,
+    Lock
 } from 'lucide-react';
 import { useLayout } from '@/context/LayoutContext';
 import Button from '@/components/ui/Button';
@@ -37,18 +39,45 @@ export const AdminLayout = () => {
         }
     }, [user, isInitialized, navigate]);
 
-    const navItems = [
-        { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
-        { name: 'Transactions', path: '/transactions', icon: Wallet },
-        { name: 'Subscriptions', path: '/subscriptions', icon: CreditCard },
-        { name: 'Coupons', path: '/coupons', icon: Ticket },
-        { name: 'Users', path: '/users', icon: Users },
-        { name: 'Roles', path: '/roles', icon: ShieldCheck },
-        { name: 'Members', path: '/members', icon: User },
-        { name: 'Organizations', path: '/organizations', icon: Building2 },
-        { name: 'Accounts', path: '/accounts', icon: Wallet },
-        { name: 'Feature Flags', path: '/feature-flags', icon: Flag },
-        { name: 'Settings', path: '/settings', icon: Settings },
+    const navGroups = [
+        {
+            title: 'Overview',
+            items: [
+                { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
+            ]
+        },
+        {
+            title: 'Management',
+            items: [
+                { name: 'Users', path: '/users', icon: Users },
+                { name: 'Roles', path: '/roles', icon: ShieldCheck },
+                { name: 'Members', path: '/members', icon: User },
+                { name: 'Organizations', path: '/organizations', icon: Building2 },
+                { name: 'Accounts', path: '/accounts', icon: Wallet },
+            ]
+        },
+        {
+            title: 'Staff',
+            items: [
+                { name: 'Staff', path: '/staff', icon: Shield },
+                { name: 'Staff Roles', path: '/staff-roles', icon: Lock },
+            ]
+        },
+        {
+            title: 'Commerce',
+            items: [
+                { name: 'Transactions', path: '/transactions', icon: Wallet },
+                { name: 'Subscriptions', path: '/subscriptions', icon: CreditCard },
+                { name: 'Coupons', path: '/coupons', icon: Ticket },
+            ]
+        },
+        {
+            title: 'System',
+            items: [
+                { name: 'Feature Flags', path: '/feature-flags', icon: Flag },
+                { name: 'Settings', path: '/settings', icon: Settings },
+            ]
+        }
     ];
 
     const handleLogout = () => {
@@ -86,36 +115,47 @@ export const AdminLayout = () => {
                 </NavLink>
             </Flex>
 
-            <Block as="nav" className="flex-grow px-4 space-y-2 mt-4 overflow-y-auto custom-scrollbar">
-                {navItems.map((item) => (
-                    <NavLink
-                        key={item.name}
-                        to={item.path}
-                        className={({ isActive }) =>
-                            `flex items-center rounded-2xl transition-all duration-200 group relative ${isSidebarOpen ? 'px-4 py-3' : 'p-3 justify-center'
-                            } ${isActive
-                                ? 'bg-primary text-white shadow-lg shadow-primary/20'
-                                : 'text-gray-400 hover:bg-gray-800 hover:text-white'
-                            }`
-                        }
-                    >
-                        <item.icon className="h-5 w-5 flex-shrink-0 relative z-10" />
-                        <AnimatePresence mode="popLayout">
-                            {isSidebarOpen && (
-                                <motion.span
-                                    initial={{ opacity: 0, x: -10 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    exit={{ opacity: 0, x: -10 }}
-                                    className="ml-3 font-medium whitespace-nowrap relative z-10"
-                                >
-                                    {item.name}
-                                </motion.span>
-                            )}
-                        </AnimatePresence>
-                        {!isSidebarOpen && (
-                            <Block className="absolute inset-0 bg-transparent group-hover:bg-gray-800 rounded-2xl transition-colors" />
+            <Block as="nav" className="flex-grow px-4 space-y-4 mt-4 overflow-y-auto custom-scrollbar pb-6">
+                {navGroups.map((group, groupIndex) => (
+                    <Block key={group.title} className="space-y-1">
+                        {isSidebarOpen ? (
+                            <Text className="text-xs font-bold text-gray-500 uppercase tracking-wider px-4 mb-2">
+                                {group.title}
+                            </Text>
+                        ) : (
+                            groupIndex > 0 && <div className="h-px bg-gray-800 mx-2 my-2" />
                         )}
-                    </NavLink>
+                        {group.items.map((item) => (
+                            <NavLink
+                                key={item.name}
+                                to={item.path}
+                                className={({ isActive }) =>
+                                    `flex items-center rounded-2xl transition-all duration-200 group relative ${isSidebarOpen ? 'px-4 py-3' : 'p-3 justify-center'
+                                    } ${isActive
+                                        ? 'bg-primary text-white shadow-lg shadow-primary/20'
+                                        : 'text-gray-400 hover:bg-gray-800 hover:text-white'
+                                    }`
+                                }
+                            >
+                                <item.icon className="h-5 w-5 flex-shrink-0 relative z-10" />
+                                <AnimatePresence mode="popLayout">
+                                    {isSidebarOpen && (
+                                        <motion.span
+                                            initial={{ opacity: 0, x: -10 }}
+                                            animate={{ opacity: 1, x: 0 }}
+                                            exit={{ opacity: 0, x: -10 }}
+                                            className="ml-3 font-medium whitespace-nowrap relative z-10"
+                                        >
+                                            {item.name}
+                                        </motion.span>
+                                    )}
+                                </AnimatePresence>
+                                {!isSidebarOpen && (
+                                    <Block className="absolute inset-0 bg-transparent group-hover:bg-gray-800 rounded-2xl transition-colors" />
+                                )}
+                            </NavLink>
+                        ))}
+                    </Block>
                 ))}
             </Block>
 

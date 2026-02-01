@@ -17,6 +17,7 @@ export function useTable<T>(
     const [filters, setFilters] = useState<Record<string, any>>({});
 
     const filteredData = useMemo(() => {
+        if (!data) return [];
         let result = [...data];
 
         // 1. Text Search

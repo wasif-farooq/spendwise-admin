@@ -39,3 +39,23 @@ export interface AdminDashboardMetrics {
     userGrowth: { date: string; value: number }[];
     revenueGrowth: { date: string; value: number }[];
 }
+
+export interface StaffRole {
+    id: number;
+    name: string;
+    description: string;
+    isDefault: boolean; // true for Super Admin
+    color: string;
+    iconName: string;
+    permissions: Record<string, string[]>;
+}
+
+export interface Staff {
+    id: number;
+    name: string;
+    email: string;
+    roles: number[]; // Array of StaffRole IDs
+    status: 'Active' | 'Inactive' | 'Pending';
+    joinedDate: string;
+    avatar?: string;
+}
