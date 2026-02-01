@@ -16,6 +16,7 @@ import { OrganizationsListPage } from './pages/admin/OrganizationsListPage';
 import { AccountsListPage } from './pages/admin/AccountsListPage';
 import { AdminDashboard } from './pages/admin/AdminDashboard';
 import { UserDetailDashboard } from './pages/admin/UserDetailDashboard';
+import { UserFormPage } from './pages/admin/UserFormPage';
 import { FeatureFlagsPage } from './pages/admin/FeatureFlagsPage';
 import { AdminSettingsPage } from './pages/admin/AdminSettingsPage';
 import { MembersListPage } from './pages/admin/MembersListPage';
@@ -66,7 +67,10 @@ function App() {
               <Route element={<AdminLayout />}>
                 <Route path="dashboard" element={<AdminDashboard />} />
                 <Route path="users" element={<UsersListPage />} />
+                <Route path="users" element={<UsersListPage />} />
+                <Route path="users/new" element={<UserFormPage />} />
                 <Route path="users/:id" element={<UserDetailDashboard />} />
+                <Route path="users/:id/edit" element={<UserFormPage />} />
 
 
                 <Route path="members" element={<MembersListPage />} />

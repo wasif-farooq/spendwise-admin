@@ -678,5 +678,97 @@
             "maxUses": 1000,
             "expiryDate": "2025-11-29"
         }
+    ],
+    "staffRoles": [
+        {
+            "id": 0,
+            "name": "Super Admin",
+            "description": "Full access to all system resources. Cannot be modified.",
+            "permissions": {},
+            "color": "from-purple-500 to-indigo-600",
+            "iconName": "ShieldCheck",
+            "isDefault": true
+        },
+        {
+            "id": 1,
+            "name": "Support Agent",
+            "description": "Access to user management and basic read-only data.",
+            "permissions": {
+                "users": [
+                    "view",
+                    "edit"
+                ],
+                "transactions": [
+                    "view"
+                ],
+                "tickets": [
+                    "view",
+                    "reply"
+                ]
+            },
+            "color": "from-blue-400 to-blue-500",
+            "iconName": "Headphones",
+            "isDefault": false
+        },
+        {
+            "id": 2,
+            "name": "Finance Manager",
+            "description": "Manage billing, subscriptions, and financial reports.",
+            "permissions": {
+                "users": [
+                    "view"
+                ],
+                "transactions": [
+                    "view",
+                    "refund"
+                ],
+                "invoices": [
+                    "view",
+                    "create",
+                    "void"
+                ]
+            },
+            "color": "from-green-500 to-emerald-600",
+            "iconName": "Wallet",
+            "isDefault": false
+        }
+    ],
+    "staff": [
+        {
+            "id": 1,
+            "name": "Admin User",
+            "email": "admin@spendwise.com",
+            "roles": [
+                0
+            ],
+            "status": "Active",
+            "joinedDate": "2024-01-15",
+            "lastActive": "2024-02-01T10:00:00Z",
+            "avatar": "https://i.pravatar.cc/150?u=admin"
+        },
+        {
+            "id": 2,
+            "name": "Sarah Support",
+            "email": "sarah@spendwise.com",
+            "roles": [
+                1
+            ],
+            "status": "Active",
+            "joinedDate": "2024-01-20",
+            "lastActive": "2024-02-01T09:30:00Z",
+            "avatar": "https://i.pravatar.cc/150?u=sarah"
+        },
+        {
+            "id": 3,
+            "name": "Mike Finance",
+            "email": "mike@spendwise.com",
+            "roles": [
+                2
+            ],
+            "status": "Inactive",
+            "joinedDate": "2024-01-25",
+            "lastActive": "2024-01-28T15:45:00Z",
+            "avatar": "https://i.pravatar.cc/150?u=mike"
+        }
     ]
 }

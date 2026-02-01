@@ -29,6 +29,24 @@ export const useAdminUsers = () => {
         dispatch(toggleUserStatusThunk(id));
     };
 
+    const getUserById = (id: string) => {
+        return users.find(u => u.id === id);
+    };
+
+    const createUser = async (userData: Partial<AdminUser>) => {
+        // Simulate API call
+        await new Promise(resolve => setTimeout(resolve, 500));
+        console.log('Creating user:', userData);
+        return true;
+    };
+
+    const updateUser = async (id: string, userData: Partial<AdminUser>) => {
+        // Simulate API call
+        await new Promise(resolve => setTimeout(resolve, 500));
+        console.log('Updating user:', id, userData);
+        return true;
+    };
+
     return {
         users: paginatedUsers,
         totalCount,
@@ -43,6 +61,9 @@ export const useAdminUsers = () => {
         setFilter,
         clearFilters,
         handleToggleStatus,
+        getUserById,
+        createUser,
+        updateUser,
         refresh: () => dispatch(fetchAllUsersThunk())
     };
 };

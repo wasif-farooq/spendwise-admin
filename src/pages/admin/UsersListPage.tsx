@@ -25,8 +25,10 @@ import { CustomSelect } from '@/components/ui/CustomSelect';
 import { useAdminUsers } from '@/hooks/features/admin/useAdminUsers';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export const UsersListPage = () => {
+    const navigate = useNavigate();
     const {
         users,
         loading,
@@ -57,7 +59,13 @@ export const UsersListPage = () => {
         <Block className="space-y-6">
             <Block>
                 <Text as="h1" className="text-3xl font-black text-gray-900 tracking-tight">Users Management</Text>
-                <Text className="text-gray-500 font-medium">Manage {totalCount} registered users across the platform</Text>
+                <Flex justify="between" align="center">
+                    <Text className="text-gray-500 font-medium">Manage {totalCount} registered users across the platform</Text>
+                    <Button className="gap-2" onClick={() => navigate('/users/new')}>
+                        <UserCheck size={18} />
+                        Add User
+                    </Button>
+                </Flex>
             </Block>
 
             <Block className="bg-white p-4 rounded-3xl shadow-sm border border-gray-100 space-y-4">
@@ -185,7 +193,12 @@ export const UsersListPage = () => {
                                             >
                                                 {user.status === 'active' ? <UserX size={16} /> : <UserCheck size={16} />}
                                             </Button>
-                                            <Button variant="ghost" size="sm" className="text-gray-400">
+                                            <Button
+                                                variant="ghost"
+                                                size="sm"
+                                                className="text-gray-400"
+                                                onClick={() => navigate(`/users/${user.id}`)}
+                                            >
                                                 <MoreVertical size={16} />
                                             </Button>
                                         </Flex>
@@ -209,6 +222,6 @@ export const UsersListPage = () => {
                 totalPages={totalPages}
                 onPageChange={setCurrentPage}
             />
-        </Block>
+        </Block >
     );
 };

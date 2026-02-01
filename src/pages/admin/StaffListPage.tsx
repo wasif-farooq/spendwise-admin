@@ -44,6 +44,7 @@ export const StaffListPage = () => {
     const navigate = useNavigate();
 
     const getRoleNames = (roleIds: number[]) => {
+        if (!roleIds || !Array.isArray(roleIds)) return [];
         return roleIds.map(id => {
             const role = staffRoles.find(r => r.id === id);
             return role ? role.name : 'Unknown';

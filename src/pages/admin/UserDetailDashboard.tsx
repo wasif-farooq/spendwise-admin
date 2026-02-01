@@ -24,6 +24,7 @@ import {
     TableHead,
     TableCell
 } from '@/components/ui/Table';
+import { Link } from 'react-router-dom';
 
 export const UserDetailDashboard = () => {
     const navigate = useNavigate();
@@ -51,7 +52,13 @@ export const UserDetailDashboard = () => {
             status: 'active',
             billingCycle: 'monthly',
             nextBilling: '2026-03-15'
-        }
+        },
+        transactions: [
+            { id: 'T1', date: '2026-02-01', description: 'Grocery Store', amount: -150.00, status: 'completed' },
+            { id: 'T2', date: '2026-01-28', description: 'Salary Deposit', amount: 3500.00, status: 'completed' },
+            { id: 'T3', date: '2026-01-25', description: 'Netflix Subscription', amount: -15.99, status: 'pending' },
+            { id: 'T4', date: '2026-01-20', description: 'Electric Bill', amount: -120.50, status: 'completed' }
+        ]
     };
 
     return (
@@ -76,7 +83,10 @@ export const UserDetailDashboard = () => {
                             Reactivate User
                         </Button>
                     )}
-                    <Button className="gap-2">
+                    <Button
+                        className="gap-2"
+                        onClick={() => navigate(`/users/${user.id}/edit`)}
+                    >
                         <Settings size={18} />
                         Edit Profile
                     </Button>
@@ -228,6 +238,6 @@ export const UserDetailDashboard = () => {
                     </Card>
                 </Block>
             </Block>
-        </Block>
+        </Block >
     );
 };
