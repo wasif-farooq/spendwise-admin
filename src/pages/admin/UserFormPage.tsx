@@ -1,65 +1,22 @@
-import { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { ArrowLeft, Save } from 'lucide-react';
 import { Block, Flex, Text } from '@shared';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import { Card } from '@/components/ui/Card';
 import { CustomSelect } from '@/components/ui/CustomSelect';
-import { toast } from 'sonner';
-import { useAdminUsers } from '@/hooks/features/admin/useAdminUsers';
+import { useUserForm } from '@/hooks/features/admin/useUserForm';
 
 export const UserFormPage = () => {
-    const navigate = useNavigate();
     const { id } = useParams();
-    const isEditing = !!id;
-    const { getUserById, createUser, updateUser } = useAdminUsers();
-
-    const [formData, setFormData] = useState({
-        name: '',
-        email: '',
-        role: 'user',
-        status: 'active'
-    });
-    const [loading, setLoading] = useState(false);
-
-    useEffect(() => {
-        if (isEditing && id) {
-            const user = getUserById(id);
-            if (user) {
-                setFormData({
-                    name: user.name,
-                    email: user.email,
-                    role: user.role,
-                    status: user.status
-                });
-            }
-        }
-    }, [isEditing, id, getUserById]);
-
-    const handleChange = (field: string, value: any) => {
-        setFormData(prev => ({ ...prev, [field]: value }));
-    };
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setLoading(true);
-
-        try {
-            if (isEditing && id) {
-                await updateUser(id, formData as any);
-                toast.success('User updated successfully');
-            } else {
-                await createUser(formData as any);
-                toast.success('User created successfully');
-            }
-            navigate('/users');
-        } catch (error) {
-            toast.error('Failed to save user');
-        } finally {
-            setLoading(false);
-        }
-    };
+    const {
+        formData,
+        loading,
+        isEditing,
+        handleChange,
+        handleSubmit,
+        navigate
+    } = useUserForm(id);
 
     return (
         <Block className="space-y-6 max-w-2xl mx-auto">

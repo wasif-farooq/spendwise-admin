@@ -1,21 +1,10 @@
-import { useNavigate } from 'react-router-dom';
 import {
     Search,
     Plus,
-    Shield,
-    Users,
     Edit3,
     Trash2,
     Lock,
-    XCircle,
-    ShieldCheck,
-    Eye,
-    CreditCard,
-    Zap,
-    Ticket,
-    Building2,
-    Wallet,
-    Headphones
+    XCircle
 } from 'lucide-react';
 import {
     Table,
@@ -30,22 +19,8 @@ import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import { Block, Flex, Text } from '@shared';
 import { Badge } from '@/components/ui/Badge';
-import { useAdminStaffRoles } from '@/hooks/features/admin/useAdminStaffRoles';
+import { useStaffRolesList } from '@/hooks/features/admin/useStaffRolesList';
 import { motion, AnimatePresence } from 'framer-motion';
-
-const ICON_MAP: Record<string, any> = {
-    ShieldCheck,
-    Users,
-    Eye,
-    CreditCard,
-    Zap,
-    Ticket,
-    Home: Building2,
-    Building2,
-    Wallet,
-    Headphones,
-    Shield
-};
 
 export const StaffRolesListPage = () => {
     const {
@@ -58,15 +33,10 @@ export const StaffRolesListPage = () => {
         setCurrentPage,
         totalPages,
         clearFilters,
-        totalCount
-    } = useAdminStaffRoles();
-
-    const navigate = useNavigate();
-
-    const renderIcon = (iconName: string, className?: string) => {
-        const IconComponent = ICON_MAP[iconName] || Shield;
-        return <IconComponent className={className} />;
-    };
+        totalCount,
+        getIconComponent,
+        navigate
+    } = useStaffRolesList();
 
     return (
         <Block className="space-y-6">
@@ -128,7 +98,10 @@ export const StaffRolesListPage = () => {
                                         <TableCell>
                                             <Flex align="center" gap={3}>
                                                 <div className={`p-2.5 rounded-xl bg-gradient-to-br ${role.color} text-white shadow-sm ring-2 ring-white`}>
-                                                    {renderIcon(role.iconName, "h-4 w-4")}
+                                                    {(() => {
+                                                        const Icon = getIconComponent(role.iconName);
+                                                        return <Icon className="h-4 w-4" />;
+                                                    })()}
                                                 </div>
                                                 <Block>
                                                     <Text className="font-bold text-gray-900">{role.name}</Text>

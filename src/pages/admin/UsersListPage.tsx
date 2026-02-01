@@ -22,13 +22,10 @@ import Input from '@/components/ui/Input';
 import { Block, Flex, Text } from '@shared';
 import { Badge } from '@/components/ui/Badge';
 import { CustomSelect } from '@/components/ui/CustomSelect';
-import { useAdminUsers } from '@/hooks/features/admin/useAdminUsers';
+import { useUsersList } from '@/hooks/features/admin/useUsersList';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 export const UsersListPage = () => {
-    const navigate = useNavigate();
     const {
         users,
         loading,
@@ -42,10 +39,11 @@ export const UsersListPage = () => {
         filters,
         setFilter,
         clearFilters,
-        totalCount
-    } = useAdminUsers();
-
-    const [showFilters, setShowFilters] = useState(false);
+        totalCount,
+        showFilters,
+        setShowFilters,
+        navigate
+    } = useUsersList();
 
     if (loading && users.length === 0) {
         return <Block className="p-8 h-64 flex items-center justify-center"><Text className="animate-pulse text-gray-400">Loading users...</Text></Block>;

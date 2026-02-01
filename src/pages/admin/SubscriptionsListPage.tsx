@@ -19,9 +19,8 @@ import Input from '@/components/ui/Input';
 import { Block, Flex, Text } from '@shared';
 import { Badge } from '@/components/ui/Badge';
 import { CustomSelect } from '@/components/ui/CustomSelect';
-import { useAdminSubscriptions } from '@/hooks/features/admin/useAdminSubscriptions';
+import { useSubscriptionsList } from '@/hooks/features/admin/useSubscriptionsList';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useState } from 'react';
 
 export const SubscriptionsListPage = () => {
     const {
@@ -36,10 +35,10 @@ export const SubscriptionsListPage = () => {
         filters,
         setFilter,
         clearFilters,
-        totalCount
-    } = useAdminSubscriptions();
-
-    const [showFilters, setShowFilters] = useState(false);
+        totalCount,
+        showFilters,
+        setShowFilters
+    } = useSubscriptionsList();
 
     if (loading && subscriptions.length === 0) {
         return <Block className="p-8 h-64 flex items-center justify-center"><Text className="animate-pulse text-gray-400">Loading subscriptions...</Text></Block>;

@@ -20,9 +20,8 @@ import {
     Pagination
 } from '@/components/ui';
 import { CustomSelect } from '@/components/ui/CustomSelect';
-import { useAdminFeatureFlags } from '@/hooks/features/admin/useAdminFeatureFlags';
+import { useFeatureFlagsList } from '@/hooks/features/admin/useFeatureFlagsList';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useState } from 'react';
 
 export const FeatureFlagsPage = () => {
     const {
@@ -39,10 +38,10 @@ export const FeatureFlagsPage = () => {
         setFilter,
         clearFilters,
         totalCount,
-        refresh
-    } = useAdminFeatureFlags();
-
-    const [showFilters, setShowFilters] = useState(false);
+        refresh,
+        showFilters,
+        setShowFilters
+    } = useFeatureFlagsList();
 
     if (loading && flags.length === 0) {
         return <Block className="p-8 h-64 flex items-center justify-center"><Text className="animate-pulse text-gray-400">Loading feature flags...</Text></Block>;

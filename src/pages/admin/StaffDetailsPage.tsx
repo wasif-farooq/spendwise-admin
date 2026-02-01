@@ -1,6 +1,4 @@
-import { useParams, useNavigate } from 'react-router-dom';
-import { useAdminMembers } from '@/hooks/features/admin/useAdminMembers';
-import { useAdminRoles } from '@/hooks/features/admin/useAdminRoles';
+import { useStaffDetail } from '@/hooks/features/admin/useStaffDetail';
 import { Block, Flex, Text } from '@shared';
 import Button from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
@@ -14,49 +12,26 @@ import {
     User,
     CheckCircle2
 } from 'lucide-react';
-import { useState, useEffect } from 'react';
-import { toast } from 'sonner';
 
-export const MemberDetailsPage = () => {
-    const { id } = useParams();
-    const navigate = useNavigate();
-    const { members } = useAdminMembers(); // In real app, would fetch single member
-    const { allRoles } = useAdminRoles();
-
-    // State to act as local cache for the member since we don't have getMemberById
-    const [member, setMember] = useState<any | undefined>(undefined);
-    const [selectedRole, setSelectedRole] = useState<string>('');
-
-    useEffect(() => {
-        if (members.length > 0 && id) {
-            const foundMember = members.find(m => m.id === Number(id));
-            if (foundMember) {
-                setMember(foundMember);
-                // Try to match member role name to a role ID, fallback to basic logic
-                const roleMatch = allRoles.find(r => r.name.toLowerCase() === foundMember.role.toLowerCase());
-                if (roleMatch) {
-                    setSelectedRole(roleMatch.id.toString());
-                }
-            }
-        }
-    }, [id, members, allRoles]);
-
-    const handleRoleChange = (roleId: string) => {
-        setSelectedRole(roleId);
-        toast.success(`Role updated to ${allRoles.find(r => r.id.toString() === roleId)?.name}`);
-    };
+export const StaffDetailsPage = () => {
+    const {
+        member,
+        allRoles,
+        selectedRole,
+        handleRoleChange,
+        currentRoleObject,
+        navigate
+    } = useStaffDetail();
 
     if (!member) {
-        return <Block className="p-8"><Text className="animate-pulse text-gray-400">Loading member details...</Text></Block>;
+        return <Block className="p-8"><Text className="animate-pulse text-gray-400">Loading staff details...</Text></Block>;
     }
-
-    const currentRoleObject = allRoles.find(r => r.id.toString() === selectedRole);
 
     return (
         <Block className="space-y-6 max-w-4xl mx-auto">
-            <Button variant="ghost" onClick={() => navigate('/members')} className="text-gray-500 hover:text-gray-900 pl-0 gap-2">
+            <Button variant="ghost" onClick={() => navigate('/staff')} className="text-gray-500 hover:text-gray-900 pl-0 gap-2">
                 <ArrowLeft size={18} />
-                Back to Members
+                Back to Staff List
             </Button>
 
             <Flex justify="between" align="start" className="flex-wrap gap-4">
@@ -76,7 +51,7 @@ export const MemberDetailsPage = () => {
                         </Flex>
                     </Block>
                 </Flex>
-                <Badge variant={member.status === 'active' ? 'success' : 'error'} className="text-sm px-3 py-1">
+                <Badge variant={member.status === 'Active' ? 'success' : 'error'} className="text-sm px-3 py-1">
                     {member.status.toUpperCase()}
                 </Badge>
             </Flex>

@@ -21,9 +21,8 @@ import Input from '@/components/ui/Input';
 import { Block, Flex, Text } from '@shared';
 import { Badge } from '@/components/ui/Badge';
 import { CustomSelect } from '@/components/ui/CustomSelect';
-import { useAdminAccounts } from '@/hooks/features/admin/useAdminAccounts';
+import { useAccountsList } from '@/hooks/features/admin/useAccountsList';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useState } from 'react';
 
 export const AccountsListPage = () => {
     const {
@@ -41,10 +40,10 @@ export const AccountsListPage = () => {
         handleFlagAccount,
         totalLiquid,
         totalLiability,
-        totalCount
-    } = useAdminAccounts();
-
-    const [showFilters, setShowFilters] = useState(false);
+        totalCount,
+        showFilters,
+        setShowFilters
+    } = useAccountsList();
 
     if (loading && accounts.length === 0) {
         return <Block className="p-8 h-64 flex items-center justify-center"><Text className="animate-pulse text-gray-400">Loading accounts...</Text></Block>;

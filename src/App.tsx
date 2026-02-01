@@ -19,14 +19,11 @@ import { UserDetailDashboard } from './pages/admin/UserDetailDashboard';
 import { UserFormPage } from './pages/admin/UserFormPage';
 import { FeatureFlagsPage } from './pages/admin/FeatureFlagsPage';
 import { AdminSettingsPage } from './pages/admin/AdminSettingsPage';
-import { MembersListPage } from './pages/admin/MembersListPage';
-import { MemberDetailsPage } from './pages/admin/MemberDetailsPage';
-import { RolesListPage } from './pages/admin/RolesListPage';
-import { RoleDetailsPage } from './pages/admin/RoleDetailsPage';
 import { TransactionsListPage } from './pages/admin/TransactionsListPage';
 import { SubscriptionsListPage } from './pages/admin/SubscriptionsListPage';
 import { CouponsListPage } from './pages/admin/CouponsListPage';
 import { StaffListPage } from './pages/admin/StaffListPage';
+import { StaffDetailsPage } from './pages/admin/StaffDetailsPage';
 import { StaffRolesListPage } from './pages/admin/StaffRolesListPage';
 import { StaffRoleDetailsPage } from './pages/admin/StaffRoleDetailsPage';
 
@@ -73,14 +70,9 @@ function App() {
                 <Route path="users/:id/edit" element={<UserFormPage />} />
 
 
-                <Route path="members" element={<MembersListPage />} />
-                <Route path="members/:id" element={<MemberDetailsPage />} />
-                <Route path="roles" element={<RolesListPage />} />
-                <Route path="roles/new" element={<RoleDetailsPage />} />
-                <Route path="roles/:id" element={<RoleDetailsPage />} />
-
                 {/* Staff Management Routes */}
                 <Route path="staff" element={<StaffListPage />} />
+                <Route path="staff/:id" element={<StaffDetailsPage />} />
                 <Route path="staff-roles" element={<StaffRolesListPage />} />
                 <Route path="staff-roles/new" element={<StaffRoleDetailsPage />} />
                 <Route path="staff-roles/:id" element={<StaffRoleDetailsPage />} />

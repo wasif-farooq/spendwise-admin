@@ -21,10 +21,8 @@ import Input from '@/components/ui/Input';
 import { Block, Flex, Text } from '@shared';
 import { Badge } from '@/components/ui/Badge';
 import { CustomSelect } from '@/components/ui/CustomSelect';
-import { useAdminCoupons } from '@/hooks/features/admin/useAdminCoupons';
+import { useCouponsList } from '@/hooks/features/admin/useCouponsList';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useState } from 'react';
-import { toast } from 'sonner';
 
 export const CouponsListPage = () => {
     const {
@@ -39,15 +37,11 @@ export const CouponsListPage = () => {
         filters,
         setFilter,
         clearFilters,
-        totalCount
-    } = useAdminCoupons();
-
-    const [showFilters, setShowFilters] = useState(false);
-
-    const handleCopyCode = (code: string) => {
-        navigator.clipboard.writeText(code);
-        toast.success(`Copied ${code} to clipboard`);
-    };
+        totalCount,
+        showFilters,
+        setShowFilters,
+        handleCopyCode
+    } = useCouponsList();
 
     if (loading && coupons.length === 0) {
         return <Block className="p-8 h-64 flex items-center justify-center"><Text className="animate-pulse text-gray-400">Loading coupons...</Text></Block>;

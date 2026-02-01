@@ -23,9 +23,8 @@ import Input from '@/components/ui/Input';
 import { Block, Flex, Text } from '@shared';
 import { Badge } from '@/components/ui/Badge';
 import { CustomSelect } from '@/components/ui/CustomSelect';
-import { useAdminOrganizations } from '@/hooks/features/admin/useAdminOrganizations';
+import { useOrganizationsList } from '@/hooks/features/admin/useOrganizationsList';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useState } from 'react';
 
 export const OrganizationsListPage = () => {
     const {
@@ -41,10 +40,10 @@ export const OrganizationsListPage = () => {
         filters,
         setFilter,
         clearFilters,
-        totalCount
-    } = useAdminOrganizations();
-
-    const [showFilters, setShowFilters] = useState(false);
+        totalCount,
+        showFilters,
+        setShowFilters
+    } = useOrganizationsList();
 
     if (loading && organizations.length === 0) {
         return <Block className="p-8 h-64 flex items-center justify-center"><Text className="animate-pulse text-gray-400">Loading organizations...</Text></Block>;

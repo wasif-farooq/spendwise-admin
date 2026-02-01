@@ -20,8 +20,7 @@ import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import { Block, Flex, Text } from '@shared';
 import { Badge } from '@/components/ui/Badge';
-import { useAdminStaff } from '@/hooks/features/admin/useAdminStaff';
-import { useAdminStaffRoles } from '@/hooks/features/admin/useAdminStaffRoles';
+import { useStaffList } from '@/hooks/features/admin/useStaffList';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export const StaffListPage = () => {
@@ -35,21 +34,10 @@ export const StaffListPage = () => {
         setCurrentPage,
         totalPages,
         clearFilters,
-        totalCount
-    } = useAdminStaff();
-
-    // Fetch roles to map IDs to Names
-    const { roles: staffRoles } = useAdminStaffRoles();
-
-    const navigate = useNavigate();
-
-    const getRoleNames = (roleIds: number[]) => {
-        if (!roleIds || !Array.isArray(roleIds)) return [];
-        return roleIds.map(id => {
-            const role = staffRoles.find(r => r.id === id);
-            return role ? role.name : 'Unknown';
-        });
-    };
+        totalCount,
+        getRoleNames,
+        navigate
+    } = useStaffList();
 
     return (
         <Block className="space-y-6">

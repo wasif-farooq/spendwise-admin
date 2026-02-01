@@ -1,28 +1,30 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useTable } from '@/hooks/useTable';
-import mockData from '@/data/mockData.json';
 import type { StaffRole } from '@/store/types/admin.types';
+import { AdminStaffRoleService } from '@/api/services/admin/AdminStaffRoleService';
 
 export const useAdminStaffRoles = () => {
     const [roles, setRoles] = useState<StaffRole[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    useEffect(() => {
-        const fetchRoles = async () => {
-            try {
-                // Simulate API call
-                await new Promise(resolve => setTimeout(resolve, 600));
-                setRoles((mockData.staffRoles || []) as StaffRole[]);
-                setLoading(false);
-            } catch (err) {
-                setError('Failed to fetch staff roles');
-                setLoading(false);
-            }
-        };
-
-        fetchRoles();
+    const fetchRoles = useCallback(async () => {
+        try {
+            setLoading(true);
+            const data = await AdminStaffRoleService.getAll();
+            setRoles(data);
+            setError(null);
+        } catch (err) {
+            setError('Failed to fetch staff roles');
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
     }, []);
+
+    useEffect(() => {
+        fetchRoles();
+    }, [fetchRoles]);
 
     const {
         searchQuery,
@@ -37,26 +39,32 @@ export const useAdminStaffRoles = () => {
         totalCount
     } = useTable<StaffRole>(roles, ['name', 'description']);
 
-    const getRoleById = (id: number) => {
-        return roles.find(r => r.id === id);
-    };
+    const getRoleById = useCallback(async (id: number) => {
+        const role = roles.find(r => r.id === id);
+        if (role) return role;
+        return AdminStaffRoleService.getById(id);
+    }, [roles]);
 
     const updateRolePermissions = async (roleId: number, permissions: Record<string, string[]>) => {
-        // Simulate API update
-        await new Promise(resolve => setTimeout(resolve, 500));
-        setRoles(prev => prev.map(r => r.id === roleId ? { ...r, permissions } : r));
-        return true;
+        try {
+            await AdminStaffRoleService.updatePermissions(roleId, permissions);
+            await fetchRoles();
+            return true;
+        } catch (err) {
+            console.error('Failed to update role permissions', err);
+            throw err;
+        }
     };
 
     const createRole = async (newRole: Omit<StaffRole, 'id'>) => {
-        // Simulate API create
-        await new Promise(resolve => setTimeout(resolve, 500));
-        const role: StaffRole = {
-            ...newRole,
-            id: Math.max(...roles.map(r => r.id), 0) + 1
-        };
-        setRoles(prev => [...prev, role]);
-        return role;
+        try {
+            const role = await AdminStaffRoleService.create(newRole);
+            await fetchRoles();
+            return role;
+        } catch (err) {
+            console.error('Failed to create role', err);
+            throw err;
+        }
     };
 
     return {
@@ -76,9 +84,6 @@ export const useAdminStaffRoles = () => {
         getRoleById,
         updateRolePermissions,
         createRole,
-        refresh: () => {
-            setLoading(true);
-            setTimeout(() => setLoading(false), 600);
-        }
+        refresh: fetchRoles
     };
 };

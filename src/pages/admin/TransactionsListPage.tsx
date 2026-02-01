@@ -21,15 +21,12 @@ import Input from '@/components/ui/Input';
 import { Block, Flex, Text } from '@shared';
 import { Badge } from '@/components/ui/Badge';
 import { CustomSelect } from '@/components/ui/CustomSelect';
-import { useAdminTransactions } from '@/hooks/features/admin/useAdminTransactions';
+import { useTransactionsList } from '@/hooks/features/admin/useTransactionsList';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useState } from 'react';
 
 export const TransactionsListPage = () => {
     const {
         transactions,
-        loading,
-        error,
         searchQuery,
         setSearchQuery,
         currentPage,
@@ -38,25 +35,11 @@ export const TransactionsListPage = () => {
         filters,
         setFilter,
         clearFilters,
-        totalCount
-    } = useAdminTransactions();
-
-    const [showFilters, setShowFilters] = useState(false);
-
-    if (loading && transactions.length === 0) {
-        return <Block className="p-8 h-64 flex items-center justify-center"><Text className="animate-pulse text-gray-400">Loading transactions...</Text></Block>;
-    }
-
-    if (error) {
-        return <Block className="p-8"><Text className="text-red-500 bg-red-50 p-4 rounded-xl border border-red-100">Error: {error}</Text></Block>;
-    }
-
-    const formatCurrency = (amount: number) => {
-        return new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency: 'USD'
-        }).format(amount);
-    };
+        totalCount,
+        showFilters,
+        setShowFilters,
+        formatCurrency
+    } = useTransactionsList();
 
     return (
         <Block className="space-y-6">

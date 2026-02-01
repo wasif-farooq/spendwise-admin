@@ -25,41 +25,16 @@ import {
     TableCell
 } from '@/components/ui/Table';
 import { Link } from 'react-router-dom';
+import { useUserDetail } from '@/hooks/features/admin/useUserDetail';
 
 export const UserDetailDashboard = () => {
     const navigate = useNavigate();
     const { id } = useParams();
+    const { user, loading } = useUserDetail(id);
 
-    // Mock user detail data
-    const user = {
-        id: id || '1',
-        name: 'Alice Johnson',
-        email: 'alice@example.com',
-        role: 'user',
-        status: 'active',
-        createdAt: '2025-01-15T10:00:00Z',
-        bio: 'Financial consultant based in NY.',
-        organizations: [
-            { id: '1', name: 'Personal', role: 'owner', joinedAt: '2025-01-15' },
-            { id: '2', name: 'Tech Solutions', role: 'admin', joinedAt: '2025-02-10' }
-        ],
-        accounts: [
-            { id: 'A1', name: 'Primary Checking', balance: 2450.00, type: 'checking' },
-            { id: 'A2', name: 'Vacation Savings', balance: 5000.00, type: 'savings' }
-        ],
-        subscription: {
-            plan: 'pro',
-            status: 'active',
-            billingCycle: 'monthly',
-            nextBilling: '2026-03-15'
-        },
-        transactions: [
-            { id: 'T1', date: '2026-02-01', description: 'Grocery Store', amount: -150.00, status: 'completed' },
-            { id: 'T2', date: '2026-01-28', description: 'Salary Deposit', amount: 3500.00, status: 'completed' },
-            { id: 'T3', date: '2026-01-25', description: 'Netflix Subscription', amount: -15.99, status: 'pending' },
-            { id: 'T4', date: '2026-01-20', description: 'Electric Bill', amount: -120.50, status: 'completed' }
-        ]
-    };
+    if (loading || !user) {
+        return <Block className="p-10 text-center text-gray-400">Loading profile...</Block>;
+    }
 
     return (
         <Block className="space-y-8">

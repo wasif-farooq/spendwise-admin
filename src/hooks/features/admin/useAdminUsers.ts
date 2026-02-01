@@ -1,16 +1,30 @@
-import { useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from '@/store/redux';
-import { fetchAllUsersThunk, toggleUserStatusThunk } from '@/store/slices/adminUserSlice';
+import { useEffect, useState, useCallback } from 'react';
 import { useTable } from '@/hooks/useTable';
 import type { AdminUser } from '@/store/types/admin.types';
+import { AdminUserService } from '@/api/services/admin/AdminUserService';
 
 export const useAdminUsers = () => {
-    const dispatch = useAppDispatch();
-    const { users, loading, error } = useAppSelector(state => state.adminUsers);
+    const [users, setUsers] = useState<AdminUser[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+
+    const fetchUsers = useCallback(async () => {
+        try {
+            setLoading(true);
+            const data = await AdminUserService.getAll();
+            setUsers(data);
+            setError(null);
+        } catch (err) {
+            setError('Failed to fetch users');
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
+    }, []);
 
     useEffect(() => {
-        dispatch(fetchAllUsersThunk());
-    }, [dispatch]);
+        fetchUsers();
+    }, [fetchUsers]);
 
     const {
         searchQuery,
@@ -25,26 +39,44 @@ export const useAdminUsers = () => {
         totalCount
     } = useTable<AdminUser>(users, ['name', 'email', 'role']);
 
-    const handleToggleStatus = (id: string) => {
-        dispatch(toggleUserStatusThunk(id));
+    const handleToggleStatus = async (id: string) => {
+        try {
+            await AdminUserService.toggleStatus(id);
+            await fetchUsers();
+        } catch (err) {
+            console.error('Failed to toggle status', err);
+        }
     };
 
-    const getUserById = (id: string) => {
-        return users.find(u => u.id === id);
-    };
+    const getUserById = useCallback((id: string) => {
+        // First try to find in current list
+        const user = users.find(u => u.id === id);
+        if (user) return Promise.resolve(user);
+
+        // If not found, fetch from API
+        return AdminUserService.getById(id);
+    }, [users]);
 
     const createUser = async (userData: Partial<AdminUser>) => {
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 500));
-        console.log('Creating user:', userData);
-        return true;
+        try {
+            await AdminUserService.create(userData);
+            await fetchUsers();
+            return true;
+        } catch (err) {
+            console.error('Failed to create user', err);
+            throw err;
+        }
     };
 
     const updateUser = async (id: string, userData: Partial<AdminUser>) => {
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 500));
-        console.log('Updating user:', id, userData);
-        return true;
+        try {
+            await AdminUserService.update(id, userData);
+            await fetchUsers();
+            return true;
+        } catch (err) {
+            console.error('Failed to update user', err);
+            throw err;
+        }
     };
 
     return {
@@ -64,6 +96,6 @@ export const useAdminUsers = () => {
         getUserById,
         createUser,
         updateUser,
-        refresh: () => dispatch(fetchAllUsersThunk())
+        refresh: fetchUsers
     };
 };
