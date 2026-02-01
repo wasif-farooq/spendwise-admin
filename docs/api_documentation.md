@@ -10,6 +10,7 @@ This document provides a 100% comprehensive reference for the SpendWise API. It 
 5. [Subscription & Billing](#5-subscription--billing)
 6. [Intelligence & Analytics](#6-intelligence--analytics)
 7. [Personalization & Dashboard](#7-personalization--dashboard)
+8. [Audit & History](#8-audit--history)
 
 ---
 
@@ -393,3 +394,22 @@ This document provides a 100% comprehensive reference for the SpendWise API. It 
 
 #### List Enabled Flags
 `GET /feature-flags`
+
+---
+
+## 8. Audit & History
+
+### Audit Services (`HistoryService`)
+
+#### List Modification History
+`GET /history`
+- **Query Params**: `entityType`, `entityId`, `userId`, `action`, `startDate`, `endDate`, `limit`, `offset`
+- **Response**: List of `ModificationHistoryEntry` objects.
+
+#### Get Entity History
+`GET /history/entity/:type/:id`
+- **Response**: List of `ModificationHistoryEntry` objects for the specific entity.
+
+#### Get Actor History
+`GET /history/actor/:userId`
+- **Response**: List of `ModificationHistoryEntry` objects for actions performed by the user.

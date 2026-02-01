@@ -1,0 +1,79 @@
+[
+    {
+        "id": "hist_1",
+        "entityType": "transaction",
+        "entityId": "tx_123",
+        "entityName": "Amazon Purchase",
+        "action": "updated",
+        "actor": {
+            "id": "user_1",
+            "name": "John Doe",
+            "email": "john@example.com"
+        },
+        "timestamp": "2026-02-01T08:30:00Z",
+        "changes": [
+            {
+                "field": "amount",
+                "oldValue": 45.0,
+                "newValue": 49.99,
+                "label": "Amount"
+            },
+            {
+                "field": "category",
+                "oldValue": "Uncategorized",
+                "newValue": "Shopping",
+                "label": "Category"
+            }
+        ],
+        "metadata": {
+            "location": "New York, USA"
+        }
+    },
+    {
+        "id": "hist_2",
+        "entityType": "account",
+        "entityId": "acc_456",
+        "entityName": "Main Savings",
+        "action": "created",
+        "actor": {
+            "id": "user_1",
+            "name": "John Doe",
+            "email": "john@example.com"
+        },
+        "timestamp": "2026-01-28T14:15:00Z"
+    },
+    {
+        "id": "hist_3",
+        "entityType": "member",
+        "entityId": "user_2",
+        "entityName": "Jane Smith",
+        "action": "invited",
+        "actor": {
+            "id": "user_1",
+            "name": "John Doe",
+            "email": "john@example.com"
+        },
+        "timestamp": "2026-01-30T10:00:00Z"
+    },
+    {
+        "id": "hist_4",
+        "entityType": "security_setting",
+        "entityId": "user_1",
+        "entityName": "John Doe's Security",
+        "action": "enabled",
+        "actor": {
+            "id": "user_1",
+            "name": "John Doe",
+            "email": "john@example.com"
+        },
+        "timestamp": "2026-01-31T09:45:00Z",
+        "changes": [
+            {
+                "field": "twoFactorEnabled",
+                "oldValue": false,
+                "newValue": true,
+                "label": "2FA Enabled"
+            }
+        ]
+    }
+]
